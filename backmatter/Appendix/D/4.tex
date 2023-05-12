@@ -1,3 +1,4 @@
+\section{类型结构}
 
 表D.6中列出的特征可以从其他类型构建类型。
 
@@ -52,7 +53,8 @@ remove_const_t<int const&> // yields int const& (only refers to int const)
 
 类型构造特征的顺序很重要:
 
-\begin{notice}由于这个原因，C++17后的下一个标准可能会提供remove\_refcv特性。
+\begin{notice}
+由于这个原因，C++17后的下一个标准可能会提供remove\_refcv特性。
 \end{notice}
 
 \begin{cpp}
@@ -130,7 +132,8 @@ remove_reference_t<int&&> // yields int
 \item
 引用类型本身不是const类型。因此，类型构造特征的顺序很重要:
 
-\begin{notice}由于这个原因，C++17后的下一个标准可能会提供remove\_refcv特性。
+\begin{notice}
+由于这个原因，C++17后的下一个标准可能会提供remove\_refcv特性。
 \end{notice}
 
 \begin{cpp}

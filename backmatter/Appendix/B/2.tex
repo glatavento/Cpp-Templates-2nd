@@ -1,10 +1,11 @@
+\section{C++11的值类别}
 
 当C++11中引入右值引用以支持移动语义时，将表达式划分为左值和右值的方法已不足以描述C++11的所有语言行为。因此，C++标准化委员会基于三个核心类别和两个复合类别，重新设计了价值类别系统(参见图B.1)。核心类别是:左值、prvalue(“纯右值”)和xvalue("过期值")。复合类别是:glvalue(“广义左值”，是左值和xvalue的并集)和rvalue (xvalue和prvalue的并集)。
 
 所有表达式仍然是左值或右值，但右值类别现在会进一步细分。
 
 \begin{center}
-\includegraphics[width=0.8\textwidth]{content/Appendix/B/images/1.png} \\
+\includegraphics[width=0.8\textwidth]{backmatter/Appendix/B/images/1.png} \\
 图B.1. 自C++11后的值类别
 \end{center}
 
@@ -55,7 +56,8 @@ prvalue的例子有:
 \item 
 由非字符串字面量或用户定义字面量的字面量组成的表达式
 
-\begin{notice}用户定义的字面量可以生成左值或右值，这取决于相关字面量操作符的返回类型。
+\begin{notice}
+用户定义的字面量可以生成左值或右值，这取决于相关字面量操作符的返回类型。
 \end{notice}
 
 \item 
@@ -85,7 +87,8 @@ xvalue的例子有:
 
 需要强调的是，glvalue、prvalue、xvalue等都是表达式，而不是值
 
-\begin{notice}这些术语属于用词不当。
+\begin{notice}
+这些术语属于用词不当。
 \end{notice}
 
 或实体。例如，变量不是左值，尽管表示该变量的表达式是左值:
@@ -98,11 +101,12 @@ int y = x; // x here is an lvalue. The evaluation of that lvalue expression does
 		  // That lvalue is then then converted to a prvalue, which is what initializes y.
 \end{cpp}
 
-\subsection{B.2.1\hspace{0.2cm}临时实现}
+\subsection{临时实现}
 
 前面提到过，左值通常要进行到右值的转换
 
-\begin{notice}使用C++11的值分类，短语glvalue到prvalue的转换会更准确，但传统术语仍然更为常见。
+\begin{notice}
+使用C++11的值分类，短语glvalue到prvalue的转换会更准确，但传统术语仍然更为常见。
 \end{notice}
 
 因为值是初始化对象(或为大多数内置操作符提供操作数)的表达式类型。

@@ -1,0 +1,6 @@
+template<typename T>
+T const& Stack<T>::top () const
+{
+^^Iassert(!elems.empty());
+^^Ireturn elems.back(); // return last element
+}

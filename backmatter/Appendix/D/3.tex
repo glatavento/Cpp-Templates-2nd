@@ -1,7 +1,8 @@
+\section{类型属性和操作}
 
 下一组特征测试单类型的其他属性，以及可能适用于某些操作(例如值交换)。
 
-\subsection{D.3.1\hspace{0.2cm}其他类型的属性}
+\subsection{其他类型的属性}
 
 \textbf{std::is\_signed<T>::value}
 
@@ -49,7 +50,8 @@ is_const<int const&>::value // false
 \item 
 若元素类型是const的，则该将数组定义为const的。
 
-\begin{notice}C++11发布后，核心问题1059的解决方案澄清了这一点。
+\begin{notice}
+C++11发布后，核心问题1059的解决方案澄清了这一点。
 \end{notice}
 
 例如:
@@ -130,7 +132,8 @@ is_volatile<int volatile&>::value // false
 \item 
 若元素类型是可变限定的，语言将数组定义为可变限定的。
 
-\begin{notice}C++11发布后，核心问题1059的解决方案澄清了这一点。
+\begin{notice}
+C++11发布后，核心问题1059的解决方案澄清了这一点。
 \end{notice}
 
 例如:
@@ -148,7 +151,8 @@ is_volatile<int volatile[]>::value // true
 \item 
 若T是聚合类型(数组或没有用户定义的类型、显式的或继承的构造函数的class/struct/union，没有私有的或受保护的非静态数据成员，没有虚函数，没有虚拟的、私有的或受保护的基类)，则生成true。
 
-\begin{notice}聚合的基类和/或数据成员不必聚合。C++14前，聚合类类型不能有默认的成员初始化式。C++17前，聚合不能有公共基类。
+\begin{notice}
+聚合的基类和/或数据成员不必聚合。C++14前，聚合类类型不能有默认的成员初始化式。C++17前，聚合不能有公共基类。
 \end{notice}
 
 \item 
@@ -532,7 +536,8 @@ std::is_invocable<int(*)()>::value // true
 \item 
 C++17之后可用。
 
-\begin{notice}C++17标准化过程的后期，is\_invocable改名为is\_callable。
+\begin{notice}
+C++17标准化过程的后期，is\_invocable改名为is\_callable。
 \end{notice}
 \end{itemize}
 
@@ -627,7 +632,7 @@ using T2 = typename std::invoke_result<ABC, int>::type; // OK since C++17
 
 \newpage
 
-\subsection{D.3.2\hspace{0.2cm}测试具体操作}
+\subsection{测试具体操作}
 
 \begin{table}[H]
 	\centering
@@ -715,7 +720,8 @@ int main()
 T t(std::declval<Args>()...);
 \end{cpp}
 
-\begin{notice}关于std::declval的效果，请参见第11.2.3节
+\begin{notice}
+关于std::declval的效果，请参见第11.2.3节
 \end{notice}
 
 \item
@@ -1028,7 +1034,7 @@ is_swappable_v<std::unique_ptr<int>> // yields true
 C++17后可用。
 \end{itemize}
 
-\subsection{D.3.3\hspace{0.2cm}类型之间的关系}
+\subsection{类型之间的关系}
 
 表D.5列出了允许测试类型之间特定关系的类型特征，包括检查为类类型提供了哪些构造函数和赋值操作符。
 
@@ -1133,7 +1139,8 @@ TO test() {
 }
 \end{cpp}
 
-\begin{notice}关于std::declval的效果，请参见第11.2.3节。
+\begin{notice}
+关于std::declval的效果，请参见第11.2.3节。
 \end{notice}
 
 \item

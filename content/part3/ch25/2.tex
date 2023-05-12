@@ -1,0 +1,89 @@
+\section{基础操作}
+
+
+
+\subsection{比较}
+
+元组是包含其他值的结构类型。要比较两个元组，比较元素就足够了，可以实现operator==的定义来比较两个定义的元素:
+
+\filename{typelist/tupleeq.hpp}
+\begin{cpp}
+// basis case:
+bool operator==(Tuple<> const&, Tuple<> const&)
+{
+	// empty tuples are always equivalent
+	return true;
+}
+
+// basis case:
+bool operator==(Tuple<> const&, Tuple<> const&)
+{
+	// empty tuples are always equivalent
+	return true;
+}
+\end{cpp}
+
+与许多关于类型列表和元组的算法一样，元素比较先访问头部元素，然后递归访问尾部元素。操作符!=、<、>、<=和>=的顺序类似。
+
+\subsection{输出}
+
+本章将创建新的元组类型，因此能够在执行程序中看到这些元组是很有用的。以下操作符<{}<可以打印任何可打印的元组元素类型:
+
+\filename{typelist/tupleio.hpp}
+\begin{cpp}
+#include <iostream>
+
+void printTuple(std::ostream& strm, Tuple<> const&, bool isFirst = true)
+{
+	strm << ( isFirst ? ’(’ : ’)’ );
+}
+
+template<typename Head, typename... Tail>
+void printTuple(std::ostream& strm, Tuple<Head, Tail...> const& t,
+				bool isFirst = true)
+{
+	strm << ( isFirst ? "(" : ", " );
+	strm << t.getHead();
+	printTuple(strm, t.getTail(), false);
+}
+
+template<typename... Types>
+std::ostream& operator<<(std::ostream& strm, Tuple<Types...> const& t)
+{
+	printTuple(strm, t);
+	return strm;
+}
+\end{cpp}
+
+现在，创建和显示元组就很容易：
+
+\begin{cpp}
+std::cout << makeTuple(1, 2.5, std::string("hello")) << ’\n’;
+\end{cpp}
+
+输出为
+
+\begin{shell}
+(1, 2.5, hello)
+\end{shell}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

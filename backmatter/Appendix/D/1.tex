@@ -1,3 +1,4 @@
+\section{使用类型特征}
 
 使用类型特征时，必须包含头文件<type\_traits>:
 
@@ -51,7 +52,7 @@ int main()
 
 参见第2.8节，了解traits的\_t版本的定义方式。关于特征的\_v版本的定义方式，请参见5.6节。
 
-\subsection{D.1.1\hspace{0.2cm}std::integral\_constant和std::bool\_constant}
+\subsection{std::integral\_constant和std::bool\_constant}
 
 所有产生值的标准类型特征都派生自辅助类模板实例std::integral\_constant:
 
@@ -99,7 +100,8 @@ C++14(以及以后的版本)中，类型特征的对象也可为函数对象(函
 	}
 \end{cpp}
 
-\begin{notice}C++17前，该标准不包括别名模板bool\_constant<>。std::true\_type和std::false\_type在C++11和C++14中确实存在，但分别指定为integral\_constant<bool,true>和integral\_constant<bool,false>。
+\begin{notice}
+C++17前，该标准不包括别名模板bool\_constant<>。std::true\_type和std::false\_type在C++11和C++14中确实存在，但分别指定为integral\_constant<bool,true>和integral\_constant<bool,false>。
 \end{notice}
 
 以便这些布尔特征在特定属性适用时继承std::true\_type，否则继承std::false\_type，所以它们对应的值成员等于true和false。为结果值设置不同的类型true和false，可以基于类型特征的结果进行标签调度(参见第19.3.3节和第20.2节)。
@@ -142,7 +144,7 @@ int main()
 
 各种元编程上下文中，具有不同的非布尔integral\_constant特化类型。参见第24.3节对类似类型CTValue的讨论，以及第25.6节对元组元素访问的使用。
 
-\subsection{D.1.2\hspace{0.2cm}使用特征}
+\subsection{使用特征}
 
 使用性格特征时需要注意以下几点:
 
@@ -170,7 +172,8 @@ void foo (std::string&& s)
 \item 
 有些特征是有要求或前提条件，违反这些前提条件会导致未定义行为。
 
-\begin{notice}C++标准委员会考虑了C++17的提议，要求违反类型特征的前提条件会导致编译时错误。然而，因为一些类型特征目前的需求比严格的必要条件更强(比如总是需要完整的类型)，所以这个改变推迟了。
+\begin{notice}
+C++标准委员会考虑了C++17的提议，要求违反类型特征的前提条件会导致编译时错误。然而，因为一些类型特征目前的需求比严格的必要条件更强(比如总是需要完整的类型)，所以这个改变推迟了。
 \end{notice}
 
 参见第11.2.1节中的一些示例。
