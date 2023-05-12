@@ -40,26 +40,25 @@
 
 \item 
 const指针具有const类型，而非const指针或指向const类型的引用则不具有const类型。例如:
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 is_const<int* const>::value // true
 is_const<int const*>::value // false
 is_const<int const&>::value // false
-\end{lstlisting}
+\end{cpp}
 
 \item 
 若元素类型是const的，则该将数组定义为const的。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}C++11发布后，核心问题1059的解决方案澄清了这一点。
-\end{tcolorbox}
+\begin{notice}C++11发布后，核心问题1059的解决方案澄清了这一点。
+\end{notice}
 
 例如:
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 is_const<int[3]>::value // false
 is_const<int const[3]>::value // true
 is_const<int[]>::value // false
 is_const<int const[]>::value // true
-\end{lstlisting}
+\end{cpp}
 
 \end{itemize}
 
@@ -122,26 +121,25 @@ is_const<int const[]>::value // true
 \item 
 可变指针具有可变限定的类型，而非可变指针或对可变类型的引用不是可变限定的。例如:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 is_volatile<int* volatile>::value // true
 is_volatile<int volatile*>::value // false
 is_volatile<int volatile&>::value // false
-\end{lstlisting}
+\end{cpp}
 
 \item 
 若元素类型是可变限定的，语言将数组定义为可变限定的。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}C++11发布后，核心问题1059的解决方案澄清了这一点。
-\end{tcolorbox}
+\begin{notice}C++11发布后，核心问题1059的解决方案澄清了这一点。
+\end{notice}
 
 例如:
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 is_volatile<int[3]>::value // false
 is_volatile<int volatile[3]>::value // true
 is_volatile<int[]>::value // false
 is_volatile<int volatile[]>::value // true
-\end{lstlisting}
+\end{cpp}
 \end{itemize}
 
 \textbf{std::is\_aggregate<T>::value}
@@ -150,13 +148,12 @@ is_volatile<int volatile[]>::value // true
 \item 
 若T是聚合类型(数组或没有用户定义的类型、显式的或继承的构造函数的class/struct/union，没有私有的或受保护的非静态数据成员，没有虚函数，没有虚拟的、私有的或受保护的基类)，则生成true。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}聚合的基类和/或数据成员不必聚合。C++14前，聚合类类型不能有默认的成员初始化式。C++17前，聚合不能有公共基类。
-\end{tcolorbox}
+\begin{notice}聚合的基类和/或数据成员不必聚合。C++14前，聚合类类型不能有默认的成员初始化式。C++17前，聚合不能有公共基类。
+\end{notice}
 
 \item 
 帮助确定是否需要列表初始化。例如:
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename Coll, typename... T>
 void insert(Coll& coll, T&&... val)
 {
@@ -167,7 +164,7 @@ void insert(Coll& coll, T&&... val)
 		coll.emplace_back(typename Coll::value_type{std::forward<T>(val)...});
 	}
 }
-\end{lstlisting}
+\end{cpp}
 
 \item 
 要求给定的类型要么完整(见第10.3.1节)，要么是(cv限定的)void。
@@ -271,9 +268,9 @@ C++17后可用。
 
 \item
 等价于: 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 is_trivial_t<T> && is_standard_layout_v<T>
-\end{lstlisting}
+\end{cpp}
 
 \item
 生成false的情况:
@@ -459,13 +456,13 @@ C++17后可用。
 指针没有相关的维度，数组类型中未指定的边界指定维度。(用数组类型声明的函数参数没有实际的数组类型，而且std::array也不是数组类型。参见D.2.1节。)
 
 例如:
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 int a2[5][7];
 rank_v<decltype(a2)>; // yields 2
 rank_v<int*>; // yields 0 (no array)
 extern int p1[];
 rank_v<decltype(p1)>; // yields1
-\end{lstlisting}
+\end{cpp}
 \end{itemize}
 
 \textbf{std::extent<T>::value}
@@ -482,7 +479,7 @@ rank_v<decltype(p1)>; // yields1
 \item 
 参见第19.8.2节了解实现细节。
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 int a2[5][7];
 extent_v<decltype(a2)>; // yields 5
 extent_v<decltype(a2),0>; // yields 5
@@ -491,7 +488,7 @@ extent_v<decltype(a2),2>; // yields 0
 extent_v<int*>; // yields 0
 extern int p1[];
 extent_v<decltype(p1)>; // yields 0
-\end{lstlisting}
+\end{cpp}
 \end{itemize}
 
 \textbf{std::underlying\_type<T>::type}
@@ -520,7 +517,7 @@ extent_v<decltype(p1)>; // yields 0
 
 \item 
 例如:
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 struct C {
 	bool operator() (int) const {
 		return true;
@@ -530,14 +527,13 @@ std::is_invocable<C>::value // false
 std::is_invocable<C,int>::value // true
 std::is_invocable<int*>::value // false
 std::is_invocable<int(*)()>::value // true
-\end{lstlisting}
+\end{cpp}
 
 \item 
 C++17之后可用。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}C++17标准化过程的后期，is\_invocable改名为is\_callable。
-\end{tcolorbox}
+\begin{notice}C++17标准化过程的后期，is\_invocable改名为is\_callable。
+\end{notice}
 \end{itemize}
 
 \textbf{std::is\_invocable\_r<RET\_T, T, Args...>::value}
@@ -556,7 +552,7 @@ C++17之后可用。
 
 \item 
 例如:
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 struct C {
 	bool operator() (int) const {
 		return true;
@@ -569,7 +565,7 @@ std::is_invocable_r<char*,C,int>::value // false
 std::is_invocable_r<long,int(*)(int)>::value // false
 std::is_invocable_r<long,int(*)(int),int>::value // true
 std::is_invocable_r<long,int(*)(int),double>::value // true
-\end{lstlisting}
+\end{cpp}
 
 \item 
 C++17后可用。
@@ -608,7 +604,7 @@ invoke\_result<>自C++17后可用，并取代了C++17弃用的result\_of<>，因
 
 \item 
 例如:
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 std::string foo(int);
 
 using R0 = typename std::result_of<decltype(&foo)(int)>::type; // C++11
@@ -623,7 +619,7 @@ struct ABC {
 
 using T1 = typename std::result_of<ABC(int)>::type; // ERROR: ABC is abstract
 using T2 = typename std::invoke_result<ABC, int>::type; // OK since C++17
-\end{lstlisting}
+\end{cpp}
 
 请参阅第11.1.3节以获得完整的示例。
 
@@ -678,7 +674,7 @@ using T2 = typename std::invoke_result<ABC, int>::type; // OK since C++17
 表D.4列出了允许检查某些特定操作的类型特征。is\_trivially\_…，检查对象、成员或基类调用的所有(子)操作是否简单(既不是用户定义的，也不是虚的)。is\_nothrow\_…，检查调用的操作是否保证不抛出异常，所有is\_…\_constructible检查对应的is\_…\_destructible。例如:
 
 \filename{utils/isconstructible.cpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include <iostream>
 
 class C {
@@ -701,7 +697,7 @@ int main()
 	cout << is_trivially_destructible_v<C> << ’\n’; // false
 	cout << is_nothrow_destructible_v<C> << ’\n’; // true
 }
-\end{lstlisting}
+\end{cpp}
 
 因虚构造函数的定义，所有操作都不再简单。因为我们定义了一个默认构造函数，没有使用noexcept，所以可能会抛出异常。默认情况下，所有其他操作都不会抛出异常。
 
@@ -715,13 +711,12 @@ int main()
 \item 
 若T类型的对象可以用Args给出的参数类型初始化，则生成true。(不使用非简单操作或保证不抛出异常)。也就是说，以下代码有效:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 T t(std::declval<Args>()...);
-\end{lstlisting}
+\end{cpp}
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}关于std::declval的效果，请参见第11.2.3节
-\end{tcolorbox}
+\begin{notice}关于std::declval的效果，请参见第11.2.3节
+\end{notice}
 
 \item
 true意味着对象可以销毁(is\_destructible\_v<T>, is\_trivially\_destructible\_v<T>， 或is\_nothrow\_destructible\_v<T>的结果为true)。
@@ -731,7 +726,7 @@ true意味着对象可以销毁(is\_destructible\_v<T>, is\_trivially\_destructi
 
 \item
 例如:
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 is_constructible_v<int> // true
 is_constructible_v<int,int> // true
 is_constructible_v<long,int> // true
@@ -740,7 +735,7 @@ is_constructible_v<void*,int> // false
 is_constructible_v<char const*,std::string> // false
 is_constructible_v<std::string,char const*> // true
 is_constructible_v<std::string,char const*,int,int> // true
-\end{lstlisting}
+\end{cpp}
 
 \item
 注意，is\_convertible对源类型和目标类型有不同的顺序。
@@ -793,7 +788,7 @@ true意味着可以销毁对象(例如，is\_destructible\_v<T>，is\_trivially\
 
 \item 
 例如:
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 is_copy_constructible_v<int> // yields true
 is_copy_constructible_v<void> // yields false
 is_copy_constructible_v<std::unique_ptr<int>> // yields false
@@ -804,7 +799,7 @@ is_copy_constructible_v<std::string&&> // yields false
 is_constructible_v<std::string,std::string> // yields true
 is_constructible_v<std::string&,std::string&> // yields true
 is_constructible_v<std::string&&,std::string&&> // yields true
-\end{lstlisting}
+\end{cpp}
 
 \end{itemize}
 
@@ -835,7 +830,7 @@ true意味着对象可以销毁(即，is\_destructible\_v<T>，is\_trivially\_de
 
 \item 
 例如:
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 is_move_constructible_v<int> // yields true
 is_move_constructible_v<void> // yields false
 is_move_constructible_v<std::unique_ptr<int>> // yields true
@@ -846,7 +841,7 @@ is_move_constructible_v<std::string&&> // yields true
 is_constructible_v<std::string,std::string> // yields true
 is_constructible_v<std::string&,std::string&> // yields true
 is_constructible_v<std::string&&,std::string&&> // yields true
-\end{lstlisting}
+\end{cpp}
 \end{itemize}
 
 \textbf{std::is\_assignable<TO, FROM>::value}
@@ -870,7 +865,7 @@ is\_convertible对源类型和目标类型有不同的顺序。
 
 \item
 例如:
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 is_assignable_v<int,int> // yields false
 is_assignable_v<int&,int> // yields true
 is_assignable_v<int&&,int> // yields false
@@ -883,7 +878,7 @@ is_assignable_v<void*,int&> // yields false
 is_assignable_v<std::string,std::string> // yields true
 is_assignable_v<std::string&,std::string&> // yields true
 is_assignable_v<std::string&&,std::string&&> // yields true
-\end{lstlisting}
+\end{cpp}
 \end{itemize}
 
 \textbf{std::is\_copy\_assignable<T>::value}
@@ -913,7 +908,7 @@ void、内置数组类型和带有删除复制赋值操作符的类，不能复�
 
 \item
 例如:
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 is_copy_assignable_v<int> // yields true
 is_copy_assignable_v<int&> // yields true
 is_copy_assignable_v<int&&> // yields true
@@ -922,7 +917,7 @@ is_copy_assignable_v<void*> // yields true
 is_copy_assignable_v<char[]> // yields false
 is_copy_assignable_v<std::string> // yields true
 is_copy_assignable_v<std::unique_ptr<int>> // yields false
-\end{lstlisting}
+\end{cpp}
 \end{itemize}
 
 \textbf{std::is\_move\_assignable<T>::value}
@@ -949,7 +944,7 @@ void、内置数组类型和带有删除移动赋值操作符的类不能进行�
 
 \item
 例如:
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 is_move_assignable_v<int> // yields true
 is_move_assignable_v<int&> // yields true
 is_move_assignable_v<int&&> // yields true
@@ -958,7 +953,7 @@ is_move_assignable_v<void*> // yields true
 is_move_assignable_v<char[]> // yields false
 is_move_assignable_v<std::string> // yields true
 is_move_assignable_v<std::unique_ptr<int>> // yields true
-\end{lstlisting}
+\end{cpp}
 \end{itemize}
 
 \textbf{std::is\_swappable\_with<T1, T2>::value}
@@ -977,7 +972,7 @@ is_move_assignable_v<std::unique_ptr<int>> // yields true
 
 \item
 例如:
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 is_swappable_with_v<int,int> // yields false
 is_swappable_with_v<int&,int> // yields false
 is_swappable_with_v<int&&,int> // yields false
@@ -990,7 +985,7 @@ is_swappable_with_v<void*,int&> // yields false
 is_swappable_with_v<std::string,std::string> // yields false
 is_swappable_with_v<std::string&,std::string&> // yields true
 is_swappable_with_v<std::string&&,std::string&&> // yields false
-\end{lstlisting}
+\end{cpp}
 
 \item
 C++17后可用。
@@ -1018,7 +1013,7 @@ C++17后可用。
 
 \item
 例如:
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 is_swappable_v<int> // yields true
 is_swappable_v<int&> // yields true
 is_swappable_v<int&&> // yields true
@@ -1027,7 +1022,7 @@ is_swappable_v<void> // yields false
 is_swappable_v<void*> // yields true
 is_swappable_v<char[]> // yields false
 is_swappable_v<std::unique_ptr<int>> // yields true
-\end{lstlisting}
+\end{cpp}
 
 \item
 C++17后可用。
@@ -1070,7 +1065,7 @@ C++17后可用。
 
 \item
 例如:
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 auto a = nullptr;
 auto b = nullptr;
 is_same_v<decltype(a),decltype(b)> // yields true
@@ -1083,7 +1078,7 @@ auto y = x;
 auto z = [] (int) {};
 is_same_v<decltype(x),decltype(y)> // yields true
 is_same_v<decltype(x),decltype(z)> // yields false
-\end{lstlisting}
+\end{cpp}
 
 \item
 参见第19.3.3节了解实现细节。
@@ -1106,7 +1101,7 @@ is_same_v<decltype(x),decltype(z)> // yields false
 
 \item
 例如:
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 class B {
 };
 class D1 : B {
@@ -1123,7 +1118,7 @@ is_base_of_v<B, B const> // yields true
 is_base_of_v<B&, DD&> // yields false (no class type)
 is_base_of_v<B[3], DD[3]> // yields false (no class type)
 is_base_of_v<int, int> // yields false (no class type)
-\end{lstlisting}
+\end{cpp}
 \end{itemize}
 
 \textbf{std::is\_convertible<FROM, TO>::value}
@@ -1132,15 +1127,14 @@ is_base_of_v<int, int> // yields false (no class type)
 \item
 若FROM类型的表达式可转换为TO类型，则生成true。因此，以下代码有效:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 TO test() {
 	return std::declval<FROM>();
 }
-\end{lstlisting}
+\end{cpp}
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}关于std::declval的效果，请参见第11.2.3节。
-\end{tcolorbox}
+\begin{notice}关于std::declval的效果，请参见第11.2.3节。
+\end{notice}
 
 \item
 类型FROM之上的引用仅用于确定转换表达式的值类别;基础类型就是源表达式的类型。
@@ -1148,7 +1142,7 @@ TO test() {
 \item
 is\_constructible并不总等价于is\_convertible。例如:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 class C {
 	public:
 	explicit C(C const&); // no implicit copy constructor
@@ -1156,7 +1150,7 @@ class C {
 };
 is_constructible_v<C,C> // yields true
 is_convertible_v<C,C> // yields false
-\end{lstlisting}
+\end{cpp}
 
 \item
 要求给定的类型要么完整(见第10.3.1节)，要么是(cv限定的)void或是边界未知的数组。

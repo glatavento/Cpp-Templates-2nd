@@ -1,12 +1,11 @@
 普通的编译错误通常是非常简洁和直指要害的。例如，当编译器说“类X没有‘fun’成员”时，通常不难找出我代码中的问题(例如，可能把run错输入为fun)。模板就不是这样了，来看一些例子。
 
-\noindent
-\textbf{类型不匹配}
+\subsubsection{类型不匹配}
 
 考虑以下使用C++标准库例子:
 
 \filename{basics/errornovel1.cpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include <string>
 #include <map>
 #include <algorithm>
@@ -20,14 +19,14 @@ int main()
 		return s != "";
 	});
 }
-\end{lstlisting}
+\end{cpp}
 
 包含一个相当小的错误:用于查找集合中第一个匹配字符串的Lambda中，针对给定的字符串进行检查。因为map中的元素是键/值对，所以期望得到std::pair<std::string const，double>。
 
 GNU C++编译器的某个版本会报告以下错误:
 
 {\scriptsize
-\begin{tcblisting}{commandshell={}}
+\begin{shell}
 
 1 In file included from /cygdrive/p/gcc/gcc61-include/bits/stl_algobase.h:71:0,
 2                  from /cygdrive/p/gcc/gcc61-include/bits/char_traits.h:39,
@@ -65,65 +64,65 @@ GNU C++编译器的某个版本会报告以下错误:
    const string&)>
 16                              [] (std::string const& s) {
 17                                                             ^
-\end{tcblisting}
+\end{shell}
 }
 {\scriptsize
-\begin{tcblisting}{commandshell={}}
+\begin{shell}
 18 errornovel1.cpp:11:52: note: no known conversion for 
    argument 1 from ’std::pair<const std::__cxx11::basic_string<char>, 
    double>’ to ’const string& {aka const std::__cxx11::basic_string
    <char>&}’
-\end{tcblisting}
+\end{shell}
 }
 
 这样的信息开始看起来更像一本小说，这可能会让模板新手感到沮丧。通过对这样的消息进行管理，错误会相对更容易定位。
 
 错误消息的第一部分说错误发生在内部predefined\_ops.h头文件中的函数模板实例中，errornovel1.cpp通过其他头文件包含其中。下面几行中，编译器报告用哪个参数实例化了什么。本例中，一切都从errornovel1.cpp的第13行语句开始:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 auto pos = 
 std::find_if (coll.begin(), coll.end(),
 	[] (std::string const& s) {
 		return s != "";
 	});
-\end{lstlisting}
+\end{cpp}
 
 这导致在stl\_go.h头文件的第115行实例化了一个find\_if模板
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 _IIter std::find_if(_IIter, _IIter, _Predicate)
-\end{lstlisting}
+\end{cpp}
 
 实例化为
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 _IIter = std::_Rb_tree_iterator<std::pair<
 	const std::__cxx11::basic_string<char>, double> >
 _Predicate = main()::<lambda(const string&)>
-\end{lstlisting}
+\end{cpp}
 
 编译器都会进行报告，不期望这些模板实例化。
 
 我们的例子中，所有类型的模板都需要实例化，只是想知道为什么它不工作。这个信息出现在消息的最后一部分:表示“调用不匹配”意味着函数调用无法解析，因为实参类型和形参类型不匹配。
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 (main()::<lambda(const string&)>) (std::pair<const std::__cxx11::basic_string<char>, double>&)
-\end{lstlisting}
+\end{cpp}
 
 导致调用代码错误:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 { return bool(_M_pred(*__it)); }
-\end{lstlisting}
+\end{cpp}
 
 之后，包含“note: candidate:”的行解释了有一个候选类型需要一个const字符串\&，这个候选类型在errornovel1.cpp的第11行定义为Lambda函数[](std::string const\& s)，并说明了为什么候选类型不适合:
 
 {\scriptsize
-\begin{tcblisting}{commandshell={}}
+\begin{shell}
 no known conversion for argument 1
 from ’std::pair<const std::__cxx11::basic_string<char>, double>’
 to ’const string& {aka const std::__cxx11::basic_string<char>&}’
-\end{tcblisting}
+\end{shell}
 }
 
 这也描述了我们的问题。
@@ -133,7 +132,7 @@ to ’const string& {aka const std::__cxx11::basic_string<char>&}’
 例如，Visual C++编译器会输出如下错误信息:
 
 {\scriptsize
-\begin{tcblisting}{commandshell={}}
+\begin{shell}
 1  c:\tools_root\cl\inc\algorithm(166): error C2664: ’bool main::<lambda_b863c1c7cd07048816
    f454330789acb4>::operator ()(const std::string &) const’: cannot convert argument 1 from
    ’std::pair<const _Kty,_Ty>’ to ’const std::string &’
@@ -173,29 +172,28 @@ to ’const string& {aka const std::__cxx11::basic_string<char>&}’
 26             _Ty=double,
 27             _Pr=main::<lambda_b863c1c7cd07048816f454330789acb4>
 28         ]
-\end{tcblisting}
+\end{shell}
 }
 
 再次提供了实例化链，并告诉哪些参数实例化了代码中的哪些位置，我们看到了两次
 
 {\scriptsize
-\begin{tcblisting}{commandshell={}}
+\begin{shell}
 cannot convert from ’std::pair<const _Kty,_Ty>’ to ’const std::string’
 with
 [
     _Kty=std::string,
     _Ty=double
 ]
-\end{tcblisting}
+\end{shell}
 }
 
-\noindent
-\textbf{缺少const的编译器}
+\subsubsection{缺少const的编译器}
 
 有时泛型代码的问题只是因为某些编译器。考虑下面的例子:
 
 \filename{basics/errornovel2.cpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include <string>
 #include <unordered_set>
 class Customer
@@ -225,12 +223,12 @@ int main()
 	std::unordered_set<Customer,MyCustomerHash> coll;
 	...
 }
-\end{lstlisting}
+\end{cpp}
 
 Visual Studio 2013或2015中，这段代码按预期编译。但是，使用g++或clang时，代码编译时会出错。例如，在g++ 6.1上，第一个错误消息如下所示:
 
 {\scriptsize
-\begin{tcblisting}{commandshell={}}
+\begin{shell}
 1  In file included from /cygdrive/p/gcc/gcc61-include/bits/hashtable.h:35:0,
 2                   from /cygdrive/p/gcc/gcc61-include/unordered_set:47,
 3                   from errornovel2.cpp:2:
@@ -255,13 +253,13 @@ Visual Studio 2013或2015中，这段代码按预期编译。但是，使用g++�
 14                  ^~~~~~~~
 15 errornovel2.cpp:22:17: note: passing ’const main()::MyCustomerHash*’ as ’this’ argument
    discards qualifiers
-\end{tcblisting}
+\end{shell}
 }
 
 紧接着是20多条其他错误消息:
 
 {\scriptsize
-\begin{tcblisting}{commandshell={}}
+\begin{shell}
 16 In file included from /cygdrive/p/gcc/gcc61-include/bits/move.h:57:0,
 17                  from /cygdrive/p/gcc/gcc61-include/bits/stl_pair.h:59,
 18                  from /cygdrive/p/gcc/gcc61-include/bits/stl_algobase.h:64,
@@ -284,10 +282,10 @@ Visual Studio 2013或2015中，这段代码按预期编译。但是，使用g++�
 30 /cygdrive/p/gcc/gcc61-include/bits/unordered_set.h: In instantiation of ’class std::
    unordered_set<Customer, main()::MyCustomerHash>’:
 31 errornovel2.cpp:28:47: required from here
-\end{tcblisting}
+\end{shell}
 }
 {\scriptsize
-\begin{tcblisting}{commandshell={}}
+\begin{shell}
 32 /cygdrive/p/gcc/gcc61-include/bits/unordered_set.h:95:63: error: ’value’ is not a member
    of ’std::__not_<std::__and_<std::__is_fast_hash<main()::MyCustomerHash>, std::__detail::
    __is_noexcept_hash<Customer, main()::MyCustomerHash> > >’
@@ -299,45 +297,45 @@ Visual Studio 2013或2015中，这段代码按预期编译。但是，使用g++�
 36 typedef typename _Hashtable::key_type key_type;
 37                                                     ^~~~~~~~
 ...
-\end{tcblisting}
+\end{shell}
 }
 
 同样，阅读错误消息也很困难(甚至找到每个消息的开头和结尾都很麻烦)。其要表达的是头文件中hashtable\_policy.h在实例化std::unordered\_set<>中需要
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 std::unordered_set<Customer,MyCustomerHash> coll;
-\end{lstlisting}
+\end{cpp}
 
 在实例化中
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 noexcept(declval<const _Hash&>()(declval<const _Key&>()))>
-\end{lstlisting}
+\end{cpp}
 
 有匹配的调用
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 const main()::MyCustomerHash (const Customer&)
-\end{lstlisting}
+\end{cpp}
 
 (declval<const\_Hash\&>()是main()::MyCustomerHash类型的表达式。)一个可能的候选是
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 std::size_t main()::MyCustomerHash::operator()(const Customer&)
-\end{lstlisting}
+\end{cpp}
 
 声明为
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 std::size_t operator() (const Customer& c) {
-\end{lstlisting}
+\end{cpp}
 
 错误信息最后说明了这个问题:
 
 {\scriptsize
-\begin{tcblisting}{commandshell={}}
+\begin{shell}
 passing ’const main()::MyCustomerHash*’ as ’this’ argument discards qualifiers
-\end{tcblisting}
+\end{shell}
 }
 
 能看出问题出在哪里吗?
@@ -346,16 +344,16 @@ passing ’const main()::MyCustomerHash*’ as ’this’ argument discards qual
 
 所有其他错误消息从第一个开始级联，并在将const限定符简单地添加到哈希函数操作符时消失:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 std::size_t operator() (const Customer& c) const {
 	...
 }
-\end{lstlisting}
+\end{cpp}
 
 Clang 3.9在第一个错误消息的末尾给出了更好的提示，哈希函数的operator()没有标记为const:
 
 {\scriptsize
-\begin{tcblisting}{commandshell={}}
+\begin{shell}
 ...
 errornovel2.cpp:28:47: note: in instantiation of template class ’std::unordered_set<Customer
 , MyCustomerHash, std::equal_to<Customer>, std::allocator<Customer> >’ requested here
@@ -365,7 +363,7 @@ errornovel2.cpp:22:17: note: candidate function not viable: ’this’ argument 
 MyCustomerHash’, but method is not marked const
 std::size_t operator() (const Customer& c) {
                 ^
-\end{tcblisting}
+\end{shell}
 }
 
 clang在这里提到了默认的模板参数，比如std::allocator<Customer>，而gcc跳过了它们。

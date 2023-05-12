@@ -2,9 +2,9 @@ Kevlin Henney在C++中推广了类型擦除，引入了any类型[HenneyValuedCon
 
 之后的工作，比如Boost.TypeErasure库[BoostTypeErasure]和Adobe的Poly库[AdobePoly]，使用模板元编程技术，允许用户形成具有特定功能列表的类型擦除值。例如，下面的类型(使用Boost.TypeErasure库)处理复制构造、类类型操作和打印输出流:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 using AnyPrintable = any<mpl::vector<copy_constructible<>,
 									typeid_<>,
 									ostreamable<>
 									>>;
-\end{lstlisting}
+\end{cpp}

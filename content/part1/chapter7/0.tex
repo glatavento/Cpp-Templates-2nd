@@ -1,8 +1,7 @@
 从一开始，C++就提供了按值和按引用调用，但要决定选择哪一种并不那么容易:通常按引用调用对于重要的对象来说成本更低，但更复杂。C++11添加了移动语义，现在有了不同的通过引用传递的方式:
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}常量右值引用X const\&\&也可以，但没有既定的语义。
-\end{tcolorbox}
+\begin{notice}常量右值引用X const\&\&也可以，但没有既定的语义。
+\end{notice}
 
 \begin{enumerate}
 \item 
@@ -29,9 +28,8 @@ X\&\& (右值引用):
 \item 
 不能复制
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}由于C++17，即使没有可用的复制或移动构造函数，也可以通过值传递临时实体(右值)(参见B.2.1节)。因此，由于C++17的约束，不可能复制左值。
-\end{tcolorbox}
+\begin{notice}由于C++17，即使没有可用的复制或移动构造函数，也可以通过值传递临时实体(右值)(参见B.2.1节)。因此，由于C++17的约束，不可能复制左值。
+\end{notice}
 
 \item 
 参数用于返回数据。

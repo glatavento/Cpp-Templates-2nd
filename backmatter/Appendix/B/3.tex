@@ -15,7 +15,7 @@ decltype((x))中需要双括号，以避免在表达式x确实命名了实体的
 
 因此，对任意表达式e使用类型特征，可以使用如下方法检查其值的类别:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 if constexpr (std::is_lvalue_reference<decltype((e))>::value) {
 	std::cout << "expression is lvalue\n";
 }
@@ -25,7 +25,7 @@ else if constexpr (std::is_rvalue_reference<decltype((e))>::value) {
 else {
 	std::cout << "expression is prvalue\n";
 }
-\end{lstlisting}
+\end{cpp}
 
 详见第15.10.2节。
 

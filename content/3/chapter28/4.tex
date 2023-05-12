@@ -4,12 +4,11 @@
 
 下面是一个可以用来测试排序算法跟踪器的例子:
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}C++17前，必须在翻译单元中在类声明之外初始化静态成员。
-\end{tcolorbox}
+\begin{notice}C++17前，必须在翻译单元中在类声明之外初始化静态成员。
+\end{notice}
 
 \filename{debugging/tracer.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include <iostream>
 class SortTracer {
 	private:
@@ -102,14 +101,14 @@ class SortTracer {
 		return value;
 	}
 };
-\end{lstlisting}
+\end{cpp}
 
 除了用于排序的值，跟踪器还提供了几个成员来跟踪实际的排序:对于每个对象，生成跟踪的依据是从原始对象中删除了多少个复制操作。也就是说，原始操作generation == 1，操作的直接副本为generation == 2，副本的副本为generation == 3，依此类推。其他静态成员会跟踪创建(构造函数调用)、销毁、赋值比较和最大值操作。
 
 这个特殊的跟踪器允许跟踪实体创建和销毁的模式，以及给定模板执行的赋值和比较。下面的测试程序演示了C++标准库的std::sort()算法:
 
 \filename{debugging/tracertest.cpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include <iostream>
 #include <algorithm>
 #include "tracer.hpp"
@@ -156,17 +155,17 @@ int main()
 			<< SortTracer::comparisons() - compared_at_start
 			<< " comparisons\n\n";
 }
-\end{lstlisting}
+\end{cpp}
 
 运行这个程序会产生相当多的输出，但是可以从最终输出中得出很多结论。对于std::sort()函数的实现，有如下输出:
 
-\begin{tcblisting}{commandshell={}}
+\begin{shell}
 std::sort() of 10 SortTracer’s was performed by:
  9 temporary tracers
  up to 11 tracers at the same time (10 before)
  33 assignments
  27 comparisons
-\end{tcblisting}
+\end{shell}
 
 例如，尽管在排序时在程序中创建了9个临时跟踪器，但最多有两个跟踪器存在。
 

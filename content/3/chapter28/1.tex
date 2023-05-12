@@ -1,12 +1,11 @@
 当模板错误发生时，问题通常在实例化后发现，从而会有冗长的错误消息，就像在第9.4节中那样。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}无疑在写代码时会遇到一些错误消息，会使最初的示例看起来很乏味!
-\end{tcolorbox}
+\begin{notice}无疑在写代码时会遇到一些错误消息，会使最初的示例看起来很乏味!
+\end{notice}
 
 为了说明这一点，请考虑以下的手写代码:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 void clear (T& p)
 {
@@ -31,13 +30,13 @@ void shell (T const& env)
 	typename T::Index i;
 	middle<T>(i);
 }
-\end{lstlisting}
+\end{cpp}
 
 这个例子阐明了软件开发的分层:像shell()这样的高级函数模板依赖于像middle()这样的组件，而这些组件本身会使用像core()这样的功能。当实例化shell()时，下面的层也需要实例化。这个例子中，有一个问题:core()实例化为int类型(在middle()中使用Client::Index)，并试图错误的解引用该类型。
 
 该错误仅在实例化时可检测到。例如:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 class Client
 {
 	public:
@@ -49,7 +48,7 @@ int main()
 	Client mainClient;
 	shell(mainClient);
 }
-\end{lstlisting}
+\end{cpp}
 
 好的通用诊断包括导致问题的所有级别的跟踪，但是获得这么多信息，也会让我们感觉手足无措。
 
@@ -57,7 +56,7 @@ int main()
 
 前面的例子中，可以在shell()中添加代码，尝试对T::Index类型的值解引用。例如:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 void ignore(T const&)
 { }
@@ -74,12 +73,11 @@ void shell (T const& env)
 	typename T::Index i;
 	middle(i);
 }
-\end{lstlisting}
+\end{cpp}
 
 若T是不能解引用T::Index的类型，则会在局部类ShallowChecks上出现编译错误。因为没有使用局部类，所以添加的代码不会影响shell()函数的运行时间，但许多编译器会警告说没有使用ShallowChecks(成员也是如此)。可以使用ignore()模板等技巧来抑制此类警告，但也会增加代码的复杂性。
 
-\noindent
-\textbf{概念检查}
+\subsubsection{概念检查}
 
 显然，示例中的代码开发可能会变得与实现模板的实际功能代码一样复杂。为了控制这种复杂性，可以尝试在某种类型的库中收集各种代码片段。这样的库可以包含宏，当模板参数替换违反该特定参数的概念时，这些宏可以扩展为触发适当错误的代码。这类库中最流行的是Concept Check库，是Boost发行版的一部分(参见[BCCL])。但这种技术的可移植性不是特别好(不同编译器诊断错误的方式不同)，有时还会掩盖在更高级别上无法捕获错误的问题。
 

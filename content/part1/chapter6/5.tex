@@ -6,39 +6,39 @@
 
 对于概念，正如其作用，只需写下以下内容:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename STR>
 requires std::is_convertible_v<STR,std::string>
 Person(STR&& n) : name(std::forward<STR>(n)) {
 	...
 }
-\end{lstlisting}
+\end{cpp}
 
 甚至可以将需求指定为一般概念
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 concept ConvertibleToString = std::is_convertible_v<T,std::string>;
-\end{lstlisting}
+\end{cpp}
 
 把这个概念表述为一种需求
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename STR>
 requires ConvertibleToString<STR>
 Person(STR&& n) : name(std::forward<STR>(n)) {
 	...
 }
-\end{lstlisting}
+\end{cpp}
 
 也可以这样表述:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<ConvertibleToString STR>
 Person(STR&& n) : name(std::forward<STR>(n)) {
 	...
 }
-\end{lstlisting}
+\end{cpp}
 
 关于C++概念的详细讨论，请参阅附录E。
 

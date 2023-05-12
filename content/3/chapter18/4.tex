@@ -4,14 +4,13 @@
 
 尽管各路开发者这些年在这个领域做了许多工作，但是概念直到C++17，才成为标准C++的一部分。一些编译器提供了对这种特性的实验性支持，但这些概念可能会成为C++17之后标准的一部分。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}例如，GCC 7提供了-fconcepts选项。
-\end{tcolorbox}
+\begin{notice}例如，GCC 7提供了-fconcepts选项。
+\end{notice}
 
 概念可以理解为静态多态的一种“接口”:
 
 \filename{poly/conceptsreq.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include "coord.hpp"
 template<typename T>
 concept GeoObj = requires(T x) {
@@ -19,14 +18,14 @@ concept GeoObj = requires(T x) {
 	{ x.center_of_gravity() } -> Coord;
 	...
 };
-\end{lstlisting}
+\end{cpp}
 
 这里，使用关键字概念来定义概念GeoObj，约束类型具有可调用成员draw()和center\_of\_gravity()，并具有适当的结果类型。
 
 现在，可以重写一些示例模板，以包含一个require子句，用GeoObj概念约束模板参数:
 
 \filename{poly/conceptspoly.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include "conceptsreq.hpp"
 #include <vector>
 
@@ -56,11 +55,11 @@ void drawElems (std::vector<T> const& elems)
 		elems[i].draw(); // call draw() according to type of element
 	}
 }
-\end{lstlisting}
+\end{cpp}
 
 对于能够参与(静态)多态行为的类型来说，这种方法属于非侵入:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 // concrete geometric object class Circle
 // - not derived from any class or implementing any interface
 class Circle {
@@ -69,7 +68,7 @@ class Circle {
 	Coord center_of_gravity() const;
 	...
 };
-\end{lstlisting}
+\end{cpp}
 
 这些类型仍然定义在没有特定基类或需求子句的情况下，并且仍然可以是基本类型，或源自独立框架的类型。
 

@@ -4,7 +4,7 @@
 
 认识到这一领域新特性的潜力，C++标准化委员会创建了一个研究小组(SG7)，以探索更强大的反射选项。组织的章程后来也扩展到元编程，以下是正在考虑的选项的一个例子:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T> void report(T p) {
 	constexpr {
 		std::meta::info infoT = reflexpr(T);
@@ -17,7 +17,7 @@ template<typename T> void report(T p) {
 	}
 	// code will be injected here
 }
-\end{lstlisting}
+\end{cpp}
 
 这段代码中有很多新内容。首先，constexpr{…}构造强制其中的语句在编译时进行求值，但若出现在模板中，则只在模板实例化时进行求值。其次，reflexpr()操作符会生成一个不透明类型std::meta::info的表达式，这是一个句柄，用于反映关于其参数的信息(在本例中是T的类型)。标准元函数库允许查询此元信息。标准元函数之一是std::meta::data\_members，会生成一个std::meta::info序列，描述其操作数的直接非静态数据成员。所以上面的for循环实际上是对p的非静态数据成员的循环。
 
@@ -25,21 +25,21 @@ template<typename T> void report(T p) {
 
 这些就绪之后，实例化类型的函数模板report():
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 struct X {
 	int x;
 	std::string s;
 };
-\end{lstlisting}
+\end{cpp}
 
 会产生类似于
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<> void report(X const& p) {
 	std::cout << "x" << ": " << "p.x" << ’\n’;
 	std::cout << "s" << ": " << "p.s" << ’\n’;
 }
-\end{lstlisting}
+\end{cpp}
 
 该函数自动生成一个函数来输出类类型的非静态数据成员值。
 

@@ -20,7 +20,7 @@
 函数模板参数可以显式指定，可以根据模板的使用方式推导出来，也可以作为默认模板参数提供。例如:
 
 \filename{details/max.cpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 T max (T a, T b)
 {
@@ -34,12 +34,12 @@ int main()
 	::max<int>(1.0, 3.0); // the explicit <int> inhibits the deduction;
 	// hence the result has type int
 }
-\end{lstlisting}
+\end{cpp}
 
 因为对应的模板参数没有出现在函数参数类型中，或者出于其他原因(参见第15.2节)，有些模板参数永远无法推导。相应的参数通常放在模板参数列表的开头，以便在推导其他参数的同时显式地指定。例如:
 
 \filename{details/implicit.cpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename DstT, typename SrcT>
 DstT implicit_cast (SrcT const& x) // SrcT can be deduced, but DstT cannot
 {
@@ -50,21 +50,21 @@ int main()
 {
 	double value = implicit_cast<double>(-1);
 }
-\end{lstlisting}
+\end{cpp}
 
 若在本例中颠倒了模板参数的顺序(写成了template<typename SrcT, typename DstT>)，则implicit\_cast的调用必须显式指定两个模板参数。
 
 此外，因为没有办法显式地指定或推导，这样的参数不能放在模板参数包之后或出现在偏特化中。
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename ... Ts, int N>
 void f(double (&)[N+1], Ts ... ps); // useless declaration because N
 // cannot be specified or deduced
-\end{lstlisting}
+\end{cpp}
 
 因为函数模板可以重载，显式地提供函数模板的参数可能不足以标识单个函数:某些情况下，可以标识一组函数:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename Func, typename T>
 void apply (Func funcPtr, T x)
 {
@@ -81,16 +81,16 @@ int main()
 	apply(&single<int>, 3); // OK
 	apply(&multi<int>, 7); // ERROR: no single multi<int>
 }
-\end{lstlisting}
+\end{cpp}
 
 本例中，因为表达式\&single<int>的类型明确，对apply()的第一次调用有效。因此，Func的模板参数值很容易推导。然而，在第二个调用中，\&multi<int>可能是两种不同类型中的一种，这种情况下不能推导Func的模板参数类型。
 
 此外，在函数模板中替换模板参数，可能会导致构造无效的C++类型或表达式。考虑以下重载函数模板(RT1和RT2是未指定类型):
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T> RT1 test(typename T::X const*);
 template<typename T> RT2 test(...);
-\end{lstlisting}
+\end{cpp}
 
 表达式test<int>对于两个函数模板中的第一个没有意义，因为int类型没有成员类型x。然而，第二个模板没有这样的问题。因此，表达式\&test<int>为单个函数的地址。将int替换到第一个模板失败的事实并不意味着表达式无效。SFINAE(替换失败不为过)原则是实现函数模板重载的重要因素，在8.4节和15.7节中进行了讨论。
 
@@ -98,7 +98,7 @@ template<typename T> RT2 test(...);
 
 模板类型实参为模板类型形参指定的“值”，任何类型(包括void、函数类型、引用类型等)都可以用作模板实参，但对模板形参的替换必须进行有效的构造:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 void clear (T p)
 {
@@ -110,7 +110,7 @@ int main()
 	int a;
 	clear(a); // ERROR: int doesn’t support the unary *
 }
-\end{lstlisting}
+\end{cpp}
 
 \subsection{非类型模板参数}
 
@@ -142,7 +142,7 @@ C++17之前，当将实参与指针或引用形参匹配时，用户定义的转
 
 下面是一些非类型模板参数的示例:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T, T nontypeParam>
 class C;
 
@@ -171,7 +171,7 @@ C<int X::*, &X::n>* c6; // an example of a pointer-to-member constant
 
 C<long, X{}>* c7; // OK: X is first converted to int via a constexpr conversion
 // function and then to long via a standard integer conversion
-\end{lstlisting}
+\end{cpp}
 
 模板参数需要在编译器或链接器在构建程序时，能够表示它们的值。在程序运行前不知道的值(例如，局部变量的地址)与构建时实例化模板的概念不兼容。
 
@@ -189,7 +189,7 @@ C<long, X{}>* c7; // OK: X is first converted to int via a constexpr conversion
 
 字符串字面值的问题是，两个相同的字面值可以存储在两个不同的地址。常量字符串上实例化模板的另一种(很麻烦)方法，引入一个额外变量来保存字符串:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<char const* str>
 class Message {
 	...
@@ -206,7 +206,7 @@ void foo()
 	Message<hello11> msg11; // OK since C++11
 	Message<hello17> msg17; // OK since C++17
 }
-\end{lstlisting}
+\end{cpp}
 
 要求是声明为引用或指针的非类型模板形参，可以是一个常量表达式，在旧C++版本中具有外部链接，C++11开始的内部链接，或者C++17开始的任意链接方式。
 
@@ -214,7 +214,7 @@ void foo()
 
 以下是其他一些无效的例子:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T, T nontypeParam>
 class C;
 
@@ -231,7 +231,7 @@ C<int&, base.i>* err2; // ERROR: fields of variables aren’t considered to be v
 
 int a[10];
 C<int*, &a[0]>* err3; // ERROR: addresses of array elements aren’t acceptable either
-\end{lstlisting}
+\end{cpp}
 
 
 \subsection{双重模板参数}
@@ -240,7 +240,7 @@ C<int*, &a[0]>* err3; // ERROR: addresses of array elements aren’t acceptable 
 
 这使得以下示例在C++17前无效:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include <list>
 	// declares in namespace std:
 	// template<typename T, typename Allocator = allocator<T>>
@@ -254,13 +254,13 @@ class Rel {
 
 Rel<int, double, std::list> rel; // ERROR before C++17: std::list has more than
 								// one template parameter
-\end{lstlisting}
+\end{cpp}
 
 本例中的问题是标准库的std::list模板有多个参数。第二个参数(用于描述分配器)有默认值，但在C++17前，将std::list匹配到Container参数时，不会考虑默认值。
 
 可变参数模板参数是上述C++17前“精确匹配”规则的例外，其为这个限制提供了一个解决方案:支持对双重模板参数进行更通用的匹配。一个双重模板参数包可以匹配零个或多个在双重模板参数中同类的模板形参:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include <list>
 
 template<typename T1, typename T2,
@@ -271,11 +271,11 @@ class Rel { // type parameters
 
 Rel<int, double, std::list> rel; // OK: std::list has two template parameters
 								// but can be used with one argument
-\end{lstlisting}
+\end{cpp}
 
 模板参数包只能匹配同类的模板实参。下面的类模板可以用只有模板类型参数的类模板或别名模板实例化，因为作为TT传递的模板类型参数包可以匹配零个或多个模板类型参数:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include <list>
 #include <map>
 	// declares in namespace std:
@@ -296,7 +296,7 @@ AlmostAnyTmpl<std::vector> withVector; // two type parameters
 AlmostAnyTmpl<std::map> withMap; // four type parameters
 AlmostAnyTmpl<std::array> withArray; // ERROR: a template type parameter pack
 									// doesn’t match a nontype template parameter
-\end{lstlisting}
+\end{cpp}
 
 C++17前，只有关键字class可以用来声明双重模板参数，这并不意味着只有用关键字class声明的类模板才允许作为替换参数。实际上，struct模板、union模板和alias模板都是双重模板参数的有效参数(C++11引入别名模板后)。这类似于任何类型都可以使用关键字class声明的模板类型参数。
 
@@ -304,7 +304,7 @@ C++17前，只有关键字class可以用来声明双重模板参数，这并不�
 
 当参数的值——相同时，两组模板实参是等价的。对于类型参数，类型别名并不重要:要比较的是类型别名声明的最终类型。对于整型非类型实参，比较实参的值;如何表达这个值并不重要:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T, int I>
 class Mix;
 
@@ -312,20 +312,20 @@ using Int = int;
 
 Mix<int, 3*3>* p1;
 Mix<Int, 4+5>* p2; // p2 has the same type as p1
-\end{lstlisting}
+\end{cpp}
 
 (从这个例子可以清楚地看出，建立模板参数列表的等价性不需要定义模板)
 
 然而上下文中，模板参数的“值”不能确定，因此等价规则会变得稍微复杂一些。考虑下面的例子:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<int N> struct I {};
 
 template<int M, int N> void f(I<M+N>); // #1
 template<int N, int M> void f(I<N+M>); // #2
 
 template<int M, int N> void f(I<N+M>); // #3 ERROR
-\end{lstlisting}
+\end{cpp}
 
 仔细研究\#1和\#2声明，通过将M和N分别重命名为N和M，会得到相同的声明:因此，这两个表达式等价，声明了相同的函数模板f。这两个声明中的表达式M+N和N+M等价。
 
@@ -340,9 +340,8 @@ template<int M, int N> void f(I<N+M>); // #3 ERROR
 \item
 从构造函数模板生成的构造函数不是复制或移动构造函数。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}默认构造函数可以构造函数模板。
-\end{tcolorbox}
+\begin{notice}默认构造函数可以构造函数模板。
+\end{notice}
 
 类似地，从赋值模板生成的赋值操作不是复制赋值操作符或移动赋值操作符。(然而，因为隐式调用复制赋值或移动赋值操作符不太常见，所以这不太容易出现问题。)
 \end{enumerate}

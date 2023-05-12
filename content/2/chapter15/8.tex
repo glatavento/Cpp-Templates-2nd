@@ -18,7 +18,7 @@
 \item 
 除非对转换操作符模板进行推导，否则替换的P类型可以是A类型的基类类型，或者是指向A为基类类型的指针。例如:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 class B {
 };
@@ -32,12 +32,12 @@ void g(D<long> dl)
 {
 	f(&dl); // deduction succeeds with T substituted with long
 }
-\end{lstlisting}
+\end{cpp}
 \end{itemize}
 
 若P在推导的上下文中不包含模板参数，那么所有隐式转换都是可以进行。例如:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T> int f(T, typename T::X);
 struct V {
 	V();
@@ -48,24 +48,24 @@ struct V {
 int r = f(v, 7.0); // OK: T is deduced to V through the first parameter,
 					// which causes the second parameter to have type V::X
 					// which can be constructed from a double value
-\end{lstlisting}
+\end{cpp}
 
 只有在不能精确匹配的情况下才考虑宽松匹配要求。即便如此，只有找到一个替换使A类型与添加了这些转换的P类型相匹配，推导才会成功。
 
 这些规则的作用范围非常窄，忽略了(例如)可以应用于函数参数以使调用成功的各种转换。例如，下面对max()函数模板的调用，如15.1节所示:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 std::string maxWithHello(std::string s)
 {
 	return ::max(s, "hello");
 }
-\end{lstlisting}
+\end{cpp}
 
 这里由第一个参数推导的模板参数，将T推导为std::string，而由第二个参数推导的模板参数T推导为char[6]，因此模板参数推导失败，因为两个参数使用相同的模板参数。这个失败可能令人惊讶，因为字符串字面量“hello”可以隐式转换为std::string
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 ::max<std::string>(s, "hello")
-\end{lstlisting}
+\end{cpp}
 
 这样就成功了。
 
@@ -75,7 +75,7 @@ std::string maxWithHello(std::string s)
 
 C++17前，模板参数推导只适用于函数和成员函数模板。特别地，类模板的参数并没有从参数导出到对其构造函数的调用。例如:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 class S {
 	public:
@@ -87,7 +87,7 @@ class S {
 
 S x(12); // ERROR before C++17: the class template parameter T was not deduced from
 // the constructor call argument 12
-\end{lstlisting}
+\end{cpp}
 
 这个限制在C++17中取消了，参见第15.12节。
 
@@ -95,17 +95,17 @@ S x(12); // ERROR before C++17: the class template parameter T was not deduced f
 
 默认函数调用参数可以在函数模板中指定，就像普通函数一样:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 void init (T* loc, T const& val = T())
 {
 	*loc = val;
 }
-\end{lstlisting}
+\end{cpp}
 
 这个例子所示，默认函数调用参数可以依赖于模板参数。这种依赖的默认参数只有在没有提供显式参数的情况下，才会实例化——这一原则使得下面的例子有效:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 class S {
 	public:
 	S(int, int);
@@ -120,11 +120,11 @@ int main()
 	// call argument T() needs no instantiation
 	// because an explicit argument is given
 }
-\end{lstlisting}
+\end{cpp}
 
 即使不依赖默认调用参数，也不能用它来推导模板参数。所以，以下代码无效:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 void f (T x = 42)
 { }
@@ -134,13 +134,13 @@ int main()
 	f<int>(); // OK: T = int
 	f(); // ERROR: cannot deduce T from default call argument
 }
-\end{lstlisting}
+\end{cpp}
 
 \subsection{异常规范}
 
 与默认调用参数一样，异常规范只在需要时才实例化，不参与模板参数推导。例如:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 void f(T, int) noexcept(nonexistent(T())); // #1
 
@@ -150,13 +150,13 @@ void test(int i)
 {
 	f(i, i); // ERROR: chooses #1 , but the expression nonexistent(T()) is ill-formed
 }
-\end{lstlisting}
+\end{cpp}
 
 \#1的函数中的noexcept规范试图调用一个不存在的函数。通常，在函数模板声明中直接出现这样的错误，会触发模板参数推导失败(SFINAE)，通过选择\#2的匹配较小的函数(与省略号参数匹配从重载解析的角度来看，是最糟糕的匹配类型;详见附录C)但是，由于异常说明不参与模板参数推导，所以重载解析选择\#1，当noexcept实例化时，程序就会呈现出一种病态的形式。
 
 相同的规则适用于潜在异常类型的异常规范：
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 void g(T, int) throw(typename T::Nonexistent); // #1
 
@@ -167,7 +167,7 @@ void test(int i)
 {
 	g(i, i); // ERROR: chooses #1 , but the type T::Nonexistent is ill-formed
 }
-\end{lstlisting}
+\end{cpp}
 
 然而，这些“动态”异常规范自C++11以来已弃用，并在C++17中删除。
 

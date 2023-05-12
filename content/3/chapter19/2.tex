@@ -4,7 +4,7 @@
 下面是如何在accum()函数模板中引入策略的示例:
 
 \filename{traits/accum6.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #ifndef ACCUM_HPP
 #define ACCUM_HPP
 
@@ -26,18 +26,17 @@ auto accum (T const* beg, T const* end)
 }
 
 #endif // ACCUM_HPP
-\end{lstlisting}
+\end{cpp}
 
 accum()的这个版本中，SumPolicy是一个策略类，也就是说，这个类通过一个接口为一个算法实现一个或多个策略。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}可以将其推广为策略参数，可以是类(如前所述)或指向函数的指针。
-\end{tcolorbox}
+\begin{notice}可以将其推广为策略参数，可以是类(如前所述)或指向函数的指针。
+\end{notice}
 
 SumPolicy可以这样写:
 
 \filename{traits/sumpolicy1.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #ifndef SUMPOLICY_HPP
 #define SUMPOLICY_HPP
 class SumPolicy {
@@ -48,12 +47,12 @@ class SumPolicy {
 	}
 };
 #endif // SUMPOLICY_HPP
-\end{lstlisting}
+\end{cpp}
 
 通过指定不同的策略来积累值，可以计算不同的东西。下面的程序，打算确定一些值的乘积:
 
 \filename{traits/accum6.cpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include "accum6.hpp"
 #include <iostream>
 
@@ -74,13 +73,13 @@ int main()
 			<< accum<int,MultPolicy>(num, num+5)
 			<< ’\n’;
 }
-\end{lstlisting}
+\end{cpp}
 
 然而，这个程序的输出并不是我们想要的:
 
-\begin{tcblisting}{commandshell={}}
+\begin{shell}
 the product of the integer values is 0
-\end{tcblisting}
+\end{shell}
 
 这里的问题是由初值的选择引起的:尽管0适用于求和，但它不适用于乘法(零初值会导致累积乘法的结果为零)。这说明了不同的特征和政策可能会相互影响，强调了设计模板的重要性。
 
@@ -102,9 +101,8 @@ policy n. …作为有利或权宜之计而采取的行动方针
 
 基于此，我们倾向于将术语策略类的使用限制为对某种类型的操作进行编码的类，这些操作与其他模板参数基本上是无关的。这与Andrei Alexandrescu在他的《现代C++设计》一书中的观点一致(见[AlexandrescuDesign]第8页):
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}Alexandrescu一直是策略界的主要声音，他在此基础上开发了一套丰富的技术。
-\end{tcolorbox}
+\begin{notice}Alexandrescu一直是策略界的主要声音，他在此基础上开发了一套丰富的技术。
+\end{notice}
 
 \textit{政策与特征有很多共同点，但不同之处在于它们不太强调类型，而更多地强调行为。}
 
@@ -167,7 +165,7 @@ policy n. …作为有利或权宜之计而采取的行动方针
 为了实现累积策略，选择将SumPolicy和multipolicy表示为具有成员模板的普通类。另一种方法是使用类模板设计策略类接口，然后将类模板用作模板参数(参见第5.7节和第12.2.3节)。可以将SumPolicy重写为模板:
 
 \filename{traits/sumpolicy2.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #ifndef SUMPOLICY_HPP
 #define SUMPOLICY_HPP
 
@@ -180,12 +178,12 @@ class SumPolicy {
 };
 
 #endif // SUMPOLICY_HPP
-\end{lstlisting}
+\end{cpp}
 
 Accum的接口可以适应使用双重模板参数:
 
 \filename{traits/accum7.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #ifndef ACCUM_HPP
 #define ACCUM_HPP
 
@@ -207,7 +205,7 @@ auto accum (T const* beg, T const* end)
 }
 
 #endif // ACCUM_HPP
-\end{lstlisting}
+\end{cpp}
 
 同样的变换也可以应用于特征参数(其他变体也有可能:与其显式地将AccT类型传递给策略类型，不如传递积累特征，并让策略从特征参数确定其结果的类型)。
 
@@ -227,12 +225,11 @@ auto accum (T const* beg, T const* end)
 
 结束对特性和策略的介绍之前，有必要看看accum()的另一个版本，它增加了处理通用迭代器(而不仅仅是指针)的功能，这是业界通用组件所期望的。这仍然允许用指针调用accum()，因为C++标准库提供了迭代器特性(特征到处都是!)。因此，可以这样定义accum()的初始版本(忽略后面的改进):
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}C++11中，必须将返回类型声明为VT。
-\end{tcolorbox}
+\begin{notice}C++11中，必须将返回类型声明为VT。
+\end{notice}
 
 \filename{traits/accum0.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #ifndef ACCUM_HPP
 #define ACCUM_HPP
 
@@ -251,11 +248,11 @@ auto accum (Iter start, Iter end)
 }
 
 #endif // ACCUM_HPP
-\end{lstlisting}
+\end{cpp}
 
 std::iterator\_traits结构封装了迭代器的所有相关属性。因为指针的偏特化存在，所以这些特征可以与普通指针类型一起使用。以下是标准库的实现:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 namespace std {
 	template<typename T>
 	struct iterator_traits<T*> {
@@ -266,7 +263,7 @@ namespace std {
 		using iterator_category = random_access_iterator_tag ;
 	};
 }
-\end{lstlisting}
+\end{cpp}
 
 因为没有迭代器所指向值的累积类型，所以需要自行设计AccumulationTraits。
 

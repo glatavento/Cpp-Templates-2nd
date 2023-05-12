@@ -5,14 +5,13 @@ C++元编程技术随着时间的推移而发展(本章末尾的附注回顾了�
 
 本书的第一版中，我们限制在最初的C++标准中引入的特性上(1998年发布，2003年进行了很小的修改)。那个世界里，编写简单的编译时(“元”)计算是一个挑战，我们在本章中花了大量的时间来研究这个问题;一个相当高级的示例，在编译时使用递归模板实例化计算整数值的平方根。正如8.2节中介绍的，在C++11中，尤其是C++14，通过引入constexpr函数，降低了挑战的难度。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}C++11的constexpr功能足以解决许多常见的挑战，但编程模型并不总是令人满意的(例如，没有循环语句，所以迭代计算必须利用递归函数调用;参见23.2节)。C++14启用了循环语句和其他构造方式。
-\end{tcolorbox}
+\begin{notice}C++11的constexpr功能足以解决许多常见的挑战，但编程模型并不总是令人满意的(例如，没有循环语句，所以迭代计算必须利用递归函数调用;参见23.2节)。C++14启用了循环语句和其他构造方式。
+\end{notice}
 
 C++14后，计算平方根的编译时函数很容易写成这样:
 
 \filename{meta/sqrtconstexpr.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 constexpr T sqrt(T x)
 {
@@ -39,18 +38,18 @@ constexpr T sqrt(T x)
 		}
 	}
 }
-\end{lstlisting}
+\end{cpp}
 
 该算法通过对已知包含x平方根的区间反复二分来寻找答案(根号0和1为特殊情况，以保持收敛准则简单)。这个sqrt()函数可以在编译或运行时求值:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 static_assert(sqrt(25) == 5, ""); // OK (evaluated at compile time)
 static_assert(sqrt(40) == 6, ""); // OK (evaluated at compile time)
 
 std::array<int, sqrt(40)+1> arr; // declares array of 7 elements (compile time)
 long long l = 53478;
 std::cout << sqrt(l) << ’\n’; // prints 231 (evaluated at run time)
-\end{lstlisting}
+\end{cpp}
 
 这个函数的实现在运行时可能不是最高效的(运行时利用机器的特性通常会有很好的性能回报)，但因为执行的是编译时计算，所以绝对效率不如可移植性重要。在这个平方根示例中没有高级的“魔术模板”，只有函数模板的常见模板参数推导。这里的代码是“普通的C++”，读起来并不困难。
 
@@ -63,7 +62,7 @@ std::cout << sqrt(l) << ’\n’; // prints 231 (evaluated at run time)
 看看下面的例子:
 
 \filename{meta/removeallextents.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 // primary template: in general we yield the given type:
 template<typename T>
 struct RemoveAllExtentsT {
@@ -82,20 +81,19 @@ struct RemoveAllExtentsT<T[]> {
 
 template<typename T>
 using RemoveAllExtents = typename RemoveAllExtentsT<T>::Type;
-\end{lstlisting}
+\end{cpp}
 
 RemoveAllExtents是一个类型元函数(即生成结果类型的计算设备)，将从类型中移除任意数量的顶层“数组层”，可以这样使用它:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 RemoveAllExtents<int[]> // yields int
 RemoveAllExtents<int[5][10]> // yields int
 RemoveAllExtents<int[][10]> // yields int
 RemoveAllExtents<int(*)[5]> // yields int(*)[5]
-\end{lstlisting}
+\end{cpp}
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}C++标准库提供了相应的类型特征std::remove\_all\_extents。详见第D.4节。
-\end{tcolorbox}
+\begin{notice}C++标准库提供了相应的类型特征std::remove\_all\_extents。详见第D.4节。
+\end{notice}
 
 元函数通过让匹配顶层数组情况的偏特化，递归地“调用”元函数本身来执行其任务。
 
@@ -107,15 +105,15 @@ RemoveAllExtents<int(*)[5]> // yields int(*)[5]
 
 为了说明这一原理，先从一个简单的例子开始:计算两个std::array值的点积。回想一下，std::array是固定长度的容器模板，声明如下:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 namespace std {
 	template<typename T, size_t N> struct array;
 }
-\end{lstlisting}
+\end{cpp}
 
 其中N是数组中类型为T的元素个数。给定两个相同数组类型的对象，其点积可以这样计算:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T, std::size_t N>
 auto dotProduct(std::array<T, N> const& x, std::array<T, N> const& y)
 {
@@ -125,25 +123,24 @@ auto dotProduct(std::array<T, N> const& x, std::array<T, N> const& y)
 	}
 	return result;
 }
-\end{lstlisting}
+\end{cpp}
 
 直接编译for循环将产生分支指令，与直线执行相比，在某些机器上可能会造成一些开销
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 result += x[0]*y[0];
 result += x[1]*y[1];
 result += x[2]*y[2];
 result += x[3]*y[3];
 ...
-\end{lstlisting}
+\end{cpp}
 
 现代编译器会将循环优化为对目标平台最有效的形式。为了便于讨论，可以以一种避免循环的方式重写dotProduct()实现:
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}这称为循环展开。我们通常不建议在可移植代码中显式展开循环，因为决定最佳展开策略的细节高度依赖于目标平台和循环体;编译器通常会更好地考虑这些因素。
-\end{tcolorbox}
+\begin{notice}这称为循环展开。我们通常不建议在可移植代码中显式展开循环，因为决定最佳展开策略的细节高度依赖于目标平台和循环体;编译器通常会更好地考虑这些因素。
+\end{notice}
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T, std::size_t N>
 struct DotProductT {
 	static inline T result(T* a, T* b) {
@@ -165,31 +162,30 @@ auto dotProduct(std::array<T, N> const& x,
 {
 	return DotProductT<T, N>::result(x.begin(), y.begin());
 }
-\end{lstlisting}
+\end{cpp}
 
 这个新实现将工作委托给一个类模板DotProductT，使我们能够使用递归模板实例化和类模板偏特化来结束递归。DotProductT的每次实例化，会产生点积和数组其他组件的点积。对于类型std::array<T，N>，因此将有N个主模板实例和一个终止偏特化的实例。为了提高效率，编译器必须每次调用内联静态成员函数result()。即使启用了中等级别的编译器优化，这也是正确的。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}我们在这里显式地指定inline关键字，是因为一些编译器(尤其是Clang)将此作为提示，以尝试更努力地进行内联调用。从语言的角度来看，这些函数隐式内联，因为它们在其外围类的体中定义。
-\end{tcolorbox}
+\begin{notice}我们在这里显式地指定inline关键字，是因为一些编译器(尤其是Clang)将此作为提示，以尝试更努力地进行内联调用。从语言的角度来看，这些函数隐式内联，因为它们在其外围类的体中定义。
+\end{notice}
 
 这段代码的主要特点是，混合了确定代码整体结构的编译时计算(通过递归模板实例化实现)和确定特定运行时效果的运行时计算(调用result())。
 
 前面提到过，由于“类型容器”的可用性，类型元编程得到了极大的增强。混合元编程中，固定长度的数组类型很有用。尽管如此，混合元编程真正的“英雄容器”是元组。元组是一个值序列，每个值都有一个可选择的类型。C++标准库包含一个支持该概念的std::tuple类模板。例如，
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 std::tuple<int, std::string, bool> tVal{42, "Answer", true};
-\end{lstlisting}
+\end{cpp}
 
 定义了一个变量tVal，它聚合了三个类型的值:int，std::string和bool(按照特定的顺序)。由于类元组容器在现代C++编程中的重要性，我们将在第25章中详细开发一个容器。上面的tVal类型非常类似于一个简单的结构类型:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 struct MyTriple {
 	int v1;
 	std::string v2;
 	bool v3;
 };
-\end{lstlisting}
+\end{cpp}
 
 鉴于在std::array和std::tuple中，有数组类型和(简单)结构类型的灵活对应，很自然地想知道简单联合类型的对应是否也对混合计算有用：答案是肯定的。C++标准库在C++17中为此引入了std::variant模板，我们在第26章开发了一个类似的组件。
 
@@ -202,19 +198,19 @@ struct MyTriple {
 用一个高度简化的例子来说明，用它们占主单位的比例(分数)来表示单位。时间的主要单位是秒，则毫秒用比例1/1000表示，分钟用比例60/1表示。关键在于定义比率类型，其中每个值都有自己的类型:
 
 \filename{meta/ratio.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<unsigned N, unsigned D = 1>
 struct Ratio {
 	static constexpr unsigned num = N; // numerator
 	static constexpr unsigned den = D; // denominator
 	using Type = Ratio<num, den>;
 };
-\end{lstlisting}
+\end{cpp}
 
 现在可以定义编译时计算，比如添加两个单元:
 
 \filename{meta/ratioadd.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 // implementation of adding two ratios:
 template<typename R1, typename R2>
 struct RatioAddImpl
@@ -229,11 +225,11 @@ struct RatioAddImpl
 // using declaration for convenient usage:
 template<typename R1, typename R2>
 using RatioAdd = typename RatioAddImpl<R1, R2>::Type;
-\end{lstlisting}
+\end{cpp}
 
 在编译时计算两个比率的总和:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 using R1 = Ratio<1,1000>;
 using R2 = Ratio<2,3>;
 using RS = RatioAdd<R1,R2>; // RS has type Ratio<2003,2000>
@@ -241,12 +237,12 @@ std::cout << RS::num << ’/’ << RS::den << ’\n’; // prints 2003/3000
 
 using RA = RatioAdd<Ratio<2,3>,Ratio<5,7>>; // RA has type Ratio<29,21>
 std::cout << RA::num << ’/’ << RA::den << ’\n’; // prints 29/21
-\end{lstlisting}
+\end{cpp}
 
 现在可以为duration定义一个类模板，参数化为任意值类型和一个单位类型，该单位类型是Ratio<>的实例:
 
 \filename{meta/duration.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 // duration type for values of type T with unit type U:
 template<typename T, typename U = Ratio<1>>
 class Duration {
@@ -263,12 +259,12 @@ class Duration {
 		return val;
 	}
 };
-\end{lstlisting}
+\end{cpp}
 
 有趣的是定义了一个加法操作符来加和两个duration:
 
 \filename{meta/durationadd.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 // adding two durations where unit type might differ:
 template<typename T1, typename U1, typename T2, typename U2>
 auto constexpr operator+(Duration<T1, U1> const& lhs,
@@ -283,11 +279,11 @@ auto constexpr operator+(Duration<T1, U1> const& lhs,
 				rhs.value() * VT::den / U2::den * U2::num;
 	return Duration<decltype(val), VT>(val);
 }
-\end{lstlisting}
+\end{cpp}
 
 允许参数有不同的单位类型，U1和U2。使用这些单位类型来计算结果持续时间，从而得到一个对应的单位分数(分子为1的分数)的单位类型。有了所有这些，可以编译以下代码:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 int x = 42;
 int y = 77;
 
@@ -295,19 +291,19 @@ auto a = Duration<int, Ratio<1,1000>>(x); // x milliseconds
 auto b = Duration<int, Ratio<2,3>>(y); // y 2/3 seconds
 auto c = a + b; // computes resulting unit type 1/3000 seconds
 				// and generates run-time code for c = a*3 + b*2000
-\end{lstlisting}
+\end{cpp}
 
 关键的“混合”效果是，对于sum c，编译器在编译时确定结果单元类型Ratio<1,3000>，并生成代码在运行时计算结果值，该值会根据结果单元类型进行调整。
 
 因为值类型是模板参数，所以可以将Duration类用于int以外的值类型，甚至可以使用异构值类型(只要定义了这些类型的值如何相加):
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 auto d = Duration<double, Ratio<1,3>>(7.5); // 7.5 1/3 seconds
 auto e = Duration<int, Ratio<1>>(4); // 4 seconds
 
 auto f = d + e; // computes resulting unit type 1/3 seconds
 				// and generates code for f = d + e*3
-\end{lstlisting}
+\end{cpp}
 
 此外，若值在编译时已知，编译器甚至可以在编译时执行值计算，因为持续时间的operator+是constexpr。
 

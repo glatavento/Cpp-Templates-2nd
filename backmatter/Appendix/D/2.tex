@@ -1,9 +1,8 @@
 
 我们从测试主要类型和复合类型类别的标准特征开始(参见图D.1)。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}感谢Howard Hinnant提供了这种类型层次结构\url{http://howardhinnant.github.io/TypeHiearchy.pdf}
-\end{tcolorbox}
+\begin{notice}感谢Howard Hinnant提供了这种类型层次结构\url{http://howardhinnant.github.io/TypeHiearchy.pdf}
+\end{notice}
 
 通常，每个类型都只属于一个主要类型类别(图D.1中的白色元素)。复合类型类别需要将主要类型合并到更高级的概念中。
 
@@ -16,9 +15,8 @@
 
 本节测试给定类型的主要类型类别。对于给定类型，只有一个主类型类别具有计算结果为true的静态值成员。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}C++14前，唯一的例外是std::nullptr\_t，对于所有的主类型类别实用程序都产生了false，因为is\_null\_pointer<>不是C++11的一部分。
-\end{tcolorbox}
+\begin{notice}C++14前，唯一的例外是std::nullptr\_t，对于所有的主类型类别实用程序都产生了false，因为is\_null\_pointer<>不是C++11的一部分。
+\end{notice}
 
 结果与类型是否用const和/或volatile(cv限定)限定无关。
 
@@ -60,14 +58,14 @@ Lambda表达式的类型是一个类(参见第15.10.6节)，将is\_class应用�
 
 \item 
 例如:
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 is_void_v<void> // yields true
 is_void_v<void const> // yields true
 is_void_v<int> // yields false
 void f();
 is_void_v<decltype(f)> // yields false (f has function type)
 is_void_v<decltype(f())> // yields true (return type of f() is void)
-\end{lstlisting}
+\end{cpp}
 
 \end{itemize}
 
@@ -112,7 +110,7 @@ std::array<>不是数组类型，而是类。
 \item 
 例如:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 is_array_v<int[]> // yields true
 is_array_v<int[5]> // yields true
 is_array_v<int*> // yields false
@@ -123,7 +121,7 @@ void foo(int a[], int b[5], int* c)
 	is_array_v<decltype(b)> // yields false (b has type int*)
 	is_array_v<decltype(c)> // yields false (c has type int*)
 }
-\end{lstlisting}
+\end{cpp}
 
 \item 
 参见第19.8.2节了解实现细节。
@@ -156,7 +154,7 @@ nullptr的类型是std::nullptr\_t
 \item 
 例如:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 is_pointer_v<int> // yields false
 is_pointer_v<int*> // yields true
 is_pointer_v<int* const> // yields true
@@ -171,7 +169,7 @@ int* foo(int a[5], void(f)())
 	is_pointer_v<decltype(&foo)> // yields true
 	is_pointer_v<decltype(foo(a,f))> // yields true (for return type int*)
 }
-\end{lstlisting}
+\end{cpp}
 
 \item 
 参见第19.8.2节了解实现细节。
@@ -185,12 +183,12 @@ int* foo(int a[5], void(f)())
 
 \item 
 例如:
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 is_null_pointer_v<decltype(nullptr)> // yields true
 void* p = nullptr;
 
 is_null_pointer_v<decltype(p)> // yields false (p has not type std::nullptr_t)
-\end{lstlisting}
+\end{cpp}
 
 \item 
 从C++14开始支持。
@@ -215,7 +213,7 @@ is_null_pointer_v<decltype(p)> // yields false (p has not type std::nullptr_t)
 
 \item 
 例如:
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 is_lvalue_reference_v<int> // yields false
 is_lvalue_reference_v<int&> // yields true
 is_lvalue_reference_v<int&&> // yields false
@@ -224,7 +222,7 @@ is_rvalue_reference_v<int> // yields false
 is_rvalue_reference_v<int&> // yields false
 is_rvalue_reference_v<int&&> // yields true
 is_rvalue_reference_v<void> // yields false
-\end{lstlisting}
+\end{cpp}
 
 \item 
 参见第19.8.2节了解实现细节。
@@ -251,14 +249,14 @@ is_rvalue_reference_v<void> // yields false
 
 \item 
 例如:
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 is_class_v<int> // yields false
 is_class_v<std::string> // yields true
 is_class_v<std::string const> // yields true
 is_class_v<std::string&> // yields false
 auto l1 = []{};
 is_class_v<decltype(l1)> // yields true (a lambda is a class object)
-\end{lstlisting}
+\end{cpp}
 
 \item 
 参见第19.8.4节了解实现细节。
@@ -282,7 +280,7 @@ is_class_v<decltype(l1)> // yields true (a lambda is a class object)
 
 \item 
 例如:
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 void foo(void(f)())
 {
 	is_function_v<decltype(f)> // yields false (f has type void(*)())
@@ -290,7 +288,7 @@ void foo(void(f)())
 	is_function_v<decltype(&foo)> // yields false
 	is_function_v<decltype(foo(f))> // yields false (for return type)
 }
-\end{lstlisting}
+\end{cpp}
 
 \item 
 参见第19.8.3节了解实现细节。
@@ -308,9 +306,9 @@ void foo(void(f)())
 
 \item 
 等价于: 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 is_lvalue_reference_v<T> || is_rvalue_reference_v<T>
-\end{lstlisting}
+\end{cpp}
 
 \item 
 参见第19.8.2节了解实现细节。
@@ -344,9 +342,9 @@ is_lvalue_reference_v<T> || is_rvalue_reference_v<T>
 
 \item 
 等价于: 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 is_member_object_pointer_v<T> || is_member_function_pointer_v<T>
-\end{lstlisting}
+\end{cpp}
 \end{itemize}
 
 \textbf{std::is\_arithmetic<T>::value}
@@ -357,9 +355,9 @@ is_member_object_pointer_v<T> || is_member_function_pointer_v<T>
 
 \item 
 等价于: 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 is_integral_v<T> || is_floating_point_v<T>
-\end{lstlisting}
+\end{cpp}
 \end{itemize}
 
 \textbf{std::is\_fundamental<T>::value}
@@ -370,15 +368,15 @@ is_integral_v<T> || is_floating_point_v<T>
 
 \item 
 等价于: 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 is_arithmetic_v<T> || is_void_v<T> || is_null_pointer_v<T>
-\end{lstlisting}
+\end{cpp}
 
 \item 
 等价于: 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 !is_compound_v<T>
-\end{lstlisting}
+\end{cpp}
 
 \item 
 参见第448页19.8.1节中的IsFundaT的实现细节。
@@ -392,10 +390,10 @@ is_arithmetic_v<T> || is_void_v<T> || is_null_pointer_v<T>
 
 \item 
 等价于:  
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 is_arithmetic_v<T> || is_enum_v<T> || is_pointer_v<T>
 || is_member_pointer_v<T> || is_null_pointer_v<T>
-\end{lstlisting}
+\end{cpp}
 \end{itemize}
 
 \textbf{std::is\_object < T >::value}
@@ -406,15 +404,15 @@ is_arithmetic_v<T> || is_enum_v<T> || is_pointer_v<T>
 
 \item 
 等价于: 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 is_scalar_v<T> || is_array_v<T> || is_class_v<T> || is_union_v<T>
-\end{lstlisting}
+\end{cpp}
 
 \item
 等价于: 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 ! (is_function_v<T> || is_reference_v<T> || is_void_v<T>)
-\end{lstlisting}
+\end{cpp}
 \end{itemize}
 
 \textbf{std::is\_compound <T>::value}
@@ -425,17 +423,17 @@ is_scalar_v<T> || is_array_v<T> || is_class_v<T> || is_union_v<T>
 
 \item 
 等价于: 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 !is_fundamental_v<T>
-\end{lstlisting}
+\end{cpp}
 
 \item
 等价于: 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 is_enum_v<T> || is_array_v<T> || is_class_v<T> || is_union_v<T>
 || is_reference_v<T> || is_pointer_v<T> || is_member_pointer_v<T>
 || is_function_v<T>
-\end{lstlisting}
+\end{cpp}
 \end{itemize}
 
 

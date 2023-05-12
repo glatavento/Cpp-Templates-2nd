@@ -1,6 +1,6 @@
 参数包是在C++11中引入的，但处理它们通常需要递归模板实例化技术。回想一下14.6节中讨论的代码示例:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename Head, typename... Remainder>
 void f(Head&& h, Remainder&&... r) {
 	doSomething(h);
@@ -9,7 +9,7 @@ void f(Head&& h, Remainder&&... r) {
 		f(r...);
 	}
 }
-\end{lstlisting}
+\end{cpp}
 
 通过使用C++17编译时if语句的特性(请参阅第8.5节)，这个示例变得更简单了，但仍然属于递归实例化技术，编译起来可能会很耗时。
 

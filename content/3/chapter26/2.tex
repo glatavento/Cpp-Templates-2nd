@@ -4,7 +4,7 @@
 下面定义的类模板VariantChoice提供了在变量的活动值为(或将为)T类型时，对缓冲区进行操作所需的操作:
 
 \filename{variant/variantchoice.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include "findindexof.hpp"
 template<typename T, typename... Types>
 class VariantChoice {
@@ -25,12 +25,12 @@ class VariantChoice {
 	Derived& operator= (T const& value); // see variantchoiceassign.hpp
 	Derived& operator= (T&& value); // see variantchoiceassign.hpp
 };
-\end{lstlisting}
+\end{cpp}
 
 模板参数包Types将包含变体中的所有类型，其可以形成Derived类型(用于CRTP)，从而提供向下转换操作getDerived()。类型的第二个有趣用法是，在类型列表中查找特定类型T的位置，可以通过元函数FindIndexOfT完成:
 
 \filename{variant/findindexof.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename List, typename T, unsigned N = 0,
 		bool Empty = IsEmpty<List>::value>
 struct FindIndexOfT;
@@ -49,14 +49,14 @@ template<typename List, typename T, unsigned N>
 struct FindIndexOfT<List, T, N, true>
 {
 };
-\end{lstlisting}
+\end{cpp}
 
 该指标值用于计算T对应的辨别器的值;稍后我们将返回特定的判别值。
 
 Variant的框架如下，表明了Variant、VariantStorage和VariantChoice之间的关系:
 
 \filename{variant/variant-skel.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename... Types>
 class Variant
 	: private VariantStorage<Types...>,
@@ -66,37 +66,35 @@ class Variant
 		friend class VariantChoice; // enable CRTP
 	...
 };
-\end{lstlisting}
+\end{cpp}
 
 每个Variant都有一个单独的、共享的VariantStorage基类。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}基类是私有的，不是公共接口的一部分。友元模板需要VariantChoice中的asDerived()函数，才能向下转换到Variant。
-\end{tcolorbox}
+\begin{notice}基类是私有的，不是公共接口的一部分。友元模板需要VariantChoice中的asDerived()函数，才能向下转换到Variant。
+\end{notice}
 
 还有一些VariantChoice基类，是由以下嵌套的包扩展产生的(参见第12.4.4节):
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 VariantChoice<Types, Types...>...
-\end{lstlisting}
+\end{cpp}
 
 实例中，有两个展开:外层展开，通过展开对类型的第一个引用，为类型中的每个类型T生成VariantChoice基类；内部展开，展开了第二次出现的Types，另外还将Types中的所有类型传递给每个VariantChoice基类。
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 Variant<int, double, std::string>
-\end{lstlisting}
+\end{cpp}
 
 会产生下面一组VariantChoice基类:
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}通过类型T来区分给定Variant的VariantChoice基类的效果是，可以防止类型重复。Variant<double, int, double>将产生编译时错误，指出类不能直接继承同一基类(在本例中，VariantChoice<double, double, int, double>会出现两个编译错误)。
-\end{tcolorbox}
+\begin{notice}通过类型T来区分给定Variant的VariantChoice基类的效果是，可以防止类型重复。Variant<double, int, double>将产生编译时错误，指出类不能直接继承同一基类(在本例中，VariantChoice<double, double, int, double>会出现两个编译错误)。
+\end{notice}
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 VariantChoice<int, int, double, std::string>,
 VariantChoice<double, int, double, std::string>,
 VariantChoice<std::string, int, double, std::string>
-\end{lstlisting}
+\end{cpp}
 
 这三个基类的辨别器值将分别为1、2和3。当变量存储的discriminator成员与特定VariantChoice基类的discriminator匹配时，该基类负责管理动态值。
 
@@ -105,7 +103,7 @@ VariantChoice<std::string, int, double, std::string>
 Variant的完整定义如下所示，下面几节将描述Variant每个成员的实现。
 
 \filename{variant/variant.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename... Types>
 class Variant
 : private VariantStorage<Types...>,
@@ -150,7 +148,7 @@ class Variant
 	~Variant() { destroy(); }
 	void destroy(); // see variantdestroy.hpp
 };
-\end{lstlisting}
+\end{cpp}
 
 
 

@@ -4,15 +4,15 @@ C++17前，必须将所有模板参数类型传递给类模板(除非有默认�
 
 例如，前面所有的代码示例中，可以使用复制构造函数，而非指定模板参数:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 Stack<int> intStack1; // stack of ints
 Stack<int> intStack2 = intStack1; // OK in all versions
 Stack intStack3 = intStack1; // OK since C++17
-\end{lstlisting}
+\end{cpp}
 
 通过接受参数的构造函数，支持推导堆栈的元素类型。例如，提供由单个元素初始化的堆栈:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 class Stack {
 private:
@@ -24,13 +24,13 @@ public:
 	}
 	...
 };
-\end{lstlisting}
+\end{cpp}
 
 可以这样声明栈:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 Stack intStack = 0; // Stack<int> deduced since C++17
-\end{lstlisting}
+\end{cpp}
 
 使用整数0初始化堆栈，模板参数T推导为int，因此会实例化一个stack<int>类型。
 
@@ -39,39 +39,37 @@ Stack intStack = 0; // Stack<int> deduced since C++17
 \begin{itemize}
 \item 
 根据int构造函数模板的定义，必须请求默认构造函数以其默认行为可用。因为只有在没有定义其他构造函数时，默认构造函数才可用:
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 Stack() = default;
-\end{lstlisting}
+\end{cpp}
 
 \item 
 参数elem传递给带大括号的elems，以初始化初始化列表，以elem作为唯一参数:
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 : elems({elem})
-\end{lstlisting}
+\end{cpp}
 vector的构造函数中无法接受单个参数作为初始元素。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}更糟糕的是，vector的构造函数会将一个整型参数作为初始大小，因此对于初始值为5的堆栈，当使用:elems(elem)时，vector将获得5个元素的初始大小。
-\end{tcolorbox}
+\begin{notice}更糟糕的是，vector的构造函数会将一个整型参数作为初始大小，因此对于初始值为5的堆栈，当使用:elems(elem)时，vector将获得5个元素的初始大小。
+\end{notice}
 
 \end{itemize}
 
 与函数模板不同，类模板参数不能只推导部分参数(通过显式地只指定部分模板参数)。详细信息请参见15.12。
 
-\noindent
-\textbf{用字符串字面值推导类模板参数}
+\subsubsection{用字符串字面值推导类模板参数}
 
 原则上，可以用字符串字面值初始化堆栈:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 Stack stringStack = "bottom"; // Stack<char const[7]> deduced since C++17
-\end{lstlisting}
+\end{cpp}
 
 但会带来很多麻烦，通过引用传递模板类型T的参数时，参数不会衰变(衰变是指将原始数组类型转换为相应的原始指针类型的机制)。这意味着会初始化了一个实例
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 Stack<char const[7]>
-\end{lstlisting}
+\end{cpp}
 
 因为，在使用T的地方使用了char const[7]。例如，不能push不同大小的字符串，因为其有不同的类型。相关的详细讨论，请参阅第7.4节。
 
@@ -79,7 +77,7 @@ Stack<char const[7]>
 
 由于这个原因，可以声明构造函数，直接传递值:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 class Stack {
 private:
 	std::vector<T> elems; // elements
@@ -89,17 +87,17 @@ public:
 	}
 	...
 };
-\end{lstlisting}
+\end{cpp}
 
 有了这个，下面的初始化就可以工作了:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 Stack stringStack = "bottom"; // Stack<char const*> deduced since C++17
-\end{lstlisting}
+\end{cpp}
 
 在这种情况下，最好将临时元素移到堆栈中，以避免不必要地复制:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 class Stack {
 private:
@@ -110,36 +108,35 @@ public:
 	}
 	...
 };
-\end{lstlisting}
+\end{cpp}
 
-\noindent
-\textbf{推导策略}
+\subsubsection{推导策略}
 
 除了声明构造函数由值调用之外，还有一种不同的解决方案:在容器中处理指针是噩梦的开始，所以应该禁止为容器类自动推导字符指针。
 
 可以定义特定的推导策略来提供额外的辅助，或修复现有类模板参数的推导。例如，可以定义只要传入一个字符串字面值或C字符串，栈就会实例化为std::string:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 Stack(char const*) -> Stack<std::string>;
-\end{lstlisting}
+\end{cpp}
 
 这个策略必须出现在与类定义相同的作用域(命名空间)中，它遵循类定义。将\texttt{->}后面的类型称为推导策略的引导类型。
 
 现在，声明
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 Stack stringStack{"bottom"}; // OK: Stack<std::string> deduced since C++17
-\end{lstlisting}
+\end{cpp}
 
 将堆栈推断为一个Stack<std::string>类。然而，在以下情况下仍然不能正常工作:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 Stack stringStack = "bottom"; // Stack<std::string> deduced, but still not valid
-\end{lstlisting}
+\end{cpp}
 
 推导出std::string，以便实例化一个Stack<std::string>类:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 class Stack {
 private:
 	std::vector<std::string> elems; // elements
@@ -149,21 +146,21 @@ public:
 	}
 	...
 };
-\end{lstlisting}
+\end{cpp}
 
 但根据语言规则，不能通过将字符串字面值传递给std::string的构造函数来复制对象，从而完成初始化。所以必须像这样初始化堆栈:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 Stack stringStack{"bottom"}; // Stack<std::string> deduced and valid
-\end{lstlisting}
+\end{cpp}
 
 此时的疑问在于，类模板参数推导的副本。将stringStack声明为Stack<std::string>之后，下面的初始化声明了相同的类型(因此，调用了复制构造函数)，而不是通过字符串堆栈元素对堆栈进行初始化:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 Stack stack2{stringStack}; // Stack<std::string> deduced
 Stack stack3(stringStack); // Stack<std::string> deduced
 Stack stack4 = {stringStack}; // Stack<std::string> deduced
-\end{lstlisting}
+\end{cpp}
 
 有关类模板参数推导的更多细节，请参见15.12节。
 

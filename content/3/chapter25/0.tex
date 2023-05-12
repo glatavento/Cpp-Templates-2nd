@@ -2,14 +2,14 @@
 
 元组的另一种方式是在可执行程序中显示类型列表，Typelist<int, double, std::string>描述了可以在编译时操作的包含int, double和std::string的类型序列，Tuple<int, double, std::string>描述了可以在运行时操作的int, double和std::string的存储。例如，下面的程序创建这样一个元组的实例:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename... Types>
 class Tuple {
 	... // implementation discussed below
 };
 
 Tuple<int, double, std::string> t(17, 3.14, "Hello, World!");
-\end{lstlisting}
+\end{cpp}
 
 通常使用模板元编程和类型列表来生成可用于存储数据的元组，即使在上面的例子中选择了int、double和std::string作为元素类型，也可以用元程序创建元组中存储的类型集。
 

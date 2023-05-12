@@ -1,11 +1,11 @@
 几种情况下，用于推导的一对(A, P)不能从函数调用的参数和函数模板参数中获得。第一种情况发生在获取函数模板地址时，P是函数模板声明的参数化类型，A是初始化或赋值给指针的函数类型。例如:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 void f(T, T);
 
 void (*pf)(char, char) = &f;
-\end{lstlisting}
+\end{cpp}
 
 例子中，P是void(T, T)， A是void(char, char)。char替换T后，推导成功，pf初始化为特化的地址f<char>。
 
@@ -32,23 +32,23 @@ void (*pf)(char, char) = &f;
 
 另一种特殊情况发生在转换函数模板中。例如:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 class S {
 	public:
 	template<typename T> operator T&();
 };
-\end{lstlisting}
+\end{cpp}
 
 这种情况下，获得(P, A)对，就好像包含一个要转换的类型和一个作为转换函数返回类型的类型:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 void f(int (&)[20]);
 
 void g(S s)
 {
 	f(s);
 }
-\end{lstlisting}
+\end{cpp}
 
 这里，试图将S转换为int(\&)[20]。因此，类型A为int[20]，类型P为T。int[20]替换T，推导成功。
 

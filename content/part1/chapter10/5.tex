@@ -1,28 +1,28 @@
 
 比较下面的类模板:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T, int N>
 class ArrayInClass {
 	public:
 	T array[N];
 };
-\end{lstlisting}
+\end{cpp}
 
 使用普通类:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 class DoubleArrayInClass {
 	public:
 	double array[10];
 };
-\end{lstlisting}
+\end{cpp}
 
 如果将参数T和N分别替换为double和10，则后者在本质上等价于前者。C++中，这个替换可表示为
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 ArrayInClass<double,10>
-\end{lstlisting}
+\end{cpp}
 
 注意模板名称后面是如何用尖括号将模板参数括起来的。
 
@@ -30,19 +30,18 @@ ArrayInClass<double,10>
 
 可以像使用非模板一样使用这个名称。例如:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 int main()
 {
 	ArrayInClass<double,10> ad;
 	ad.array[0] = 1.0;
 }
-\end{lstlisting}
+\end{cpp}
 
 区分模板形参和模板实参很重要。简而言之，“参数由实参初始化”。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}学术界中，参数有时称为实际参数，而声明参数称为形式参数。
-\end{tcolorbox}
+\begin{notice}学术界中，参数有时称为实际参数，而声明参数称为形式参数。
+\end{notice}
 
 或者更准确地说:
 
@@ -60,13 +59,13 @@ int main()
 
 可以进一步推进这种方式:因为模板形参是编译时实体，所以也可以用来创建有效的模板形参。下面是一个例子:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 class Dozen {
 	public:
 	ArrayInClass<T,12> contents;
 };
-\end{lstlisting}
+\end{cpp}
 
 本例中，名称T既是模板形参，又是模板实参。因此，可以使用一种机制从更简单的模板构建更复杂的模板。当然，这与组装类型和函数的机制没有区别。
 

@@ -6,7 +6,7 @@
 首先定义一个特征，可以确定给定类型T是否有成员类型size\_type:
 
 \filename{traits/hassizetype.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include <type_traits> // defines true_type and false_type
 
 // helper to ignore any number of template parameters:
@@ -23,7 +23,7 @@ template<typename T>
 struct HasSizeTypeT<T, VoidT<typename T::size_type>> : std::true_type
 {
 };
-\end{lstlisting}
+\end{cpp}
 
 使用SFINAE的方法剔除了偏特化。
 
@@ -31,58 +31,56 @@ struct HasSizeTypeT<T, VoidT<typename T::size_type>> : std::true_type
 
 本例中，只需要一个构造:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 typename T::size_type
-\end{lstlisting}
+\end{cpp}
 
 当类型T具有成员类型size\_type时，该构造有效，这是我们试图确定的。若对于特定的T，构造无效(类型T没有成员类型size\_type)， SFINAE会丢弃偏特化，会返回到主模板。否则，偏特化有效，并且是首选。
 
 可以这样使用这个特征:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 std::cout << HasSizeTypeT<int>::value; // false
 struct CX {
 	using size_type = std::size_t;
 };
 std::cout << HasSizeType<CX>::value; // true
-\end{lstlisting}
+\end{cpp}
 
 若成员类型size\_type私有，HasSizeTypeT会产生false，因为特征模板没有对参数类型的访问权限，因此typename T::size\_type无效(触发SFINAE)。换句话说，特征会测试是否有可访问的成员类型size\_type。
 
-\noindent
-\textbf{处理引用类型}
+\subsubsection{处理引用类型}
 
 作为开发者，我们会考虑“临界”情况可能会出现的问题。对于像HasSizeTypeT这样的特征模板，引用类型可能会产生一些问题。例如，下面的代码工作很好:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 struct CXR {
 	using size_type = char&; // Note: type size_type is a reference type
 };
 std::cout << HasSizeTypeT<CXR>::value; // OK: prints true
-\end{lstlisting}
+\end{cpp}
 
 以下代码则会失败:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 std::cout << HasSizeTypeT<CX&>::value; // OOPS: prints false
 std::cout << HasSizeTypeT<CXR&>::value; // OOPS: prints false
-\end{lstlisting}
+\end{cpp}
 
 这就很神奇。引用类型本身没有成员，但每当使用引用时，得到的表达式都有底层类型，因此考虑底层类型可能会更好。可以通过在HasSizeTypeT的偏特化中使用之前的RemoveReference特征来实现:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 struct HasSizeTypeT<T, VoidT<RemoveReference<T>::size_type>>
 : std::true_type {
 };
-\end{lstlisting}
+\end{cpp}
 
-\noindent
-\textbf{注入类名}
+\subsubsection{注入类名}
 
 用来检测成员类型的特征也会为注入类名生成一个真实值(参见第13.2.3节)。例如:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 struct size_type {
 };
 
@@ -91,7 +89,7 @@ struct Sizeable : size_type {
 
 static_assert(HasSizeTypeT<Sizeable>::value,
 			"Compiler bug: Injected class name missing");
-\end{lstlisting}
+\end{cpp}
 
 因为size\_type引入自己的名称作为成员类型，并且继承该名称，所以后一个静态断言成功。若没有成功，这就是编译器的一个缺陷。
 
@@ -101,16 +99,15 @@ static_assert(HasSizeTypeT<Sizeable>::value,
 
 因为没有语言机制来描述“这种”名称，所以目前只能通过宏来实现。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}撰写本文时，C++标准化委员会正在探索以程序可以探索的方式“反映”各种程序实体(如类类型及其成员)的方法。参见第17.9节。
-\end{tcolorbox}
+\begin{notice}撰写本文时，C++标准化委员会正在探索以程序可以探索的方式“反映”各种程序实体(如类类型及其成员)的方法。参见第17.9节。
+\end{notice}
 
 在不使用宏的情况下，可以使用泛型Lambda，如第19.6.4节所示。
 
 宏的例子:
 
 \filename{traits/hastype.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include <type_traits> // for true_type, false_type, and void_t
 #define DEFINE_HAS_TYPE(MemType) \
 template<typename, typename = std::void_t<>> \
@@ -120,12 +117,12 @@ template<typename T> \
 struct HasTypeT_##MemType<T, std::void_t<typename T::MemType>> \
 : std::true_type { } // ; intentionally skipped
 ✝ 
-\end{lstlisting}
+\end{cpp}
 
 每次使用DEFINE\_HAS\_TYPE(MemberType)都会定义一个新的HasTypeT\_MemberType特征。可以使用它来检测类型是否有value\_type或char\_type成员类型:
 
 \filename{traits/hastype.cpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include "hastype.hpp"
 #include <iostream>
 #include <vector>
@@ -144,14 +141,14 @@ int main()
 	std::cout << "std::iostream::char_type: "
 	<< HasTypeT_char_type<std::iostream>::value << ’\n’;
 }
-\end{lstlisting}
+\end{cpp}
 
 \subsection{检查非类型成员}
 
 可以修改特征来检查数据成员和(单个)成员函数:
 
 \filename{traits/hasmember.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include <type_traits> // for true_type, false_type, and void_t
 
 #define DEFINE_HAS_MEMBER(Member) \
@@ -161,7 +158,7 @@ struct HasMemberT_##Member \
 template<typename T> \
 struct HasMemberT_##Member<T, std::void_t<decltype(&T::Member)>> \
 : std::true_type { } // ; intentionally skipped
-\end{lstlisting}
+\end{cpp}
 
 当\&T::Member无效时，使用SFINAE禁用偏特化。要使该结构有效，以下条件必须为true:
 
@@ -182,7 +179,7 @@ struct HasMemberT_##Member<T, std::void_t<decltype(&T::Member)>> \
 可以这样使用模板:
 
 \filename{traits/hasmember.cpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include "hasmember.hpp"
 
 #include <iostream>
@@ -201,26 +198,25 @@ int main()
 	std::cout << "std::pair<int,int>::first: "
 				<< HasMemberT_first<std::pair<int,int>>::value << ’\n’;
 }
-\end{lstlisting}
+\end{cpp}
 
 修改偏特化，以排除\&T::Member不是指向成员类型指针，这并不困难(相当于排除静态数据成员)。类似地，可以排除或要求使用指针成员函数，将特征限制为数据成员或成员函数。
 
-\noindent
-\textbf{检查成员函数}
+\subsubsection{检查成员函数}
 
 注意，HasMember特征只检查是否存在一个具有相应名称的成员。若存在两个成员，特征也会失败。若检查重载的成员函数，就可能发生这种情况。例如:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 DEFINE_HAS_MEMBER(begin);
 std::cout << HasMemberT_begin<std::vector<int>>::value; // false
-\end{lstlisting}
+\end{cpp}
 
 然而，SFINAE原则可以防止在函数模板声明中同时，创建无效类型和表达式，允许上面的重载扩展到测试表达式是否定义良好。
 
 检查是否可以以特定的方式调用感兴趣的函数，并且即使函数重载也能成功调用。与第19.5节中的IsConvertibleT特征一样，技巧在于构造表达式来检查是否可以在decltype表达式中调用begin()来获取函数模板参数的默认值:
 
 \filename{traits/hasbegin.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include <utility> // for declval
 #include <type_traits> // for true_type, false_type, and void_t
 
@@ -234,27 +230,25 @@ template<typename T>
 struct HasBeginT<T, std::void_t<decltype(std::declval<T>().begin())>>
 : std::true_type {
 };
-\end{lstlisting}
+\end{cpp}
 
 这里，我们使用
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 decltype(std::declval<T>().begin())
-\end{lstlisting}
+\end{cpp}
 
 测试给定一个T类型的值/对象(使用std::declval来避免使用构造函数)，调用成员begin()是否有效。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}除了decltype(调用表达式)不需要一个非引用、非void的返回类型作为完整的返回类型，这与其他表达式不同。而使用decltype(std::declval<T>().begin(), 0)，因为返回的值不再是decltype操作数的结果，所以要求调用的返回类型完整。
-\end{tcolorbox}
+\begin{notice}除了decltype(调用表达式)不需要一个非引用、非void的返回类型作为完整的返回类型，这与其他表达式不同。而使用decltype(std::declval<T>().begin(), 0)，因为返回的值不再是decltype操作数的结果，所以要求调用的返回类型完整。
+\end{notice}
 
-\noindent
-\textbf{检查其他表达式}
+\subsubsection{检查其他表达式}
 
 可以将上述技术用于其他类型的表达式，甚至组合多个表达式。可以测试给定类型T1和T2，是否为这些类型的值定义了小于操作符:
 
 \filename{traits/hasless.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 include <utility> // for declval
 #include <type_traits> // for true_type, false_type, and void_t
 
@@ -271,33 +265,32 @@ struct HasLessT<T1, T2, std::void_t<decltype(std::declval<T1>()
 : std::true_type
 {
 };
-\end{lstlisting}
+\end{cpp}
 
 这里的挑战在于为条件检查定义一个有效的表达式，并使用decltype将其放置在SFINAE中，若表达式无效，则会回退到主模板:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 decltype(std::declval<T1>() < std::declval<T2>())
-\end{lstlisting}
+\end{cpp}
 
 以这种方式检测有效表达式的特征相当健壮:当表达式定义良好时，才会为true，当小于操作符不明确、删除或不可访问时，会正确地返回false。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}C++11扩展SFINAE覆盖无效表达式前，检测特定表达式有效性的技术集中于为测试函数引入新的重载(例如，小于操作符)，该重载具有过于宽松的签名和一个大小怪异的返回类型，以作为一个备用案例。但这种方法容易产生歧义，并会由于访问控制导致错误。
-\end{tcolorbox}
+\begin{notice}C++11扩展SFINAE覆盖无效表达式前，检测特定表达式有效性的技术集中于为测试函数引入新的重载(例如，小于操作符)，该重载具有过于宽松的签名和一个大小怪异的返回类型，以作为一个备用案例。但这种方法容易产生歧义，并会由于访问控制导致错误。
+\end{notice}
 
 可以这样使用这个特征:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 HasLessT<int, char>::value // yields true
 HasLessT<std::string, std::string>::value // yields true
 HasLessT<std::string, int>::value // yields false
 HasLessT<std::string, char*>::value // yields true
 HasLessT<std::complex<double>, std::complex<double>>::value // yields false
-\end{lstlisting}
+\end{cpp}
 
 可以使用这个特征要求模板参数T支持小于操作符:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 class C
 {
@@ -305,12 +298,12 @@ class C
 				  "Class C requires comparable elements");
 	...
 };
-\end{lstlisting}
+\end{cpp}
 
 由于std::void\_t的性质，可以在一个特征中组合多个约束:
 
 \filename{traits/hasvarious.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include <utility> // for declval
 #include <type_traits> // for true_type, false_type, and void_t
 
@@ -328,7 +321,7 @@ struct HasVariousT<T, std::void_t<decltype(std::declval<T>().begin()),
 : std::true_type
 {
 };
-\end{lstlisting}
+\end{cpp}
 
 检测特定语法有效性的特性非常强大，允许模板根据特定操作的存在或不存在来定制行为。这些特征将再次作为SFINAE友好特征的一部分(第19.4.4节)和协助基于类型属性的重载(第20章)。
 
@@ -339,7 +332,7 @@ struct HasVariousT<T, std::void_t<decltype(std::declval<T>().begin()),
 下面的例子说明了如何定义特征，检查数据成员或类型成员(如first或size\_type)是否存在，或者是否为两个不同类型的对象定义了小于操作符:
 
 \filename{traits/isvalid1.cpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include "isvalid.hpp"
 #include<iostream>
 #include<string>
@@ -382,14 +375,14 @@ int main()
 	cout << hasLess(type<string>, type<int>) << ’\n’; // yields false
 	cout << hasLess(type<string>, "hello") << ’\n’; // yields true
 }
-\end{lstlisting}
+\end{cpp}
 
 因为不能从引用中访问类型成员，所以hasSizeType使用std::decay从传递的x中移除了引用。若跳过该步骤，因为使用了isValidImpl<>()的第二次重载，所以特征将总生成false。
 
 为了能够使用通用泛型语法，将类型作为模板参数，可以再次定义辅助程序:
 
 \filename{traits/isvalid2.cpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include "isvalid.hpp"
 #include<iostream>
 #include<string>
@@ -433,20 +426,20 @@ int main()
 	cout << HasLessT<string, int>::value << ’\n’; // false
 	cout << HasLessT<string, char*>::value << ’\n’; // true
 }
-\end{lstlisting}
+\end{cpp}
 
 现在
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 using HasFirstT = decltype(hasFirst(std::declval<T>()));
-\end{lstlisting}
+\end{cpp}
 
 允许调用
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 HasFirstT<std::pair<int,int>>::value
-\end{lstlisting}
+\end{cpp}
 
 来获取pair的两个整型数，其计算方法如上所述。
 

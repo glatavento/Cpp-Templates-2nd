@@ -4,23 +4,20 @@ Bill Gibbons是Taligent在C++委员会的代表，其极力主张让模板可以
 
 模板的早期开发过程中，Tom Pennello(Metaware公司的一位著名解析专家)就意识到了尖括号所带来的一些问题。Stroustrup也对这个话题进行了讨论[StroustrupDnE]，而且认为人们更喜欢阅读尖括号，而不是圆括号。然而，除了尖括号和圆括号，还存在其他的一些可能性:Pennello在1991年的C++标准大会(在达拉斯举办)上特别地提议使用大括号，例如(List{::X}）。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}使用括号也不是完全没有问题。具体来说，特化类模板的语法需要进行重大的调整。
-\end{tcolorbox}
+\begin{notice}使用括号也不是完全没有问题。具体来说，特化类模板的语法需要进行重大的调整。
+\end{notice}
 
 那时，因为嵌入在其他模板内部的模板(也称为成员模板)还是不合法的，所以问题的影响范围也非常有限，也就不会涉及到13.3.3节的问题。最后，委员会拒绝了这个取代尖括号的提议。
 
 13.4.2节中描述的非依赖型名称和依赖型基类的名称查找规则，是在1993年C++标准中引入的。在1994年，Bjarne Stroustrup的[StroustrupDnE]首次公开描述了这一规则。然而直到1997年惠普才把这一规则引入C++编译器，自那以后出现了大量的派生自依赖型基类的类模板代码。当惠普工程师开始测试该实现时，发现大部分以特殊方式使用模板的代码都无法编译成功了。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}幸运的是，在发布新功能之前就发现了。
-\end{tcolorbox}
+\begin{notice}幸运的是，在发布新功能之前就发现了。
+\end{notice}
 
 特别地，STL的所有实现都打破了这一规则。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}具有讽刺意味的是，第一个实现也是由惠普开发的。
-\end{tcolorbox}
+\begin{notice}具有讽刺意味的是，第一个实现也是由惠普开发的。
+\end{notice}
 
 考虑到客户的转换代码的成本，对于那些“假定非依赖型名称可以在依赖型基类中进行查找”的代码，惠普弱化了相关的错误信息。例如，对于位于类模板作用域的非依赖型名称，若利用标准原则不能找到该名称，C++就会在依赖型基类中进行查找。若仍然找不到，才会给出一个错误而编译失败。然而，若在依赖型基类中找到了该名称，那么就会给出一个警告，对该名称进行标记，并且当成是依赖型名称，然后在实例化时再次查找。
 

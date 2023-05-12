@@ -10,7 +10,7 @@ C++中，以各种参数类型重载的函数很常见。因此，当编译器�
 考虑下面的例子:
 
 \filename{basics/len1.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 // number of elements in a raw array:
 template<typename T, unsigned N>
 std::size_t len (T(&)[N])
@@ -24,13 +24,12 @@ typename T::size_type len (T const& t)
 {
 	return t.size();
 }
-\end{lstlisting}
+\end{cpp}
 
 这里，定义了两个函数模板len()，接受一个泛型参数:
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}没有将该函数命名为size()，避免与C++标准库的命名冲突，C++17引入了标准函数模板std::size()。
-\end{tcolorbox}
+\begin{notice}没有将该函数命名为size()，避免与C++标准库的命名冲突，C++17引入了标准函数模板std::size()。
+\end{notice}
 
 \begin{enumerate}
 \item 
@@ -42,41 +41,41 @@ typename T::size_type len (T const& t)
 
 当传递数组或字符串字面量时，只有数组的函数模板匹配:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 int a[10];
 std::cout << len(a); // OK: only len() for array matches
 std::cout << len("tmp"); // OK: only len() for array matches
-\end{lstlisting}
+\end{cpp}
 
 根据签名，第二个函数模板在(分别)用int[10]和char const[4]替换T时也会匹配，这些替换会导致返回类型T::size\_type中出现错误。因此，对于这些调用，第二个模板将会直接忽略。
 
 当传递std::vector<>时，只有第二个函数模板匹配:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 std::vector<int> v;
 std::cout << len(v); // OK: only len() for a type with size_type matches
-\end{lstlisting}
+\end{cpp}
 
 当传递指针时，两个模板都不匹配(不会失败)。结果，编译器会抱怨没有找到匹配的len()函数:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 int* p;
 std::cout << len(p); // ERROR: no matching len() function found
-\end{lstlisting}
+\end{cpp}
 
 注意，这与传递一个具有size\_type成员，但没有size()成员函数的类型对象不同，例如:std::allocator<>:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 std::allocator<int> x;
 std::cout << len(x); // ERROR: len() function found, but can’t size()
-\end{lstlisting}
+\end{cpp}
 
 当传递这种类型的对象时，编译器会找到第二个函数模板作为匹配的函数模板。因此，这将导致编译错误，即对std::allocator<int>的调用size()无效，而不是没有找到匹配的len()函数。这一次，没有忽略第二个函数模板。
 
 当替换候选对象的返回类型没有意义时，忽略它会导致编译器选择另一个参数匹配更差的候选对象。例如:
 
 \filename{basics/len2.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 // number of elements in a raw array:
 template<typename T, unsigned N>
 std::size_t len (T(&)[N])
@@ -96,19 +95,18 @@ std::size_t len (...)
 {
 	return 0;
 }
-\end{lstlisting}
+\end{cpp}
 
 这里，还提供了一个通用的len()函数，该函数总是匹配，但其匹配度也是最糟糕的那个(重载解析中使用省略号匹配(…)，参见C.2节)。
 
 对于数组和vector，这里有两个匹配，其中特化的匹配更好。对于指针，只有保底候选可以匹配，这样编译器就不会再抱怨这个调用缺少len()了。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}实践中，保底候选函数通常会提供更有用的默认值、抛出异常或包含静态断言输出更有用的错误消息。
-\end{tcolorbox}
+\begin{notice}实践中，保底候选函数通常会提供更有用的默认值、抛出异常或包含静态断言输出更有用的错误消息。
+\end{notice}
 
 但对于分配器，第二个和第三个函数模板匹配，第二个函数模板会进行更好的匹配。因此，这会导致无法调用size()成员函数的错误:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 int a[10];
 std::cout << len(a); // OK: len() for array is best match
 std::cout << len("tmp"); // OK: len() for array is best match
@@ -122,18 +120,17 @@ std::cout << len(p); // OK: only fallback len() matches
 std::allocator<int> x;
 std::cout << len(x); // ERROR: 2nd len() function matches best,
 					 // but can’t call size() for x
-\end{lstlisting}
+\end{cpp}
 
 关于SFINAE的更多细节，请参见15.7节和SFINAE应用的章节19.4。
 
-\noindent
-\textbf{SFINAE和重载解析}
+\subsubsection{SFINAE和重载解析}
 
 随着时间的推移，SFINAE原则在模板设计者中变得重要和普遍，以至于它的缩写已经成为一个动词。若打算应用SFINAE机制来确保函数模板在某些约束条件下进行忽略，可以说“SFINAE出了一个函数”，方法是对模板代码进行测试，导致这些约束条件的代码无效。当在C++标准中读到函数模板“不应该参与重载解析，除非…”，这意味着SFINAE去除了这个函数模板。
 
 例如，std::thread类声明了一个构造函数:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 namespace std {
 class thread {
 public:
@@ -143,7 +140,7 @@ public:
 	...
 };
 }
-\end{lstlisting}
+\end{cpp}
 
 附注如下:
 
@@ -151,15 +148,14 @@ public:
 
 这意味着如果使用std::thread作为第一个也是唯一的参数调用模板构造函数，将忽略。原因是成员模板有时可能比预定义的复制或移动构造函数更匹配(请参阅6.2节和16.2.4节了解详细信息)。当调用线程时，通过SFINAE输出构造函数模板，确保另一个线程构造一个线程时，总是使用预定义的复制或移动构造函数。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}由于删除了类线程的复制构造函数，这也禁止了复制。
-\end{tcolorbox}
+\begin{notice}由于删除了类线程的复制构造函数，这也禁止了复制。
+\end{notice}
 
 这种技术可能很麻烦。幸运的是，标准库提供了更容易禁用模板的工具。这种特性是std::enable\_if<>，在6.3节中介绍。允许通过使用包含禁用条件的构造替换类型来禁用模板。
 
 因此，std::thread的实际声明如下所示:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 namespace std {
 	class thread {
 		public:
@@ -171,7 +167,7 @@ namespace std {
 		...
 	};
 }
-\end{lstlisting}
+\end{cpp}
 
 请参阅第20.3节了解如何使用偏特化和SFINAE实现std::enable\_if<>的详细信息。
 
@@ -182,7 +178,7 @@ namespace std {
 
 例如，想确保函数模板len()对于具有size\_type成员，但没有size()成员函数的参数类型就会忽略。函数声明中没有对size()成员函数的要求，最终会在实例化时出错:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 typename T::size_type len (T const& t)
 {
@@ -191,7 +187,7 @@ typename T::size_type len (T const& t)
 
 std::allocator<int> x;
 std::cout << len(x) << ’\n’; // ERROR: len() selected, but x has no size()
-\end{lstlisting}
+\end{cpp}
 
 有一种常见的模式或习语可以用来处理这种情况:
 
@@ -211,19 +207,19 @@ std::cout << len(x) << ’\n’; // ERROR: len() selected, but x has no size()
 
 例如:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 auto len (T const& t) -> decltype( (void)(t.size()), T::size_type() )
 {
 	return t.size();
 }
-\end{lstlisting}
+\end{cpp}
 
 返回类型是
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 decltype( (void)(t.size)(), T::size_type() )
-\end{lstlisting}
+\end{cpp}
 
 decltype构造的操作数是一个逗号分隔的表达式列表，因此最后一个表达式T::size\_type()会产生期望的返回类型的值(decltype使用该值转换为返回类型)。在(最后一个)逗号之前，必须有有效的表达式，本例中就是t.size()。将表达式强制转换为void，是为了避免表达式使用了用户重载定义的逗号操作符。
 

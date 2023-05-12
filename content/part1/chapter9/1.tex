@@ -19,7 +19,7 @@
 了解了这些习惯，下面的(错误的)程序展示了开始学习模板开发者所抱怨的常见错误。和“普通代码”一样，可以在头文件中声明模板:
 
 \filename{basics/myfirst.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #ifndef MYFIRST_HPP
 #define MYFIRST_HPP
 
@@ -28,12 +28,12 @@ template<typename T>
 void printTypeof (T const&);
 
 #endif // MYFIRST_HPP
-\end{lstlisting}
+\end{cpp}
 
 printTypeof()是一个辅助函数的声明，打印一些类型信息。函数实现放在另一个CPP文件中:
 
 \filename{basics/myfirst.cpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include <iostream>
 #include <typeinfo>
 #include "myfirst.hpp"
@@ -44,18 +44,17 @@ void printTypeof (T const& x)
 {
 	std::cout << typeid(x).name() << ’\n’;
 }
-\end{lstlisting}
+\end{cpp}
 
 该示例使用typeid操作符打印一个字符串，该字符串描述传递表达式的类型。返回一个静态类型std::type\_info的左值，提供了一个成员name()，显示表达式的类型。C++标准上并没有规定name()必须返回有意义的东西，但在定义良好的C++实现中，应该获得传递给typeid的表达式类型的字符串，该字符串对表达式的类型进行了很好的描述。
  
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}某些实现中，这个字符串是混乱的(使用参数类型和作用域的名称进行编码，以区别于其他名称)，存在解析器可以将其转换为人类可读的文本。
-\end{tcolorbox}
+\begin{notice}某些实现中，这个字符串是混乱的(使用参数类型和作用域的名称进行编码，以区别于其他名称)，存在解析器可以将其转换为人类可读的文本。
+\end{notice}
 
 最后，在另一个CPP文件中使用模板，模板声明通过\#include包含:
 
 \filename{basics/myfirstmain.cpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include "myfirst.hpp"
 // use of the template
 int main()
@@ -63,7 +62,7 @@ int main()
 	double ice = 3.0;
 	printTypeof(ice); // call function template for type double
 }
-\end{lstlisting}
+\end{cpp}
 
 C++编译器可能会接受这个程序，但是链接器可能会报错:printTypeof()函数没有定义。
 
@@ -76,7 +75,7 @@ C++编译器可能会接受这个程序，但是链接器可能会报错:printTy
 也就是，不提供文件myfirst.cpp，而是重写myfirst.hpp，使其包含所有模板声明和模板定义:
 
 \filename{basics/myfirst2.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #ifndef MYFIRST_HPP
 #define MYFIRST_HPP
 
@@ -95,7 +94,7 @@ void printTypeof (T const& x)
 }
 
 #endif // MYFIRST_HPP
-\end{lstlisting}
+\end{cpp}
 
 这种组织模板的方法称为“包含模型”，程序可以正确地编译、链接和执行。
 

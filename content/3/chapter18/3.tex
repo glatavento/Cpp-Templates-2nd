@@ -1,14 +1,12 @@
 
 先对这两种形式的多态性进行分类和比较。
 
-\noindent
-\textbf{术语}
+\subsubsection{术语}
 
 动态和静态多态为不同的C++编程习惯提供了支持:
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}有关多态术语的详细讨论，请参见[CzarneckiEiseneckerGenProg]的第6.5到6.7节。
-\end{tcolorbox}
+\begin{notice}有关多态术语的详细讨论，请参见[CzarneckiEiseneckerGenProg]的第6.5到6.7节。
+\end{notice}
 
 \begin{itemize}
 \item 
@@ -36,8 +34,7 @@
 
 严格地说，在C++语言中，动态多态性和静态多态性是有界动态多态性和无界静态多态性的快捷方式。其他语言中，也存在其他组合(例如，Smalltalk提供了无界的动态多态性)。在C++的上下文中，动态多态和静态多态这两个术语不会引起混淆。
 
-\noindent
-\textbf{优势与不足}
+\subsubsection{优势与不足}
 
 C++中的动态多态性展示了以下优点:
 
@@ -69,8 +66,7 @@ C++中的静态多态有这些优点:
 
 实践中，不同的语义假设隐藏在相同的接口后面时，模板实例化也会造成一些麻烦。当假定关联加法操作符的模板实例化了一个与该操作符无关的类型时，可能会发生意外。这种语义不匹配在基于继承的层次结构中很少发生，可能是因为更明确地指定了接口规范。
 
-\noindent
-\textbf{两种形式结合}
+\subsubsection{两种形式结合}
 
 当然，可以结合这两种形式的多态性。例如，可以从公共基类派生不同种类的几何对象，以便能够处理几何对象的异构集合。但仍然可以使用模板，为特定类型的几何对象编写代码。
 

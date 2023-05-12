@@ -6,7 +6,7 @@
 
 模块定义可能是这样:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 module MyLib;
 
 void helper() {
@@ -18,16 +18,16 @@ export inline void libFunc() {
 	helper();
 	...
 }
-\end{lstlisting}
+\end{cpp}
 
 这个模块导出了一个函数libFunc()，可以在外部代码中使用，如下所示:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 import MyLib;
 int main() {
 	libFunc();
 }
-\end{lstlisting}
+\end{cpp}
 
 libFunc()对外部代码可见，但函数helper()不是，即使编译的模块文件可能包含helper()的信息以启用内联。
 

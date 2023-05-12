@@ -7,44 +7,42 @@
 下面就是一个函数模板，返回两个数的最大值：
 
 \filename{basics/max1.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 T max (T a, T b)
 {
 	// if b < a then yield a else yield b
 	return b < a ? a : b;
 }
-\end{lstlisting}
+\end{cpp}
 
 这个模板定义指定了一个函数组，返回两个值的最大值，a和b作为函数的参数。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}根据[StepanovNotes]，max()模板有意地返回b < a ? a: b，而不是a < b ? b: a，是为了确保函数行为的正确性。
-\end{tcolorbox}
+\begin{notice}根据[StepanovNotes]，max()模板有意地返回b < a ? a: b，而不是a < b ? b: a，是为了确保函数行为的正确性。
+\end{notice}
 
 参数类型为模板参数T，模板参数必须使用以下形式的进行声明:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<逗号分割的模板参数>
-\end{lstlisting}
+\end{cpp}
 
 示例中，参数列表是typename T。注意<和>尖括号。关键字typename引入了一个类型参数。这是C++程序中最常见的模板参数类型，也可以使用其他参数，会在后面进行讨论(参见第3章)。
 
 类型参数是T，也可以使用其他标识符作为参数名(T是惯例罢了)。类型参数表示在调用函数时才确定的类型，可以使用支持模板使用操作的类型(基本类型、类等)。因为a和b使用小于操作符进行比较，所以类型T必须支持小于操作符。max()的定义可能不太明显，类型T的值必须可复制，以便返回。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}C++17之前，类型T也必须可复制才能传递参数。C++17以后，即使复制构造函数和移动构造函数都无效，也可以传递临时变量(右值，参见附录B)。
-\end{tcolorbox}
+\begin{notice}C++17之前，类型T也必须可复制才能传递参数。C++17以后，即使复制构造函数和移动构造函数都无效，也可以传递临时变量(右值，参见附录B)。
+\end{notice}
 
 由于一些历史原因，还可以使用关键字class来定义类型参数。关键字typename在C++98标准中出现得较晚，所以在此之前，关键字class是引入类型参数的唯一方法，现在这种方法仍然有效。因此，模板max()可以等价地定义为:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<class T>
 T max (T a, T b)
 {
 	return b < a ? a : b;
 }
-\end{lstlisting}
+\end{cpp}
 
 即使使用class，模板参数也可以使用任意类型。但这样使用class可能会引起误会(不仅是类可以替换为T)，所以更推荐使用typename。但与类声明不同，在声明类型参数时，不能使用关键字struct来代替typename。
 
@@ -53,7 +51,7 @@ T max (T a, T b)
 下面的展示了如何使用函数模板max():
 
 \filename{basics/max1.cpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include "max1.hpp"
 #include <iostream>
 #include <string>
@@ -71,62 +69,59 @@ int main()
 	std::string s2 = "math";
 	std::cout << "max(s1,s2): " << ::max(s1,s2) << '\n';
 }
-\end{lstlisting}
+\end{cpp}
 
 这里，max()调用了三次:int，double，std::string。输出如下:
 
-\begin{tcblisting}{commandshell={}}
+\begin{shell}
 max(7,i): 42
 max(f1,f2): 3.4
 max(s1,s2): mathematics
-\end{tcblisting}
+\end{shell}
 
 代码中，对max()的使用都用\textbf{::}限定。这是为了确保在全局命名空间中找到max()模板。因为标准库中有一个std::max()，在某些情况下可以使用，但这里可能会产生歧义。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}命名空间std中定义了一个参数类型(例如std::string)，根据C++的查找规则，std中的max()模板函数和全局模板函数都会找到(参见附录C)。
-\end{tcolorbox}
+\begin{notice}命名空间std中定义了一个参数类型(例如std::string)，根据C++的查找规则，std中的max()模板函数和全局模板函数都会找到(参见附录C)。
+\end{notice}
 
 模板不会编译成处理任意类型的实体。相反，对于模板所使用的每个类型，会根据模板中生成不同的实体。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}“一体多用”的方案可以想想，但不会在实践中使用(运行时效率较低)。所有语言规则都基于这样一个原则:对于不同的模板参数，会生成不同的实体。
-\end{tcolorbox}
+\begin{notice}“一体多用”的方案可以想想，但不会在实践中使用(运行时效率较低)。所有语言规则都基于这样一个原则:对于不同的模板参数，会生成不同的实体。
+\end{notice}
 
 因此，max()对这三种类型进行了分别编译。例如，max()的第一次调用
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 int i = 42;
 ... max(7,i) ...
-\end{lstlisting}
+\end{cpp}
 
 使用int作为模板形参T的函数模板。因此，等同于调用的如下函数:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 int max (int a, int b)
 {
 	return b < a ? a : b;
 }
-\end{lstlisting}
+\end{cpp}
 
 用具体类型替换模板参数的过程称为实例化，会产生一个模板实例。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}面向对象编程中，术语实例(instance)和实例化(instantiate)用于不同的上下文——类的具体对象。本书针对模板，仅用这两个术语表示对模板的“使用”，除非另有说明。
-\end{tcolorbox}
+\begin{notice}面向对象编程中，术语实例(instance)和实例化(instantiate)用于不同的上下文——类的具体对象。本书针对模板，仅用这两个术语表示对模板的“使用”，除非另有说明。
+\end{notice}
 
 注意，使用函数模板就可以进行实例化，开发者无需单独实例化。
 
 类似地，max()的其他调用实例化了double和std::string的max模板:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 double max (double, double);
 std::string max (std::string, std::string);
-\end{lstlisting}
+\end{cpp}
 
 如果结果代码有效，void也是有效的模板参数。例如:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 T foo(T*)
 {
@@ -134,17 +129,17 @@ T foo(T*)
 
 void* vp = nullptr;
 foo(vp); // OK: deduces void foo(void*)
-\end{lstlisting}
+\end{cpp}
 
 \subsection{两阶段翻译}
 
 若为不支持使用操作的类型实例化模板，将导致编译时错误。例如:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 std::complex<float> c1, c2; // doesn’t provide operator <
 ...
 ::max(c1,c2); // ERROR at compile time
-\end{lstlisting}
+\end{cpp}
 
 因此，模板“编译”分为两个阶段:
 
@@ -168,7 +163,7 @@ std::complex<float> c1, c2; // doesn’t provide operator <
 
 例如：
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 void foo(T t)
 {
@@ -179,20 +174,18 @@ void foo(T t)
 	static_assert(sizeof(T) > 10, // 若示例T的大小小于等于10，则断言失败
 	              "T too small");
 }
-\end{lstlisting}
+\end{cpp}
 
 检查两次名称的情况称为两阶段查找，在第14.3.1节会进行详细讨论。
 
 注意，有些编译器不在第一阶段编译时进行完全的检查。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}例如，一些版本的Visual C++编译器(如Visual Studio 2013和2015)允许模板参数使用未声明名称，甚至允许一些语法缺陷(如缺少分号)。
-\end{tcolorbox}
+\begin{notice}例如，一些版本的Visual C++编译器(如Visual Studio 2013和2015)允许模板参数使用未声明名称，甚至允许一些语法缺陷(如缺少分号)。
+\end{notice}
 
 因此，在模板代码第一次实例化前，可能不会看到已存在的问题。
 
-\noindent
-\textbf{编译和连接}
+\subsubsection{编译和连接}
 
 两阶段翻译在实际处理模板时，会有一个问题:当以数模板实例化的方式使用函数模板时，编译器(在某些时候)需要查看该模板的定义。当函数的声明可以编译，并连接通过时，就打破了普通函数的编译和链接方式。第9章讨论了处理这个问题的方法。现在，我们使用最简单的方法:仅在头文件中实现每个模板。
 

@@ -7,7 +7,7 @@
 可以使用print()来获取可变类型的参数:
 
 \filename{basics/varprint1.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include <iostream>
 
 void print ()
@@ -20,42 +20,42 @@ void print (T firstArg, Types... args)
 	std::cout << firstArg << '\n'; // print first argument
 	print(args...); // call print() for remaining arguments
 }
-\end{lstlisting}
+\end{cpp}
 
 若传递了一个或多个参数，则使用函数模板，通过指定第一个参数，可以在递归调用其余参数的print()前，打印第一个参数。剩下的args是一个函数参数包:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 void print (T firstArg, Types... args)
-\end{lstlisting}
+\end{cpp}
 
 使用由模板参数包指定的不同“类型”:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T, typename... Types>
-\end{lstlisting}
+\end{cpp}
 
 要结束递归，需要提供print()的非模板重载，该重载在参数包为空时使用。
 
 例如，
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 std::string s("world");
 print (7.5, "hello", s);
-\end{lstlisting}
+\end{cpp}
 
 将会输出以下内容:
 
-\begin{tcblisting}{commandshell={}}
+\begin{shell}
 7.5
 hello
 world
-\end{tcblisting}
+\end{shell}
 
 调用首先展开为
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 print<double, char const*, std::string> (7.5, "hello", s);
-\end{lstlisting}
+\end{cpp}
 
 \begin{itemize}
 \item 
@@ -67,9 +67,9 @@ args是可变参数模板参数，其值为char const*型的"hello"和std::strin
 
 将7.5作为firstArg打印后，再次对其余参数调用print()，然后展开为:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 print<char const*, std::string> ("hello", s);
-\end{lstlisting}
+\end{cpp}
 
 \begin{itemize}
 \item 
@@ -81,9 +81,9 @@ args是可变参数，其值类型为std::string。
 
 将"hello"作为firstArg打印后，再次对其余参数调用print()，然后展开为:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 print<std::string> (s);
-\end{lstlisting}
+\end{cpp}
 
 \begin{itemize}
 \item 
@@ -100,7 +100,7 @@ args是空的可变参数模板参数。
 也可以这样实现上面的例子:
 
 \filename{basics/varprint2.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include <iostream>
 
 template<typename T>
@@ -115,13 +115,12 @@ void print (T firstArg, Types... args)
 	print(firstArg); // call print() for the first argument
 	print(args...); // call print() for remaining arguments
 }
-\end{lstlisting}
+\end{cpp}
 
 若两个函数模板的区别仅在于末尾参数包的不同，则首选没有末尾参数包的函数模板。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}起初在C++11和C++14中，这是一个不明确的问题，后来得到了解决(参见[CoreIssue1395])，并且所有版本的编译器都会这样处理。
-\end{tcolorbox}
+\begin{notice}起初在C++11和C++14中，这是一个不明确的问题，后来得到了解决(参见[CoreIssue1395])，并且所有版本的编译器都会这样处理。
+\end{notice}
 
 C.3.1节解释了这里应用的重载解析规则。
 
@@ -129,7 +128,7 @@ C.3.1节解释了这里应用的重载解析规则。
 
 C++11还为可变参模板引入了一种新的操作符:sizeof...，其值为参数包包含的元素数量。因此,
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T, typename... Types>
 void print (T firstArg, Types... args)
 {
@@ -137,13 +136,13 @@ void print (T firstArg, Types... args)
 	std::cout << sizeof...(args) << '\n'; // print number of remaining args
 	...
 }
-\end{lstlisting}
+\end{cpp}
 
 传递给print()的第一个参数之后，输出剩余两次参数的数量。对于模板参数包和函数参数包可以使用sizeof...。
 
 我们可能会认为，递归结束时可以跳过该函数，并在没有参数的情况下不调用它:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T, typename... Types>
 void print (T firstArg, Types... args)
 {
@@ -152,7 +151,7 @@ void print (T firstArg, Types... args)
 		print(args...); // and no print() for no arguments declared
 	}
 }
-\end{lstlisting}
+\end{cpp}
 
 但因为函数模板中所有if的两个分支都要实例化。这里，是否运行是运行时确定，而调用的实例化是编译时确定。因此，如果为一个(最后一个)参数使用print()函数模板，则调用print(args...)的语句在没有参数的情况下仍然会实例化，若没有参数的情况下不提供print()函数，则会报错。
 

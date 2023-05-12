@@ -3,7 +3,7 @@
 上一节中，了解了名称相同的两个函数模板可以共存，即使以相同的参数类型实例化。下面是另一个例子:
 
 \filename{deduce/funcoverload1.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 int f(T)
 {
@@ -15,14 +15,14 @@ int f(T*)
 {
 	return 2;
 }
-\end{lstlisting}
+\end{cpp}
 
 第一个模板中用int*替换T时，得到的函数与在第二个模板中用int替换T得到的函数具有相同的参数(和返回)类型。不仅这些模板可以共存，它们的实例化也可以共存，即使具有相同的参数和返回类型。
 
 下面演示了如何使用显式模板参数语法，调用这两个生成的函数(假设前面对模板进行了声明):
 
 \filename{deduce/funcoverload1.cpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include <iostream>
 #include "funcoverload1.hpp"
 int main()
@@ -30,13 +30,13 @@ int main()
 	std::cout << f<int*>((int*)nullptr); // calls f<T>(T)
 	std::cout << f<int>((int*)nullptr); // calls f<T>(T*)
 }
-\end{lstlisting}
+\end{cpp}
 
 程序输出：
 
-\begin{tcblisting}{commandshell={}}
+\begin{shell}
 12
-\end{tcblisting}
+\end{shell}
 
 为了说明，这里详细分析一下f<int*>((int*)nullptr)的调用。语法f<int*>()表示用int*替换模板f()的第一个模板参数。这里不止一个模板f()，因此创建了一个重载集，其中包含从模板生成的两个函数:f<int*>(int*)(从第一个模板生成)和f<int*>(int**)(从第二个模板生成)。调用(int*)nullptr的参数类型为int*，这只匹配从第一个模板生成的函数。
 
@@ -46,9 +46,8 @@ int main()
 
 如果两个函数有不同的签名，可以在一个程序中共存。函数签名的定义如下所示:
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}这个定义与C++标准中给出的定义不同，但其结果等价。
-\end{tcolorbox}
+\begin{notice}这个定义与C++标准中给出的定义不同，但其结果等价。
+\end{notice}
 
 \begin{enumerate}
 \item 
@@ -75,7 +74,7 @@ int main()
 
 下面的模板和实例化体可以在一个程序中共存：
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T1, typename T2>
 void f1(T1, T2);
 
@@ -87,11 +86,11 @@ long f2(T);
 
 template<typename T>
 char f2(T);
-\end{lstlisting}
+\end{cpp}
 
 当定义在相同的作用域中时，实例化会产生重载歧义，所以不能总一起使用。例如，调用f2(42)对于上面声明的模板会产生歧义：
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include <iostream>
 template<typename T1, typename T2>
 void f1(T1, T2)
@@ -110,23 +109,23 @@ int main()
 {
 	f1<char, char>(’a’, ’b’); // ERROR: ambiguous
 }
-\end{lstlisting}
+\end{cpp}
 
 这里，函数
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 f1<T1 = char, T2 = char>(T1, T2)
-\end{lstlisting}
+\end{cpp}
 
 可以与下面函数共存
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 f1<T1 = char, T2 = char>(T2, T1)
-\end{lstlisting}
+\end{cpp}
 
 但是重载解析永远无法判断出哪一个更合适。若模板在不同的编译单元中出现，这两个实例化实际上可以在同一个程序中共存(并且，链接器不会抱怨重复的定义，这是因为实例化的签名不同):
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 // translation unit 1:
 #include <iostream>
 
@@ -157,28 +156,28 @@ int main()
 	f1<char, char>(’a’, ’b’);
 	g();
 }
-\end{lstlisting}
+\end{cpp}
 
 该程序有效，其输出如下：
 
-\begin{tcblisting}{commandshell={}}
+\begin{shell}
 f1(T2, T1)
 f1(T1, T2)
-\end{tcblisting}
+\end{shell}
 
 \subsection{重载函数模板的部分排序}
 
 重新考虑前面的例子:发现在替换了给定的模板参数列表(<int*>和<int>)后，重载解析最终调用了正确的函数:
 
-\begin{tcblisting}{commandshell={}}
+\begin{shell}
 std::cout << f<int*>((int*)nullptr); // calls f<T>(T)
 std::cout << f<int>((int*)nullptr); // calls f<T>(T*)
-\end{tcblisting}
+\end{shell}
 
 因为模板参数推导发挥了作用，即使没有提供显式模板参数，函数也会选中。稍微修改一下前面例子中的main():
 
 \filename{deduce/funcoverload2.cpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include <iostream>
 
 template<typename T>
@@ -199,7 +198,7 @@ int main()
 	std::cout << f(nullptr); // calls f<T>(T)
 	std::cout << f((int*)nullptr); // calls f<T>(T*)
 }
-\end{lstlisting}
+\end{cpp}
 
 考虑第一个调用，f(0):参数类型是int，若用int替换T，其与第一个模板的参数类型匹配。但第二个模板的参数类型始终是指针，在推导之后，会从第一个模板生成的实例是候选，重载解析在这没什么用。
 
@@ -207,9 +206,9 @@ f(nullptr):参数的类型是std::nullptr\_t，也只能匹配第一个模板。
 
 第三个调用(f(int*)nullptr)更有趣:两个模板都成功推导了参数，产生了函数f<int*>(int*)和f<int>(int*)。从重载解析的角度来看，使用int*参数调用这两个函数都是同样的，从而具有歧义(参见附录C)。这里，重载解析标准起了作用:选择从更特化的模板生成的函数。因为，第二个模板更特化，所以输出为
 
-\begin{tcblisting}{commandshell={}}
+\begin{shell}
 112
-\end{tcblisting}
+\end{shell}
 
 \subsection{正式的排序规则}
 
@@ -245,7 +244,7 @@ f(nullptr):参数的类型是std::nullptr\_t，也只能匹配第一个模板。
 
 考虑一个涉及多个函数参数的例子:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 void t(T*, T const* = nullptr, ...);
 
@@ -256,7 +255,7 @@ void example(int* p)
 {
 	t(p, p);
 }
-\end{lstlisting}
+\end{cpp}
 
 因为实际调用不使用第一个模板的省略号参数，而第二个模板的最后一个参数由其默认参数替代，所以这些参数在部分排序中忽略。注意没有使用第一个模板的默认参数;因此，相应的参数参与了排序。
 
@@ -269,7 +268,7 @@ void example(int* p)
 函数模板可以用非模板函数重载。在其他条件相同的情况下，选择要调用的函数时，会首选非模板函数:
 
 \filename{details/nontmpl1.cpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include <string>
 #include <iostream>
 
@@ -289,18 +288,18 @@ int main()
 	int x = 7;
 	std::cout << f(x) << ’\n’; // prints: Nontemplate
 }
-\end{lstlisting}
+\end{cpp}
 
 输出为
 
-\begin{tcblisting}{commandshell={}}
+\begin{shell}
 Nontemplate
-\end{tcblisting}
+\end{shell}
 
 但当const限定符和引用限定符不同时，重载解析的优先级可能会改变。例如:
 
 \filename{details/nontmpl2.cpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include <string>
 #include <iostream>
 
@@ -322,31 +321,31 @@ int main()
 	int const c = 7;
 	std::cout << f(c) << ’\n’; // prints: Nontemplate
 }
-\end{lstlisting}
+\end{cpp}
 
 程序输出如下:
 
-\begin{tcblisting}{commandshell={}}
+\begin{shell}
 Template
 Nontemplate
-\end{tcblisting}
+\end{shell}
 
 函数模板f<>(T\&)在传递非常量int时，匹配的更好。对于int来说，实例化的f<>(int\&)比f(int const\&)匹配得更好。因此，区别不仅仅在于是否是函数是模板，可以使用重载解析的一般性规则(见第C.2节)。只有对int const调用f()时，两个签名才具有相同的int const\&类型，因此首选非模板函数。
 
 因此，将成员函数模板声明为
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 std::string f(T const&)
 {
 	return "Template";
 }
-\end{lstlisting}
+\end{cpp}
 
 当成员函数定义接受与复制或移动构造函数相同的参数时，很容易发生意外。例如:
 
 \filename{details/tmplconstr.cpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include <string>
 #include <iostream>
 
@@ -374,16 +373,16 @@ int main()
 	C x4{c}; // prints: copy constructor
 	C x5{std::move(c)}; // prints: template constructor
 }
-\end{lstlisting}
+\end{cpp}
 
 程序输出如下:
 
-\begin{tcblisting}{commandshell={}}
+\begin{shell}
 template constructor
 move constructor
 copy constructor
 template constructor
-\end{tcblisting}
+\end{shell}
 
 因此，成员函数模板比复制构造函数更适合复制C。对于std::move(c)，会产生类型C的const\&\&(这是一种可能的类型，但通常没有有意义的语义)，成员函数模板也比移动构造函数更好。
 
@@ -394,7 +393,7 @@ template constructor
 可变参数函数模板(参见第12.4节)在部分排序过程中需要特殊处理，参数包的推导(在第15.5节中描述)会将单个参数与多个参数匹配。这种行为为函数模板排序引入了几种有趣的情况:
 
 \filename{details/variadicoverload.cpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include <iostream>
 
 template<typename T>
@@ -421,27 +420,27 @@ int main()
 	std::cout << f((int*)nullptr, (double*)nullptr); // calls f<>(Ts*...)
 	std::cout << f((int*)nullptr); // calls f<>(T*)
 }
-\end{lstlisting}
+\end{cpp}
 
 这个示例的输出是
 
-\begin{tcblisting}{commandshell={}}
+\begin{shell}
 231
-\end{tcblisting}
+\end{shell}
 
 第一个调用f(0, 0.0)中，将考虑名为f的函数模板。对于第一个函数模板f(T*)，推导失败的原因有两个:一是无法推导出模板参数T，二是这个非变参函数模板的函数实参比形参多。第二个函数模板f(Ts…)可变:推导将函数参数包(Ts)的模式与两个参数的类型(分别为int和double)进行比较，将Ts推导为(int, double)。对于第三个函数模板f(Ts*…)，将函数参数包Ts*的模式与每个参数类型进行比较。这时推导失败了(不能推导Ts)，只剩下第二个函数模板。所以，这里不需要对函数模板排序。
 
 第二个调用f((int*)nullptr，(double*)nullptr):对于第一个函数模板，推导失败，因为函数实参比形参多，但是对于第二个和第三个模板，推导成功。
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 f<int*,double*>((int*)nullptr, (double*)nullptr) // for second template
-\end{lstlisting}
+\end{cpp}
 
 和
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 f<int,double>((int*)nullptr, (double*)nullptr) // for third template
-\end{lstlisting}
+\end{cpp}
 
 部分排序考虑第二个和第三个模板，这两个都是可变参数模板:当对可变参数模板应用第16.2.3节描述的正式排序规则时，每个模板参数包将替换为单个组成的类型、类模板或值。第二个和第三个函数模板的合成参数类型分别是A1和A2*，其中A1和A2是合成类型。通过将参数包Ts替换为单元素序列(A2*)，第二个模板针对第三个参数类型列表的推导成功。然而，没有办法使第三个模板的参数包的模式Ts*与非指针类型A1匹配，因此第三个函数模板(接受指针参数)比第二个函数模板(接受任何参数)更特化。
 
@@ -450,7 +449,7 @@ f<int,double>((int*)nullptr, (double*)nullptr) // for third template
 上面描述的规则同样适用于函数签名中的类型中的包扩展。可以将前面示例中每个函数模板的形参和实参包装到可变参数类模板Tuple中，从而得到一个不涉及函数参数包的示例:
 
 \filename{details/tupleoverload.cpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include <iostream>
 
 template<typename... Ts> class Tuple
@@ -481,13 +480,13 @@ int main()
 	std::cout << f(Tuple<int*, double*>()); // calls f<>(Tuple<Ts*...>)
 	std::cout << f(Tuple<int*>()); // calls f<>(Tuple<T*>)
 }
-\end{lstlisting}
+\end{cpp}
 
 函数模板排序将Tuple的模板参数中的包扩展为函数参数包，会输出相同的结果:
 
-\begin{tcblisting}{commandshell={}}
+\begin{shell}
 231
-\end{tcblisting}
+\end{shell}
 
 
 

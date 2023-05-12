@@ -7,14 +7,14 @@
 
 与C++标准库类似，NIHCL支持丰富的容器和迭代器。但实现遵循了Smalltalk的动态多态风格:迭代器使用抽象基类Collection来操作不同类型的集合:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 Bag c1;
 Set c2;
 ...
 Iterator i1(c1);
 Iterator i2(c2);
 ...
-\end{lstlisting}
+\end{cpp}
 
 但就运行时间和内存用量而言，这种方法的代价很高。运行时间通常比使用C++标准库的等效代码差几个数量级，因为大多数操作最终都需要一个虚调用(而在C++标准库中，许多操作都是内联的，迭代器和容器接口中不涉及虚函数)。此外，由于(与Smalltalk不同)接口是有边界的，内置类型必须封装在更大的多态类中(这样的封装器由NIHCL提供)，这反过来可能会导致存储需求的急剧增加。
 

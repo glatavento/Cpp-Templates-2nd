@@ -13,34 +13,33 @@ C和C++中，函数调用参数默认按值传递。调用方计算的参数值�
 
 这个问题可以通过一个策略特征模板处理，该模板是一个类型函数:该函数将预期的参数类型T映射到最优参数类型T或T const\&。主模板可以对不超过两个指针的类型使用按值传递，对其他类型使用引用const传递:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 struct RParam {
 	using Type = typename IfThenElseT<sizeof(T)<=2*sizeof(void*),
 									T,
 									T const&>::Type;
 };
-\end{lstlisting}
+\end{cpp}
 
 另一方面，对于sizeof返回小值的容器类型，可能会涉及昂贵的复制构造函数，因此可能需要许多特化和偏特化:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 struct RParam<Array<T>> {
 	using Type = Array<T> const&;
 };
-\end{lstlisting}
+\end{cpp}
 
 因为这类类型在C++中很常见，所以只使用简单的复制和移动构造函数，作为值类型来标记小类型可能会更安全
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}若对复制或移动构造函数的调用，可以用底层字节的简单复制来替换，则将其称trivial。
-\end{tcolorbox}
+\begin{notice}若对复制或移动构造函数的调用，可以用底层字节的简单复制来替换，则将其称trivial。
+\end{notice}
 
 然后有选择地添加其他类类型(std::is\_trivially\_copy\_constructible和std::is\_trivially\ move\ constructible类型特征是C++标准库的一部分)。
 
 \filename{traits/rparam.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #ifndef RPARAM_HPP
 #define RPARAM_HPP
 
@@ -58,12 +57,12 @@ struct RParam {
 };
 
 #endif // RPARAM_HPP
-\end{lstlisting}
+\end{cpp}
 
 无论采用哪种方式，策略现在都可以集中在特征模板定义中，外部可以很好地利用它。假设有两个类，其中一个类指定通过值调用更适合只读参数:
 
 \filename{traits/rparamcls.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include "rparam.hpp"
 #include <iostream>
 
@@ -91,12 +90,12 @@ class RParam<MyClass2> {
 	public:
 	using Type = MyClass2;
 };
-\end{lstlisting}
+\end{cpp}
 
 可以声明使用RParam<>作为只读参数的函数，并调用这些函数:
 
 \filename{traits/rparam1.cpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include "rparam.hpp"
 #include "rparamcls.hpp"
 
@@ -114,14 +113,14 @@ int main()
 	MyClass2 mc2;
 	foo<MyClass1,MyClass2>(mc1,mc2);
 }
-\end{lstlisting}
+\end{cpp}
 
 使用RParam有一些明显的缺点。首先，函数声明明显更混乱。其次，因为模板参数只出现在函数参数的限定符中，所以不能用参数推导调用foo()。因此，调用站点必须明确指定模板参数。
 
 这个选项的一个笨拙的解决方法是使用内联包装器函数模板，提供完美的转发功能(第15.6.3节)，但其假定编译器会省略内联函数:
 
 \filename{traits/rparam2.cpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include "rparam.hpp"
 #include "rparamcls.hpp"
 
@@ -146,7 +145,7 @@ int main()
 	MyClass2 mc2;
 	foo(mc1,mc2); // same as foo_core<MyClass1,MyClass2>(mc1,mc2)
 }
-\end{lstlisting}
+\end{cpp}
 
 
 

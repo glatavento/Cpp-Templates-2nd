@@ -85,13 +85,13 @@
 \item
 这个特性的主模板通常是通过以下方式实现的(这里只使用两个参数):
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T1, typename T2>
 struct common_type<T1,T2> {
 	using type = std::decay_t<decltype(true ? std::declval<T1>()
 	: std::declval<T2>())>;
 };
-\end{lstlisting}
+\end{cpp}
 \end{itemize}
 
 \textbf{std::aligned\_union<MIN\_SZ, T...>::type}
@@ -116,7 +116,7 @@ alignof(type)
 
 \item
 例如:
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 using POD_T = std::aligned_union_t<0, char,
 								std::pair<std::string,std::string>>;
 std::cout << sizeof(POD_T) << ’\n’;
@@ -124,7 +124,7 @@ std::cout << std::aligned_union<0, char,
 								std::pair<std::string,std::string>
 								>::alignment_value;
 		<< ’\n’;
-\end{lstlisting}
+\end{cpp}
 
 使用aligned\_union来获取对齐值，而不是使用aligned\_union\_t获取类型。
 \end{itemize}
@@ -142,9 +142,9 @@ std::cout << std::aligned_union<0, char,
 
 \item
 例如:
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 using POD_T = std::aligned_storage_t<5>;
-\end{lstlisting}
+\end{cpp}
 \end{itemize}
 
 

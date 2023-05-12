@@ -4,20 +4,20 @@
 
 其语法类似于全变量模板特化，不同的是使用实际的模板声明替换template<>，并且变量模板名称后面的模板参数列表必须依赖于模板参数。例如:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T> constexpr std::size_t SZ = sizeof(T);
 
 template<typename T> constexpr std::size_t SZ<T&> = sizeof(void*);
-\end{lstlisting}
+\end{cpp}
 
 与变量模板的全特化一样，偏特化的类型不需要匹配主模板类型:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T> typename T::iterator null_iterator;
 
 template<typename T, std::size_t N> T* null_iterator<T[N]> = null_ptr;
 // T* doesn’t match T::iterator, and that is fine
-\end{lstlisting}
+\end{cpp}
 
 关于为变量模板偏特化指定的模板参数类型的规则与为类模板特化指定的规则相同。类似地，为给定的具体模板参数列表选择特化的规则也相同。
 

@@ -4,18 +4,17 @@
 
 然而，T可能只是类型的“一部分”。若声明max()使用常量引用:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 T max (T const& a, T const& b)
 {
 	return b < a ? a : b;
 }
-\end{lstlisting}
+\end{cpp}
 
 并传递int，同样T会推导为int，因为函数形参匹配的是int const\&。
 
-\noindent
-\textbf{类型推导时的类型转换}
+\subsubsection{类型推导时的类型转换}
 
 注意，自动类型转换在类型推导时有一些限制:
 
@@ -29,7 +28,7 @@ T max (T const& a, T const& b)
 
 例如:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 T max (T a, T b);
 ...
@@ -41,30 +40,30 @@ int& ir = i;
 max(i, ir); // OK: T推导为int
 int arr[4];
 max(&i, arr); // OK: T推导为int*
-\end{lstlisting}
+\end{cpp}
 
 下面就是反面案例了：
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 max(4, 7.2); // ERROR: T推导为int或double
 std::string s;
 max("hello", s); // ERROR: T推导为char const*或std::string
-\end{lstlisting}
+\end{cpp}
 
 有三种方法可以处理此类错误:
 
 \begin{enumerate}
 \item
 强制转换:
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 max(static_cast<double>(4), 7.2); // OK
-\end{lstlisting}
+\end{cpp}
 
 \item
 显式指定(或限定)T的类型:
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 max<double>(4, 7.2); // OK
-\end{lstlisting}
+\end{cpp}
 
 \item
 指定参数可以有不同的类型。
@@ -72,27 +71,26 @@ max<double>(4, 7.2); // OK
 
 第1.3节将进行详细的说明。第7.2节和第15章将详细讨论类型推导时的类型转换规则。
 
-\noindent
-\textbf{默认参数的类型推导}
+\subsubsection{默认参数的类型推导}
 
 类型推导不适用于默认调用参数。例如:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 void f(T = "");
 ...
 f(1); // OK: 推导出T为int，因此其可以调用f<int>(1)
 f(); // ERROR: 不能推断出T的类型
-\end{lstlisting}
+\end{cpp}
 
 为了支持这种情况，必须为模板形参声明一个默认实参，这将在1.4节中进行详述:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T = std::string>
 void f(T = "");
 ...
 f(); // OK
-\end{lstlisting}
+\end{cpp}
 
 
 

@@ -1,10 +1,10 @@
 
 可以组合基本的类型列表，操作Front、PopFront和PushFront可以创建更有趣的类型列表操作。可以对PopFront的结果应用PushFront来替换类型列表中的第一个元素:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 using Type = PushFront<PopFront<SignedIntegralTypes>, bool>;
 			// equivalent to Typelist<bool, short, int, long, long long>
-\end{lstlisting}
+\end{cpp}
 
 更进一步，可以实现算法——搜索、转换、反转——作为操作在类型列表上的模板元函数。
 
@@ -12,14 +12,14 @@ using Type = PushFront<PopFront<SignedIntegralTypes>, bool>;
 
 类型列表上最基本的操作是从列表中提取特定的元素。第24.1节说明了如何实现提取第一个元素的操作。这里，我们推广这个操作来提取第n个元素，要在给定的类型列表的索引2处提取类型:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 using TL = NthElement<Typelist<short, int, long>, 2>;
-\end{lstlisting}
+\end{cpp}
 
 TL是一个别名。NthElement操作是通过一个递归元程序实现的，遍历类型列表，直到找到所请求的元素:
 
 \filename{typelist/nthelement.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 // recursive case:
 template<typename List, unsigned N>
 class NthElementT : public NthElementT<PopFront<List>, N-1>
@@ -34,27 +34,27 @@ class NthElementT<List, 0> : public FrontT<List>
 
 template<typename List, unsigned N>
 using NthElement = typename NthElementT<List, N>::Type;
-\end{lstlisting}
+\end{cpp}
 
 首先，考虑由N为0的偏特化的情况，特化通过在列表前面提供元素来终止递归。通过从FrontT<List>公开继承来实现，(间接地)提供了Type类型别名，既是该列表的前端，也是NthElement元函数的结果，并使用元函数转发(在19.3.2节中讨论)。
 
 递归情况(也是模板的主要定义)遍历了类型列表。由于偏特化保证N > 0，递归会从列表中删除前面的元素，并在剩余的列表元素中查找(N−1)$ ^{st} $元素：
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 NthElementT<Typelist<short, int, long>, 2>
-\end{lstlisting}
+\end{cpp}
 
 继承自
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 NthElementT<Typelist<int, long>, 1>
-\end{lstlisting}
+\end{cpp}
 
 再继承自
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 NthElementT<Typelist<long>, 0>
-\end{lstlisting}
+\end{cpp}
 
 这里，FrontT<typelist<long>{}>继承自通过嵌套类型Type的结果类型。
 
@@ -63,7 +63,7 @@ NthElementT<Typelist<long>, 0>
 许多类型列表算法在列表中搜索数据，希望找到类型列表中最大的类型(为列表中的类型分配足够的存储空间)。这也可以通过递归模板元程序来完成:
 
 \filename{typelist/largesttype.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename List>
 class LargestTypeT;
 
@@ -88,19 +88,17 @@ class LargestTypeT<Typelist<>>
 
 template<typename List>
 using LargestType = typename LargestTypeT<List>::Type;
-\end{lstlisting}
+\end{cpp}
 
 LargestType算法将返回类型列表中第一个最大的类型，给定类型列表Typelist<bool, int, long, short>，该算法将返回与long大小相同的第一个类型，可能是int或long，这取决于执行代码的平台。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}某些平台上，bool甚至与long大小相同!
-\end{tcolorbox}
+\begin{notice}某些平台上，bool甚至与long大小相同!
+\end{notice}
 
 LargestTypeT的主要模板作为算法的递归用例会使用多次，从而采用了常见的第一/其他的惯用法，其有三个步骤。第一步中，只基于第一个元素(本例中是列表的前端元素)计算部分结果，并将其放在First中。接下来，递归计算列表中其余元素的结果，并将结果放在Rest中。在递归的第一步中，对于Typelist<bool, int, long, short>，First是bool，而Rest是将算法应用到Typelist<int, long, short>的结果。最后，第三步结合First和Rest得到结果。IfThenElse选择列表中第一个元素中较大的(First)或目前为止最好的候选元素(Rest)，并返回最大的那个。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}类型列表可以包含sizeof，但这个操作有不适用的类型，例如void。这种情况下，编译器在试图计算类型表的最大类型时，产生一个错误。
-\end{tcolorbox}
+\begin{notice}类型列表可以包含sizeof，但这个操作有不适用的类型，例如void。这种情况下，编译器在试图计算类型表的最大类型时，产生一个错误。
+\end{notice}
 
 >=会倾向于使用前面的元素，也就是第一个最大的类型。
 
@@ -109,7 +107,7 @@ LargestTypeT的主要模板作为算法的递归用例会使用多次，从而�
 基本用例显式地提到了空类型列表。因为它排除了使用其他形式的类型列表，我们将在后面的部分(包括第24.3节、第24.5节和第25章)中返回这些类型列表。为了解决这个问题，引入了IsEmpty元函数来确定给定的类型列表是否为空:
 
 \filename{typelist/typelistisempty.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename List>
 class IsEmpty
 {
@@ -122,12 +120,12 @@ class IsEmpty<Typelist<>> {
 	public:
 	static constexpr bool value = true;
 };
-\end{lstlisting}
+\end{cpp}
 
 使用IsEmpty，可以实现LargestType。这样对实现Front、PopFront和IsEmpty的类型列表都有效:
 
 \filename{typelist/genericlargesttype.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename List, bool Empty = IsEmpty<List>::value>
 class LargestTypeT;
 
@@ -153,7 +151,7 @@ class LargestTypeT<List, true>
 
 template<typename List>
 using LargestType = typename LargestTypeT<List>::Type;
-\end{lstlisting}
+\end{cpp}
 
 LargestTypeT的第二个默认模板参数Empty检查列表是否为空。若不空，递归情况(将此参数固定为false)将继续查找列表。否则，基本情况(将参数固定为true)终止递归并提供初始结果(char)。
 
@@ -162,7 +160,7 @@ LargestTypeT的第二个默认模板参数Empty检查列表是否为空。若不
 PushFront操作允许向类型列表的头部添加一个新类型，从而生成一个新的类型列表。假设想在列表的末尾添加一个新类型，对于类型列表模板，这个操作只需要对第24.1节中的PushFront实现做一些修改，就可以完成PushBack操作:
 
 \filename{typelist/typelistpushback.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename List, typename NewElement>
 class PushBackT;
 
@@ -175,16 +173,15 @@ class PushBackT<Typelist<Elements...>, NewElement>
 
 template<typename List, typename NewElement>
 using PushBack = typename PushBackT<List, NewElement>::Type;
-\end{lstlisting}
+\end{cpp}
 
 与LargestType算法一样，可以为PushBack实现一个通用算法，只使用基本操作Front、PushFront、PopFront和IsEmpty:
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}要试用这个版本的算法，需要删除Typelist的PushBack的偏特化，否则要使用它来代替通用版本。
-\end{tcolorbox}
+\begin{notice}要试用这个版本的算法，需要删除Typelist的PushBack的偏特化，否则要使用它来代替通用版本。
+\end{notice}
 
 \filename{typelist/genericpushback.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename List, typename NewElement, bool = IsEmpty<List>::value>
 class PushBackRecT;
 
@@ -214,55 +211,54 @@ class PushBackT : public PushBackRecT<List, NewElement> { };
 
 template<typename List, typename NewElement>
 using PushBack = typename PushBackT<List, NewElement>::Type;
-\end{lstlisting}
+\end{cpp}
 
 PushBackRecT模板管理递归，使用PushFront将NewElement添加到空列表中，因为PushFront相当于空列表中的PushBack。递归的情况要有趣得多:将列表分成第一个元素(Head)和包含其余元素的类型列表(Tail)，递归地将新元素附加到Tail，以生成NewTail。然后再次使用PushFront将Head添加到列表NewTail的前面，从而形成最终的列表。
 
 使用一个简单的例子展开递归:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 PushBackRecT<Typelist<short, int>, long>
-\end{lstlisting}
+\end{cpp}
 
 最外面的步骤中，Head是short，Tail是Typelist<int>。继续递归
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 PushBackRecT<Typelist<int>, long>
-\end{lstlisting}
+\end{cpp}
 
 其中Head是int，Tail是Typelist<>。
 
 再次递归计算
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 PushBackRecT<Typelist<>, long>
-\end{lstlisting}
+\end{cpp}
 
 触发基本情况，并返回PushFrontTypelist<>, long>，其计算结果为Typelist<long>。然后展开递归，将前一个Head推到列表的前面:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 PushFront<int, Typelist<long>>
-\end{lstlisting}
+\end{cpp}
 
 这会产生Typelist<int, long>。递归再次展开，将最外层的Head(short)推到这个列表上:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 PushFront<short, Typelist<int, long>>
-\end{lstlisting}
+\end{cpp}
 
 就产生了最终的结果:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 Typelist<short, int, long>
-\end{lstlisting}
+\end{cpp}
 
 通用的PushBackRecT实现适用于任何类型的类型列表。与本节中的其他算法一样，需要线性数量的模板实例来计算，因为对于长度为N的类型列表，将有N + 1个PushBackRecT和PushFrontT的实例，以及N个FrontT和PopFrontT的实例。计算模板实例化的数量，可以粗略估计编译特定元程序所需的时间，因为模板实例化本身对于编译器来说是一个相当复杂的过程。
 
 对于大型模板元程序来说，编译时间可能是一个问题，可以减少由这些算法执行模板实例化的数量。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}Abrahams和Gurtovoy ([AbrahamsGurtovoyMeta])对模板元程序的编译时间进行了更深入的讨论，包括许多减少编译时间的技术。我们只是涉及了其表面。
-\end{tcolorbox}
+\begin{notice}Abrahams和Gurtovoy ([AbrahamsGurtovoyMeta])对模板元程序的编译时间进行了更深入的讨论，包括许多减少编译时间的技术。我们只是涉及了其表面。
+\end{notice}
 
 PushBack的第一个实现(Typelist上使用了偏特化)只需要固定数量的模板实例化，这使得它(在编译时)比通用版本要高效得多。因为描述为PushBackT的偏特化，所以在对Typelist实例执行PushBack时，将自动选择这个高效的实现，将算法特化的概念(如第20.1节所述)引入模板元程序。本节中讨论的许多技术都可以应用于模板元程序，以减少算法模板实例化的数量。
 
@@ -271,7 +267,7 @@ PushBack的第一个实现(Typelist上使用了偏特化)只需要固定数量�
 类型列表的元素之间有一定顺序时，在应用某些算法时，可以反转类型列表中元素的顺序。第24.1节中介绍的SignedIntegralTypes类型列表是按照递增的整数秩排序的。但可以使用元函数实现Reverse算法，将这个列表反向生成类型列表Typelist<long long, long, int, short, signed char>:
 
 \filename{typelist/typelistreverse.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename List, bool Empty = IsEmpty<List>::value>
 class ReverseT;
 
@@ -290,14 +286,14 @@ class ReverseT<List, true>
 	public:
 	using Type = List;
 };
-\end{lstlisting}
+\end{cpp}
 
 此元函数递归情况是空类型表上的恒等函数。递归情况将列表分解为第一个元素和列表中的其余元素。若给定类型列表Typelist<short, int, long>，递归步骤将第一个元素(short)与其余元素(Typelist<int, long>)分离。然后递归地反转剩余的元素列表(生成Typelist<long， int>)，最后使用PushBackT将第一个元素追加到反转列表(生成Typelist<long, int, short>)。
 
 Reverse算法可以为类型列表实现PopBackT操作，可从类型列表中删除最后一个元素:
 
 \filename{typelist/typelistpopback.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename List>
 class PopBackT {
 	public:
@@ -306,7 +302,7 @@ class PopBackT {
 
 template<typename List>
 using PopBack = typename PopBackT<List>::Type;
-\end{lstlisting}
+\end{cpp}
 
 该算法反转列表，从反转列表中删除第一个元素(使用PopFront)，然后再次反转结果列表。
 
@@ -314,14 +310,13 @@ using PopBack = typename PopBackT<List>::Type;
 
 以前的类型列表算法允许我们从类型列表器中提取元素、在列表中搜索、构造新列表和反向列表。但我们还没有对类型列表中的元素执行任何操作，比如：以某种方式“转换”类型列表中的所有类型，
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}函数式语言社区中，这种操作通常称为map(映射)，我们使用变换这个术语是为了更好地与C++标准库自己的算法名称保持一致。
-\end{tcolorbox}
+\begin{notice}函数式语言社区中，这种操作通常称为map(映射)，我们使用变换这个术语是为了更好地与C++标准库自己的算法名称保持一致。
+\end{notice}
 
 例如：使用AddConst元函数将每个类型转换为符合常量条件的类型:
 
 \filename{typelist/addconst.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 struct AddConstT
 {
@@ -330,18 +325,18 @@ struct AddConstT
 
 template<typename T>
 using AddConst = typename AddConstT<T>::Type;
-\end{lstlisting}
+\end{cpp}
 
 为此，我们将实现一个Transform算法，该算法接受一个类型列表和一个元函数，并生成另一个类型列表，其中包含将元函数应用到每种类型的结果。
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 Transform<SignedIntegralTypes, AddConstT>
-\end{lstlisting}
+\end{cpp}
 
 将是一个包含有符号char const、short const、int const、long const和long long const的类型列表。元函数通过双重模板参数提供，将输入类型映射到输出类型。Transform算法本身，如期望一样，是一个递归算法:
 
 \filename{typelist/transform.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename List, template<typename T> class MetaFun,
 bool Empty = IsEmpty<List>::value>
 class TransformT;
@@ -364,7 +359,7 @@ class TransformT<List, MetaFun, true>
 
 template<typename List, template<typename T> class MetaFun>
 using Transform = typename TransformT<List, MetaFun>::Type;
-\end{lstlisting}
+\end{cpp}
 
 递归虽然语法繁琐，但不难。转换的结果是转换列表中的第一个元素(到PushFront的第二个参数)的结果，并将其添加到递归转换列表中的其余元素(到PushFront的第一个参数)生成的列表头部。
 
@@ -374,9 +369,8 @@ using Transform = typename TransformT<List, MetaFun>::Type;
 
 变换是一种对序列的每个元素进行变换的算法，经常与累加一起使用，后者将序列的所有元素组合成单个结果值。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}函数式语言社区中，这种操作通常称为归约，使用术语“累加”是为了更好地与C++标准库的算法名称保持一致。
-\end{tcolorbox}
+\begin{notice}函数式语言社区中，这种操作通常称为归约，使用术语“累加”是为了更好地与C++标准库的算法名称保持一致。
+\end{notice}
 
 Accumulate算法使用一个类型列表T，其中包含元素T1、T2、…、TN(初始类型I)和元函数F(接受两种类型并返回一种类型)。它返回F(F(F(:::F(I;T1);T2);:::;TN−1);TN)，其中在累加的第i步F应用到前面i−1步的结果和Ti。
 
@@ -385,7 +379,7 @@ Accumulate算法使用一个类型列表T，其中包含元素T1、T2、…、TN
 Accumulate的实现遵循标准的递归元程序分解:
 
 \filename{typelist/accumulate.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename List,
 		template<typename X, typename Y> class F,
 		typename I,
@@ -416,27 +410,26 @@ template<typename List,
 		template<typename X, typename Y> class F,
 		typename I>
 using Accumulate = typename AccumulateT<List, F, I>::Type;
-\end{lstlisting}
+\end{cpp}
 
 初始类型I也用作累加器，捕获当前结果。因此，在到达列表末尾时返回此结果。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}这也确保了累加空列表的结果将是初始值。
-\end{tcolorbox}
+\begin{notice}这也确保了累加空列表的结果将是初始值。
+\end{notice}
 
 递归情况下，算法将F应用到前面的结果(I)和列表的前面，将应用F的结果作为初始类型传递给列表的其余部分的累加。
 
 有了Accumulate，可以使用PushFrontT作为元函数F，并使用空的类型列表(TypeList<T>)作为初始类型I，生成一个反转的类型列表:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 using Result = Accumulate<SignedIntegralTypes, PushFrontT, Typelist<>>;
 				// produces TypeList<long long, long, int, short, signed char>
-\end{lstlisting}
+\end{cpp}
 
 实现基于累加器的LargestType版本，因为需要产生一个返回两种类型中较大的类型的元函数，所以LargestTypeAcc需要多做一些工作:
 
 \filename{typelist/largesttypeacc0.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T, typename U>
 class LargerTypeT
 : public IfThenElseT<sizeof(T) >= sizeof(U), T, U>
@@ -452,12 +445,12 @@ Front<Typelist>>
 
 template<typename Typelist>
 using LargestTypeAcc = typename LargestTypeAccT<Typelist>::Type;
-\end{lstlisting}
+\end{cpp}
 
 因为提供了类型列表的第一个元素作为初始类型，所以LargestType的这种形式需要一个非空的类型列表。可以显式地处理空列表的情况，要么返回一些哨点类型(char或void)，要么使算法对SFINAE友好，如19.4.4节所述:
 
 \filename{typelist/largesttypeacc.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T, typename U>
 class LargerTypeT
 : public IfThenElseT<sizeof(T) >= sizeof(U), T, U>
@@ -481,7 +474,7 @@ class LargestTypeAccT<Typelist, true>
 
 template<typename Typelist>
 using LargestTypeAcc = typename LargestTypeAccT<Typelist>::Type;
-\end{lstlisting}
+\end{cpp}
 
 因为Accumulate允许表示许多不同的操作，所以其是一种功能强大的类型列表算法，可以认为是类型列表操作的基本算法。
 
@@ -490,7 +483,7 @@ using LargestTypeAcc = typename LargestTypeAccT<Typelist>::Type;
 对于最后一个的类型列表算法，这里将实现插入排序。与其他算法一样，递归步骤将列表分成第一个元素(头)和其余元素(尾)。然后，对尾部进行排序(递归地)，并将头部插入已排序列表中的正确位置。该算法的对外表示为类型列表算法:
 
 \filename{typelist/insertionsort.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename List,
 		template<typename T, typename U> class Compare,
 		bool = IsEmpty<List>::value>
@@ -517,14 +510,14 @@ class InsertionSortT<List, Compare, true>
 	public:
 	using Type = List;
 };
-\end{lstlisting}
+\end{cpp}
 
 Compare参数是用于对类型列表中的元素进行排序的比较。其接受两种类型，并通过其value成员计算为布尔值。基本情况是输入一个空的类型列表，处理也很简单。
 
 插入排序的核心是InsertSortedT元函数，已经排序的列表的第一点插入一个值，将保持列表的顺序:
 
 \filename{typelist/insertsorted.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include "identity.hpp"
 template<typename List, typename Element,
 		template<typename T, typename U> class Compare,
@@ -562,13 +555,13 @@ class InsertSortedT<List, Element, Compare, true>
 template<typename List, typename Element,
 		template<typename T, typename U> class Compare>
 using InsertSorted = typename InsertSortedT<List, Element, Compare>::Type;
-\end{lstlisting}
+\end{cpp}
 
 因为单元素列表总是排序的，所以也没啥难度。递归情况的不同取决于要插入的元素应该位于列表的开头还是列表的后面。若插入的元素位于列表中的第一个元素之前(该元素已经排序)，则结果是该元素添加到带有PushFront的列表中。否则，要将列表分为头和尾，递归将该元素插入尾，然后将头添加到插入尾的元素的前面。
 
 该实现包括一个编译时优化，以避免实例化不使用的类型，该技术在第19.7.1节中讨论过。下面的实现在技术上是正确的:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename List, typename Element,
 		template<typename T, typename U> class Compare>
 class InsertSortedT<List, Element, Compare, false>
@@ -579,7 +572,7 @@ class InsertSortedT<List, Element, Compare, false>
 							Front<List>>>
 {
 };
-\end{lstlisting}
+\end{cpp}
 
 因为它计算IfThenElseT的两个分支中的模板参数，即使只使用一个分支，这种递归情况的表述都非常低效。例子中，then分支中的PushFront通常是相当廉价，但else分支中的递归InsertSorted则不然。
 
@@ -588,7 +581,7 @@ class InsertSortedT<List, Element, Compare, false>
 下面的程序演示了如何使用插入排序，来根据类型的大小对类型列表进行排序。比较操作使用sizeof操作符比较结果:
 
 \filename{typelist/insertionsorttest.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T, typename U>
 struct SmallerThanT {
 	static constexpr bool value = sizeof(T) < sizeof(U);
@@ -601,7 +594,7 @@ void testInsertionSort()
 	std::cout << std::is_same<ST,Typelist<char, short, int, double>>::value
 			<< ’\n’;
 }
-\end{lstlisting}
+\end{cpp}
 
 
 

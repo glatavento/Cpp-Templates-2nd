@@ -23,17 +23,17 @@
 
 偏特化函数模板的一种自然语法是泛化类模板表示法:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 T const& max (T const&, T const&); // primary template
 
 template<typename T>
 T* const& max <T*>(T* const&, T* const&); // partial specialization
-\end{lstlisting}
+\end{cpp}
 
 一些语言设计人员担心这种偏特化方法与函数模板重载的交互。例如:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 void add (T& x, int i); // a primary template
 
@@ -42,7 +42,7 @@ void add (T1 a, T2 b); // another (overloaded) primary template
 
 template<typename T>
 void add<T*> (T*&, int); // Which primary template does this specialize?
-\end{lstlisting}
+\end{cpp}
 
 然而，我们希望将这样的情况视为错误，不会对功能的使用产生重大影响。
 

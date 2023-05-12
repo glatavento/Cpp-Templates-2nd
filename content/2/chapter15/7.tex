@@ -2,13 +2,12 @@
 
 SFINAE(替换失败不为过)原则在第8.4节中介绍，其对模板参数类型的推导有很大的影响，可以避免不相关的函数模板在重载解析期间引起的错误。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}SFINAE也适用于部分类模板特化的替换。参见第16.4节
-\end{tcolorbox}
+\begin{notice}SFINAE也适用于部分类模板特化的替换。参见第16.4节
+\end{notice}
 
 例如，考虑一对函数模板，用于提取容器或数组的起始迭代器:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T, unsigned N>
 T* begin(T (&array)[N])
 {
@@ -29,7 +28,7 @@ int main()
 	::begin(v); // OK: only container begin() matches, because the first deduction fails
 	::begin(a); // OK: only array begin() matches, because the second substitution fails
 }
-\end{lstlisting}
+\end{cpp}
 
 对begin()的第一次调用，其中参数是std::vector<int>，尝试对begin()函数模板进行模板参数推导:
 
@@ -55,9 +54,8 @@ int main()
 
 SFINAE可以避免形成无效类型或表达式的尝试，包括在函数模板替换的即时上下文中发生的由歧义或违反访问控制引起的错误。通过定义函数模板替换的即时上下文，可以更容易地定义不在该上下文中的内容。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}即时上下文包括很多东西，各种查找、别名模板替换、重载解析等。但这个术语有不恰当，因为包含的一些活动与所替换的函数模板没有关系。
-\end{tcolorbox}
+\begin{notice}即时上下文包括很多东西，各种查找、别名模板替换、重载解析等。但这个术语有不恰当，因为包含的一些活动与所替换的函数模板没有关系。
+\end{notice}
 
 函数模板替换过程中，为了推导而发生的实例化，都不在函数模板替换的即时上下文中：
 
@@ -85,7 +83,7 @@ SFINAE可以避免形成无效类型或表达式的尝试，包括在函数模�
 
 因此，若替换函数模板声明的模板参数需要实例化类模板的主体，该类的一个成员正在引用，那么实例化期间的错误并不在函数模板替换的即时上下文中，因此是一个真正的错误(即使另一个函数模板匹配没有错误)。例如:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 class Array {
 	public:
@@ -102,13 +100,13 @@ int main()
 {
 	f<int&>(0, 0); // ERROR: substituting int& for T in the first function template
 } // instantiates Array<int&>, which then fails
-\end{lstlisting}
+\end{cpp}
 
 此示例与上一个示例的主要区别在于错误位置。前面的例子中，错误发生在typename Container::iterator类型时，该类型位于函数模板begin()替换的即时上下文中。本例中，失败发生在Array<int\&>的实例化中，尽管由函数模板的上下文触发，但实际上发生在类模板Array的上下文中。因此，SFINAE原理在这里不适用，编译器将产生错误。
 
 下面是C++14的例子——依赖于推导的返回类型(参见15.10.1节)——在函数模板定义的实例化过程中会产生一个错误:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T> auto f(T p) {
 	return p->m;
 }
@@ -121,7 +119,7 @@ int main()
 {
 	g(42);
 }
-\end{lstlisting}
+\end{cpp}
 
 调用g(42)将T推导为int。在g()的声明中进行替换需要确定f(p)的类型(p现在已知是int类型)，因此需要确定f()的返回类型。f()有两个候选。非模板候选匹配，但不是很好，因为它匹配一个省略号参数。不幸的是，模板候选有一个推导的返回类型，因此必须实例化定义来确定返回类型。这个实例化失败的原因是p\texttt{->}m在p是int时无效，而且由于失败在替换的即时上下文之外(因为在函数定义的后续实例化中)，失败产生了一个错误。因此，若可以显式指定推导返回类型，这里建议不使用。
 

@@ -11,7 +11,7 @@
 
 两者都可能是可工作的，也可能是不工作的。当数组衰变为指针时，将失去区分处理指向元素的指针和处理传递的数组的能力。另一方面，处理可能传递字符串字面值的参数时，因为不同大小的字符串字面值有不同的类型，所以不衰变可能有问题。例如:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 void foo (T const& arg1, T const& arg2)
 {
@@ -19,13 +19,13 @@ void foo (T const& arg1, T const& arg2)
 }
 
 foo("hi", "guy"); // ERROR
-\end{lstlisting}
+\end{cpp}
 
 这里，foo("hi"，"guy")无法进行编译，因为"hi"的类型是char const[3]，而"guy"的类型是char const[4]，但模板要求它们具有相同的类型T。只有当字符串字面值具有相同的长度时，这样的代码才能编译。出于这个原因，强烈建议在测试用例中使用不同长度的字符串字面值。
 
 通过声明函数模板foo()来通过值传递参数:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 void foo (T arg1, T arg2)
 {
@@ -33,11 +33,11 @@ void foo (T arg1, T arg2)
 }
 
 foo("hi", "guy"); // compiles, but ...
-\end{lstlisting}
+\end{cpp}
 
 但是，这并不意味着所有的问题都消失了。更糟糕的是，编译时问题可能变成了运行时问题。考虑下面的代码，使用operator==比较传递的参数:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 void foo (T arg1, T arg2)
 {
@@ -47,7 +47,7 @@ void foo (T arg1, T arg2)
 }
 
 foo("hi", "guy"); // compiles, but ...
-\end{lstlisting}
+\end{cpp}
 
 因为模板还必须处理来自已衰变的字符串字面量参数(例如，通过value调用的函数或赋值给使用auto声明的对象)，所以编译器必须知道应该将传递的字符指针解释为字符串。
 
@@ -65,7 +65,7 @@ foo("hi", "guy"); // compiles, but ...
 \item 
 可以声明模板参数，使其只对数组有效:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T, std::size_t L1, std::size_t L2>
 void foo(T (&arg1)[L1], T (&arg2)[L2])
 {
@@ -75,21 +75,21 @@ void foo(T (&arg1)[L1], T (&arg2)[L2])
 		...
 	}
 }
-\end{lstlisting}
+\end{cpp}
 
 这里，arg1和arg2必须是数组，具有相同的元素类型T，但L1和L2大小不同。但请注意，可能需要多个实现来支持数组(参见第5.4节)。
 
 \item 
 可以使用类型特征来检测是否传递了数组(或指针):
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T,
 		 typename = std::enable_if_t<std::is_array_v<T>>>
 void foo (T&& arg1, T&& arg2)
 {
 	...
 }
-\end{lstlisting}
+\end{cpp}
 \end{itemize}
 
 由于这些属于特殊的处理方式，而常用处理数组方式就是使用不同的函数名。当然，更好的方法是确定模板的调用者使用std::vector或std::array。只要字符串字面值是数组，就必须考虑这种情况。

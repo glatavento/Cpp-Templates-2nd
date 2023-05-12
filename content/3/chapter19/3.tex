@@ -4,7 +4,7 @@
 sizeof是一个有用的内置类型函数，其返回一个常量，描述给定类型参数的大小(以字节为单位)。类模板也可以用作类型函数。类型函数的参数是模板参数，结果作为成员类型或成员常量提取。sizeof操作符可以实现如下接口:
 
 \filename{traits/sizeof.cpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include <cstddef>
 #include <iostream>
 
@@ -18,7 +18,7 @@ int main()
 	std::cout << "TypeSize<int>::value = "
 	<< TypeSize<int>::value << ’\n’;
 }
-\end{lstlisting}
+\end{cpp}
 
 因为有内置的sizeof操作符可用，但TypeSize<T>是一个类型，因此可以作为类模板参数传递。或者，TypeSize是一个模板，可以作为模板参数传递。
 
@@ -29,7 +29,7 @@ int main()
 假设有许多容器模板(std::vector<>和std::list<>)，以及内置数组。需要一个类型函数，给定这样的容器类型，该类型函数生成元素类型。这可以通过使用偏特化来实现:
 
 \filename{traits/elementtype.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include <vector>
 #include <list>
 
@@ -57,14 +57,14 @@ struct ElementT<T[]> { // partial specialization for arrays of unknown bounds
 	using Type = T;
 };
 ...
-\end{lstlisting}
+\end{cpp}
 
 应该为所有可能的数组类型提供偏特化(详见第5.4节)。
 
 可以这样使用类型函数:
 
 \filename{traits/elementtype.cpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include "elementtype.hpp"
 #include <vector>
 #include <iostream>
@@ -85,22 +85,22 @@ int main()
 	int arr[42];
 	printElementType(arr);
 }
-\end{lstlisting}
+\end{cpp}
 
 偏特化允许实现类型函数，而不需要容器知道类型。然而，类型函数是与适用类型一起设计的，并且可以简化实现。若容器类型定义了一个成员类型value\_type(就像标准容器所做的那样)，就可以这样:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename C>
 struct ElementT {
 	using Type = typename C::value_type;
 };
-\end{lstlisting}
+\end{cpp}
 
 这可以是默认实现，并且不排除没有定义合适的成员类型value\_type的容器类型的特化。
 
 尽管如此，还是建议为类模板类型参数提供成员类型定义，以便在泛型代码中更容易访问(就像标准容器模板那样):
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T1, typename T2, ...>
 class X {
 	public:
@@ -108,21 +108,21 @@ class X {
 	using ... = T2;
 	...
 };
-\end{lstlisting}
+\end{cpp}
 
 如何使用类型函数?其可以根据容器类型对模板进行参数化，而不需要元素类型和其他特征的参数。例如，
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T, typename C>
 T sumOfElements (C const& c);
-\end{lstlisting}
+\end{cpp}
 
 需要sumOfElements<int>(list)这样的语法来显式指定元素类型，可以声明
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename C>
 typename ElementT<C>::Type sumOfElements (C const& c);
-\end{lstlisting}
+\end{cpp}
 
 其中元素类型由类型函数确定。
 
@@ -132,29 +132,28 @@ typename ElementT<C>::Type sumOfElements (C const& c);
 
 方便起见，可以为类型函数创建别名模板。例如，可以引入
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 using ElementType = typename ElementT<T>::Type;
-\end{lstlisting}
+\end{cpp}
 
 这允许进一步简化上面的sumOfElements声明为
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename C>
 ElementType<C> sumOfElements (C const& c);
-\end{lstlisting}
+\end{cpp}
 
 \subsection{特征变换}
 
 除了提供对主参数类型的特定方面的访问外，特征还可以对类型执行转换，例如添加或删除引用或const和volatile限定符。
 
-\noindent
-\textbf{删除引用}
+\subsubsection{删除引用}
 
 可以实现一个RemoveReferenceT特征，将引用类型转换为的底层对象或函数类型，只保留非引用类型:
 
 \filename{traits/removereference.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 struct RemoveReferenceT {
 	using Type = T;
@@ -169,26 +168,25 @@ template<typename T>
 struct RemoveReferenceT<T&&> {
 	using Type = T;
 };
-\end{lstlisting}
+\end{cpp}
 
 同样，别名模板可使使用方式更简单:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 using RemoveReference = typename RemoveReferenceT<T>::Type;
-\end{lstlisting}
+\end{cpp}
 
 有时会产生引用类型的构造派生类型时，可以从类型中删除引用，例如在第15.6节中讨论的T\&\&类型的函数参数的特殊推导规则。
 
 C++标准库提供了相应的类型特征std::remove\_reference<>，在第D.4节中描述。
 
-\noindent
-\textbf{添加引用}
+\subsubsection{添加引用}
 
 可以找一个已存在的类型，并从中创建一个左值或右值引用(以及别名模板):
 
 \filename{traits/addreference.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 struct AddLValueReferenceT {
 	using Type = T&;
@@ -204,23 +202,23 @@ struct AddRValueReferenceT {
 
 template<typename T>
 using AddRValueReference = typename AddRValueReferenceT<T>::Type;
-\end{lstlisting}
+\end{cpp}
 
 引用折叠规则(第15.6节)适用于此。调用AddLValueReference<int\&\&>会产生类型int\&\&(因此不需要通过偏特化手动实现)。
 
 若保留AddLValueReferenceT和AddRValueReferenceT，不引入其特化，那么别名实际上可以简化为
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 using AddLValueReferenceT = T&;
 
 template<typename T>
 using AddRValueReferenceT = T&&;
-\end{lstlisting}
+\end{cpp}
 
 可以在不实例化类模板的情况下进行实例化(轻量级过程)。这是有风险的，因为很可能想为特殊情况特化这些模板。如上所述，不能使用void作为这些模板的模板参数。一些显式特化可以解决这个问题:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<>
 struct AddLValueReferenceT<void> {
 	using Type = void;
@@ -240,19 +238,18 @@ template<>
 struct AddLValueReferenceT<void const volatile> {
 	using Type = void const volatile;
 };
-\end{lstlisting}
+\end{cpp}
 
 AddRValueReferenceT也类似，必须根据类模板来制定别名模板，以确保采用特化(别名模板不能特化)模板。
 
 C++标准库提供了相应的类型特征std::add\_lvalue\_reference<>和std::add\_rvalue\_reference<>，在第D.4节中有描述。标准模板包括void类型的特化。
 
-\noindent
-\textbf{删除限定符}
+\subsubsection{删除限定符}
 
 转换特征可以分解或引入任何类型的复合类型，而不仅仅是引用。如果存在const限定符，可以删除:
 
 \filename{traits/removeconst.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 struct RemoveConstT {
 	using Type = T;
@@ -265,12 +262,12 @@ struct RemoveConstT<T const> {
 
 template<typename T>
 using RemoveConst = typename RemoveConstT<T>::Type;
-\end{lstlisting}
+\end{cpp}
 
 此外，特征转换可以组合，比如创建一个RemoveCVT特征，可以同时删除const和volatile:
 
 \filename{traits/removecv.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include "removeconst.hpp"
 #include "removevolatile.hpp"
 
@@ -280,36 +277,34 @@ struct RemoveCVT : RemoveConstT<typename RemoveVolatileT<T>::Type> {
 
 template<typename T>
 using RemoveCV = typename RemoveCVT<T>::Type;
-\end{lstlisting}
+\end{cpp}
 
 关于RemoveCVT的定义，有两点需要注意。首先，同时使用RemoveConstT和RemoveVolatileT，首先删除volatile(若存在)，然后将结果类型传递给RemoveConstT。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}限定符删除的顺序没有语义上的影响:可以先删除volatile，然后再删除const。
-\end{tcolorbox}
+\begin{notice}限定符删除的顺序没有语义上的影响:可以先删除volatile，然后再删除const。
+\end{notice}
 
 其次，使用元函数转发从RemoveConstT继承Type成员，而不是声明自己与RemoveConstT特化中相同的Type成员。这里使用元函数转发只是为了减少RemoveCVT定义中的输入量，当没有为所有输入定义元函数时，元函数转发也很有用，这种技术将在第19.4节中进一步讨论。
 
 别名模板RemoveCV可以简化为
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 using RemoveCV = RemoveConst<RemoveVolatile<T>>;
-\end{lstlisting}
+\end{cpp}
 
 同样，这只在RemoveCVT没有特化的情况下有效。与AddLValueReference和AddRValueReference不同，没有原因需要进行这样的特化。
 
 C++标准库也提供了相应的类型特征std::remove\_volatile<>， std::remove\_const<>，和std::remove\_cv<>，在第D.4节中有描述。
 
-\noindent
-\textbf{衰变}
+\subsubsection{衰变}
 
 为了完善对特征转换的讨论，我们开发了一个特征，按值向参数传递时模拟类型转换。派生自C语言，参数会产生衰变(将数组类型转换为指针，将函数类型转换为指向函数的指针类型;请参阅第7.4节和第11.1.1节)，并删除所有const、volatile或引用限定符(因为解析函数调用时将忽略参数类型的类型限定符)。
 
 这种按值传递的效果可以在下面的程序中看到，打印出编译器衰变指定类型后产生的实际参数类型:
 
 \filename{traits/passbyvalue.cpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include <iostream>
 #include <typeinfo>
 #include <type_traits>
@@ -334,29 +329,28 @@ int main()
 	printParameterType(&f<int[7]>);
 	printParameterType(&f<int(int)>);
 }
-\end{lstlisting}
+\end{cpp}
 
 程序的输出中，int参数保持不变，但是int const、int[7]和int(int)形参分别衰变为int、int*和int(*)(int)。
 
 可以实现一个特征，产生相同的按值传递类型转换。为了与C++标准库特征std::decay相匹配，我们把它命名为DecayT。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}使用术语衰变可能会有点混乱，因为在C中它只意味着从数组/函数类型到指针类型的转换，而在这里它还包括删除const/volatile限定符。
-\end{tcolorbox}
+\begin{notice}使用术语衰变可能会有点混乱，因为在C中它只意味着从数组/函数类型到指针类型的转换，而在这里它还包括删除const/volatile限定符。
+\end{notice}
 
 它的实现结合了上面描述的几种技术。
 
 首先，定义了非数组、非函数的情况，可以简单地删除const和volatile限定符:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 struct DecayT : RemoveCVT<T> {
 };
-\end{lstlisting}
+\end{cpp}
 
 接下来，处理数组到指针的衰变，要求使用偏特化来识别数组类型(有或没有绑定):
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 struct DecayT<T[]> {
 	using Type = T*;
@@ -366,11 +360,11 @@ template<typename T, std::size_t N>
 struct DecayT<T[N]> {
 	using Type = T*;
 };
-\end{lstlisting}
+\end{cpp}
 
 最后，处理函数到指针的衰变，必须匹配任何函数类型，而不管返回类型或参数类型的数量。为此，这里使用可变参数模板:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename R, typename... Args>
 struct DecayT<R(Args...)> {
 	using Type = R (*)(Args...);
@@ -380,18 +374,17 @@ template<typename R, typename... Args>
 struct DecayT<R(Args..., ...)> {
 	using Type = R (*)(Args..., ...);
 };
-\end{lstlisting}
+\end{cpp}
 
 注意，第二个偏特化匹配任何使用C风格可变参数的函数类型。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}严格地说，第二个省略号(…)之前的逗号可选，但这里为了清晰起见提供了逗号。由于省略可选，第一个偏特化中的函数类型在语法上不明确:可以解析为R(Args，…)(C风格的可变参数)或R(Args…(参数包)。之所以选择第二种解释，是因为Args是未扩展的参数包。需要其他解释的情况下，可以显式地添加逗号。
-\end{tcolorbox}
+\begin{notice}严格地说，第二个省略号(…)之前的逗号可选，但这里为了清晰起见提供了逗号。由于省略可选，第一个偏特化中的函数类型在语法上不明确:可以解析为R(Args，…)(C风格的可变参数)或R(Args…(参数包)。之所以选择第二种解释，是因为Args是未扩展的参数包。需要其他解释的情况下，可以显式地添加逗号。
+\end{notice}
 
 主DecayT模板和它的四个偏特化一起实现参数类型衰变，如下例程序所示:
 
 \filename{traits/decay.cpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include <iostream>
 #include <typeinfo>
 #include <type_traits>
@@ -414,14 +407,14 @@ int main()
 	printDecayedType<int[7]>();
 	printDecayedType<int(int)>();
 }
-\end{lstlisting}
+\end{cpp}
 
 像往常一样，这里提供了一个别名模板:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template typename T>
 using Decay = typename DecayT<T>::Type;
-\end{lstlisting}
+\end{cpp}
 
 C++标准库还提供了相应的类型特征std::decay<>，在第D.4节中描述。
 
@@ -429,13 +422,12 @@ C++标准库还提供了相应的类型特征std::decay<>，在第D.4节中描�
 
 我们已经研究和开发了单一类型的类型函数:给定一个类型，提供其他相关的类型或常量。但是，通常可以开发依赖多个参数的类型函数。这也导致了一种特殊形式的类型特征，类型谓词(产生布尔值的类型函数)。
 
-\noindent
-\textbf{IsSameT}
+\subsubsection{IsSameT}
 
 IsSameT特征会产生两种类型是否相等:
 
 \filename{traits/issame0.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T1, typename T2>
 struct IsSameT {
 	static constexpr bool value = false;
@@ -445,32 +437,31 @@ template<typename T>
 struct IsSameT<T, T> {
 	static constexpr bool value = true;
 };
-\end{lstlisting}
+\end{cpp}
 
 这里的主模板定义了两个不同的类型，通常作为模板参数传递。使得value成员为false。使用偏特化，当传递的两个类型相同的特殊情况时，value为true。
 
 下面的表达式检查传递的模板参数是否为整数:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 if (IsSameT<T, int>::value) ...
-\end{lstlisting}
+\end{cpp}
 
 对于产生常量值的特征，不能提供别名模板，但可以提供constexpr变量模板来扮演相同的角色:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T1, typename T2>
 constexpr bool isSame = IsSameT<T1, T2>::value;
-\end{lstlisting}
+\end{cpp}
 
 C++标准库提供了相应的类型特征std::is\_same<>，在第D.3.3节中详述。
 
-\noindent
-\textbf{true\_type和false\_type}
+\subsubsection{true\_type和false\_type}
 
 可以通过为两种结果，提供不同的类型来改进IsSameT的定义。若声明一个类模板BoolConstant，其中包含TrueType和FalseType两种可能的实例化:
 
 \filename{traits/boolconstant.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<bool val>
 struct BoolConstant {
 	using Type = BoolConstant<val>;
@@ -478,12 +469,12 @@ struct BoolConstant {
 };
 using TrueType = BoolConstant<true>;
 using FalseType = BoolConstant<false>;
-\end{lstlisting}
+\end{cpp}
 
 可以定义IsSameT，根据这两种类型是否匹配，其派生自TrueType或FalseType:
 
 \filename{traits/issame.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include "boolconstant.hpp"
 
 template<typename T1, typename T2>
@@ -495,18 +486,18 @@ template<typename T>
 struct IsSameT<T, T> : TrueType
 {
 };
-\end{lstlisting}
+\end{cpp}
 
 结果类型为
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 IsSameT<T,int>
-\end{lstlisting}
+\end{cpp}
 
 隐式转换为其基类TrueType或FalseType，不仅提供了相应的值成员，而且可以在编译时，分配给不同的函数实现或类模板偏特化。例如:
 
 \filename{traits/issame.cpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include "issame.hpp"
 #include <iostream>
 
@@ -533,16 +524,16 @@ int main()
 	foo(42); // calls fooImpl(42, TrueType)
 	foo(7.7); // calls fooImpl(7.7, FalseType)
 }
-\end{lstlisting}
+\end{cpp}
 
 这种技术称为标签调度，将在第20.2节中介绍。
 
 BoolConstant的实现包含一个Type成员，其允许为IsSameT重新引入一个别名模板:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 using IsSame = typename IsSameT<T>::Type;
-\end{lstlisting}
+\end{cpp}
 
 别名模板可以与变量模板isSame共存。
 
@@ -550,28 +541,28 @@ using IsSame = typename IsSameT<T>::Type;
 
 C++标准库在<type\_traits>头文件中提供了相应的类型，因为C++11: std::true\_type和std::false\_type。在C++11和C++14中，其定义如下:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 namespace std {
 	using true_type = integral_constant<bool, true>;
 	using false_type = integral_constant<bool, false>;
 }
-\end{lstlisting}
+\end{cpp}
 
 C++17后，其定义为
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 namespace std {
 	using true_type = bool_constant<true>;
 	using false_type = bool_constant<false>;
 }
-\end{lstlisting}
+\end{cpp}
 
 其中bool\_constant在命名空间std中定义为
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<bool B>
 using bool_constant = integral_constant<bool, B>;
-\end{lstlisting}
+\end{cpp}
 
 请参阅第D.1.1节了解更多细节。
 
@@ -581,38 +572,38 @@ using bool_constant = integral_constant<bool, B>;
 
 处理多种类型函数的另一个例子是结果类型特征，在编写操作符模板时非常有用。为了了解其用法，我们编写一个函数模板，可以添加两个数组容器:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 Array<T> operator+ (Array<T> const&, Array<T> const&);
-\end{lstlisting}
+\end{cpp}
 
 因为语言允许在int值上添加一个char值，所以更倾向于混合类型的数组操作。然后，需要确定结果模板的返回类型
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T1, typename T2>
 Array<???> operator+ (Array<T1> const&, Array<T2> const&);
-\end{lstlisting}
+\end{cpp}
 
 除了在1.3节中介绍的不同方法外，结果类型模板可以在前面的声明中填写问号，如下所示:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T1, typename T2>
 Array<typename PlusResultT<T1, T2>::Type>
 operator+ (Array<T1> const&, Array<T2> const&);
-\end{lstlisting}
+\end{cpp}
 
 或，若假设一个别名模板
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T1, typename T2>
 Array<PlusResult<T1, T2>>
 operator+ (Array<T1> const&, Array<T2> const&);
-\end{lstlisting}
+\end{cpp}
 
 PlusResultT特征通过加法操作符将两种(可能是不同的)类型的值相加，从而确定产生的类型:
 
 \filename{traits/plus1.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T1, typename T2>
 struct PlusResultT {
 	using Type = decltype(T1() + T2());
@@ -620,40 +611,39 @@ struct PlusResultT {
 
 template<typename T1, typename T2>
 using PlusResult = typename PlusResultT<T1, T2>::Type;
-\end{lstlisting}
+\end{cpp}
 
 这个特征模板使用decltype来计算表达式T1()+T2()的类型，将确定结果类型的工作(包括处理提升规则和重载操作符)交给编译器。
 
 然而，对于我们的例子来说，decltype实际上保留了太多的信息(参见第15.10.2节关于decltype行为的描述)。PlusResultT可能会产生引用类型，但我们的Array类模板不是为处理引用类型而设计的。更实际地说，重载加法操作符可能返回const类类型的值:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 class Integer { ... };
 Integer const operator+ (Integer const&, Integer const&);
-\end{lstlisting}
+\end{cpp}
 
 添加两个Array<Integer>值将得到一个Integer const数组，这很可能不是我们想要的。我们想要的是通过删除引用和限定符来转换结果类型，就像上一节那样:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T1, typename T2>
 Array<RemoveCV<RemoveReference<PlusResult<T1, T2>>>>
 operator+ (Array<T1> const&, Array<T2> const&);
-\end{lstlisting}
+\end{cpp}
 
 这种特征嵌套在模板库中很常见，经常用于元编程上下文中。元编程将在第23章详细介绍。(别名模板对于像这样的多层嵌套特别有用；否则，需要在每一层添加typename和::Type后缀。)
 
 当将两个元素类型(可能是不同的)数组相加时，数组加法操作符将正确地计算结果类型。但PlusResultT对元素类型T1和T2添加了一个限制，因为表达式T1()+T2()尝试对T1和T2类型的值进行初始化，这两种类型必须具有可访问的、非删除的默认构造函数(或者是非类类型)。Array类本身可能不需要元素类型的值初始化，因此这是一个不必要的限制。
 
-\noindent
-\textbf{declval}
+\subsubsection{declval}
 
 通过使用生成给定类型T值的函数，为加法表达式生成值很容易，不需要构造函数。为此，C++标准提供std::declval<>，在第11.2.3节中介绍。它在标准头文件<utility>中定义:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 namespace std {
 	template<typename T>
 	add_rvalue_reference_t<T> declval() noexcept;
 }
-\end{lstlisting}
+\end{cpp}
 
 表达式declval<T>()生成T类型的值，不需要默认构造函数(或其他操作)。
 
@@ -663,9 +653,8 @@ namespace std {
 \item 
 对于可引用的类型，返回类型是该类型的右值引用，这使得declval可以用于不能从函数返回的类型，如抽象类类型(具有纯虚函数的类)或数组类型。否则，从T到T\&\&的转换对作为表达式使用的declval<T>()的行为没有影响:两者都是右值(若T是一个对象类型)，而左值引用类型由于引用折叠规则而不变(第15.6节中描述)。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}通过直接使用decltype可以发现返回类型T和T\&\&之间的区别。因为declval的使用限制，所以其没什么实际意义。
-\end{tcolorbox}
+\begin{notice}通过直接使用decltype可以发现返回类型T和T\&\&之间的区别。因为declval的使用限制，所以其没什么实际意义。
+\end{notice}
 
 \item 
 noexcept异常说明说明declval不会导致表达式认为抛出异常。当在noexcept操作符的上下文中使用declval时，就可以使用了(第19.7.2节)。
@@ -674,7 +663,7 @@ noexcept异常说明说明declval不会导致表达式认为抛出异常。当�
 使用declval，可以消除PlusResultT的值初始化要求:
 
 \filename{traits/plus2.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include <utility>
 
 template<typename T1, typename T2>
@@ -684,7 +673,7 @@ struct PlusResultT {
 
 template<typename T1, typename T2>
 using PlusResult = typename PlusResultT<T1, T2>::Type;
-\end{lstlisting}
+\end{cpp}
 
 结果类型特征提供了一种确定特定操作的精确返回类型的方法，在描述函数模板的结果类型时很有用。
 

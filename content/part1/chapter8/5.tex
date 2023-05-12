@@ -2,11 +2,10 @@
 
 作为第一个例子，4.1.1节中介绍的可变参数函数模板print()，使用递归打印参数(任意类型)。与提供一个单独的函数来结束递归不同，constexpr if特性决定是否继续递归:
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}虽然代码读取if constexpr，但该特性称为constexpr if，因为它是if的“constexpr”形式(由于历史原因)。
-\end{tcolorbox}
+\begin{notice}虽然代码读取if constexpr，但该特性称为constexpr if，因为它是if的“constexpr”形式(由于历史原因)。
+\end{notice}
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T, typename... Types>
 void print (T const& firstArg, Types const&... args)
 {
@@ -15,13 +14,13 @@ void print (T const& firstArg, Types const&... args)
 		print(args...); // code only available if sizeof...(args)>0 (since C++17)
 	}
 }
-\end{lstlisting}
+\end{cpp}
 
 这里，若只对一个参数调用print()， args将成为空的参数包，因此sizeof…(args)将变为0。结果，print()的递归调用变成了一个丢弃的语句，代码没有实例化。因此，相应的函数不需要存在，递归结束。
 
 代码没有实例化意味着只执行第一个翻译阶段，检查正确的语法和不依赖于模板参数的名称(参见第1.1.3节)。
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 void foo(T t)
 {
@@ -37,11 +36,11 @@ void foo(T t)
 		static_assert(!std::is_integral_v<T>, "no integral"); // OK
 	}
 }
-\end{lstlisting}
+\end{cpp}
 
 若constexpr可以用于任何函数，而不仅在模板中。只需要一个产生布尔值的编译时表达式。例如:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 int main()
 {
 	if constexpr(std::numeric_limits<char>::is_signed) {
@@ -54,11 +53,11 @@ int main()
 		"char is unsigned"); // OK
 	}
 }
-\end{lstlisting}
+\end{cpp}
 
 有了这个特性，若给定的大小不是质数，可以使用第8.2节中的isPrime()在编译时执行:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T, std::size_t SZ>
 void foo (std::array<T,SZ> const& coll)
 {
@@ -67,7 +66,7 @@ void foo (std::array<T,SZ> const& coll)
 	}
 	...
 }
-\end{lstlisting}
+\end{cpp}
 
 详见14.6节。
 

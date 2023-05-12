@@ -1,7 +1,7 @@
 为了激发表达式模板的灵感，先从一种简单的方法开始，来实现支持数字数组操作的模板。基本数组模板可能如下所示(SArray代表简单数组):
 
 \filename{exprtmpl/sarray1.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include <cstddef>
 #include <cassert>
 
@@ -66,12 +66,12 @@ class SArray {
 	T* storage; // storage of the elements
 	std::size_t storage_size; // number of elements
 };
-\end{lstlisting}
+\end{cpp}
 
 数字运算符的代码如下:
 
 \filename{exprtmpl/sarrayops1.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 // addition of two SArrays
 template<typename T>
 SArray<T> operator+ (SArray<T> const& a, SArray<T> const& b)
@@ -111,12 +111,12 @@ SArray<T> operator* (T const& s, SArray<T> const& a)
 // addition of scalar and SArray
 // addition of SArray and scalar
 ...
-\end{lstlisting}
+\end{cpp}
 
 这些操作符和其他操作符的许多其他版本都可以这样写，这些足够我们的示例表达式使用:
 
 \filename{exprtmpl/sarray1.cpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include "sarray1.hpp"
 #include "sarrayops1.hpp"
 
@@ -126,7 +126,7 @@ int main()
 	...
 	x = 1.2*x + x*y;
 }
-\end{lstlisting}
+\end{cpp}
 
 由于两个原因，这个实现非常低效:
 
@@ -140,7 +140,7 @@ int main()
 
 具体的是一个使用临时变量操作的循环序列:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 hat happens concretely is a sequence of loops that operates with temporaries:
 tmp1 = 1.2*x; // loop of 1,000 operations
 			  // plus creation and destruction of tmp1
@@ -149,14 +149,14 @@ tmp2 = x*y; // loop of 1,000 operations
 tmp3 = tmp1+tmp2; // loop of 1,000 operations
 				  // plus creation and destruction of tmp3
 x = tmp3; // 1,000 read operations and 1,000 write operations
-\end{lstlisting}
+\end{cpp}
 
 除非使用特殊的快速分配器，否则创建不需要的临时变量通常占用小数组操作所需的时间。因为没有存储它们的储空间，所以对于真正的大型临时数组完全不可接受(具有挑战性的数值模拟通常试图使用所有可用的内存来获得更真实的结果。若内存用来保存不需要的临时文件，模拟的质量就会受到影响)。
 
 数字数组库的早期实现也面临这个问题，并鼓励用户使用计算赋值(如+=、*=等)。这些赋值的优点是参数和目的地都是由调用方提供的，因此不需要临时变量。可以这样添加SArray成员:
 
 \filename{exprtmpl/sarrayops2.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 // additive assignment of SArray
 template<typename T>
 SArray<T>& SArray<T>::operator+= (SArray<T> const& b)
@@ -188,12 +188,12 @@ SArray<T>& SArray<T>::operator*= (T const& s)
 	}
 	return *this;
 }
-\end{lstlisting}
+\end{cpp}
 
 使用这样的运算符，计算示例可以重写为
 
 \filename{exprtmpl/sarray2.cpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include "sarray2.hpp"
 #include "sarrayops1.hpp"
 #include "sarrayops2.hpp"
@@ -208,7 +208,7 @@ int main()
 	x *= 1.2;
 	x += tmp;
 }
-\end{lstlisting}
+\end{cpp}
 
 显然，计算赋值的技术仍有不足:
 
@@ -225,7 +225,7 @@ int main()
 
 我们真正想要的是一个“理想循环”，可以处理每个索引的整个表达式:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 int main()
 {
 	SArray<double> x(1000), y(1000);
@@ -234,7 +234,7 @@ int main()
 		x[idx] = 1.2*x[idx] + x[idx]*y[idx];
 	}
 }
-\end{lstlisting}
+\end{cpp}
 
 现在不需要临时数组，每次迭代只需要两次内存读取(x[idx]和y[idx])和一次内存写入(x[k])。因此，手动循环只需要大约2000次内存读取和1000次内存写入。
 

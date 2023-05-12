@@ -1,27 +1,27 @@
 
 历史上，只有两种值类别:左值和右值。左值是指存储在内存或机器寄存器中实际值的表达式，例如表达式x，其中x是变量名。这些表达式可以修改，从而允许更新存储的值。若x是一个int类型的变量，下面的赋值会将x的值替换为7:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 x = 7;
-\end{lstlisting}
+\end{cpp}
 
 术语左值来自于这些表达式在赋值中可能扮演的角色:字母“l”代表“左手边”，因为(在C中)只有左值可能出现在赋值的左手边。相反，右值(“r”代表“右手边”)只能出现在赋值表达式的右手边。
 
 1989年C语言标准化后，情况发生了变化:当int const仍然是存储在内存中的值时，不能出现在赋值操作的左侧:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 int const x; // x is a nonmodifiable lvalue
 x = 7; // ERROR: modifiable lvalue required on the left
-\end{lstlisting}
+\end{cpp}
 
 C++进一步改变了这一点:类的右值可以出现在赋值的左侧。这样的赋值实际上是对类的适当赋值操作符的函数调用，而不是对标量类型的“简单”赋值，因此遵循(单独的)成员函数调用规则。
 
 由于所有这些变化，术语左值现在有时称为本地化值。引用变量的表达式并不是唯一一种左值表达式。另一类左值表达式包括指针解引用操作(例如，*p)和类对象成员的表达式(例如，p\texttt{->}data)。解引用操作指向存储在指针引用地址的值。即使调用返回用\&声明的“传统”左值引用类型的函数也是左值。例如(详见第B.4节):
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 std::vector<int> v;
 v.front() // yields an lvalue because the return type is an lvalue reference
-\end{lstlisting}
+\end{cpp}
 
 字符串字面值也是(不可修改的)左值。
 

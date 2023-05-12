@@ -5,9 +5,9 @@
 
 概念是布尔谓词，有效的常量表达式。给定一个概念C和一些类型T1, T2，…模型的概念，可以静态地断言观察:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 static_assert(C<T1, T2, ...>, "Model failure");
-\end{lstlisting}
+\end{cpp}
 
 设计概念时，建议也设计以这种方式测试其简单类型。包括挑战概念界限的类型，则需要回答如下问题:
 
@@ -30,13 +30,13 @@ static_assert(C<T1, T2, ...>, "Model failure");
 
 另一方面，会试图在“基本语法”概念的基础上构建所有这些概念。例如:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T, typename U>
 concept Addable =
 requires (T x, U y) {
 	x + y;
 }
-\end{lstlisting}
+\end{cpp}
 
 不建议这样做，因为这是一个没有明确语义的概念。当T和U都是std::string或者当一个类型是指针而另一个是整型，当然还有算术类型时，概念条件就满足了。在这三种情况下，可添加的概念有一些不同的含义(分别是连接、迭代器位移和算术加法)。因此，引入这样的概念将导致库接口模糊，并可能引起歧义。
 
@@ -46,17 +46,17 @@ requires (T x, U y) {
 
 资深C++开发者知道，当某些实体(特别是函数和成员函数)会在编译为低层机器码时，相关联的名称会将声明名称与实体类型和作用范围相结合。这个名称，通常称为实体的重组名称，是实际为链接器提供实体的引用(例如，来自其他对象文件)的名称。例如，定义为的函数的重组名称
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 namespace X {
 	void f() {}
 }
-\end{lstlisting}
+\end{cpp}
 
 使用EvItanium C++ ABI [ItaniumABI]时是\_ZN1X1f，其中的字母X和f分别来自命名空间名和函数名。
 
 混乱的名称不能在程序中“冲突”，若两个函数可能在一个程序中共存，那必须具有不同的、混乱的名称。反之，约束必须在函数名中编码(因为模板特化除了约束和函数体之外，其他方面都是相同的，可以出现在不同的翻译单元中)。考虑以下两个翻译单元:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include <iostream>
 
 template<typename T>
@@ -74,11 +74,11 @@ int main() {
 	f(1);
 	g();
 }
-\end{lstlisting}
+\end{cpp}
 
 和
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include <iostream>
 
 template<typename T>
@@ -95,20 +95,19 @@ template int f(int);
 void g() {
 	f(2);
 }
-\end{lstlisting}
+\end{cpp}
 
 程序必须输出
 
-\begin{tcblisting}{commandshell={}}
+\begin{shell}
 TU1
 TU2
-\end{tcblisting}
+\end{shell}
 
 这意味着f()的两个定义必须以不同的方式处理。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}GCC 7.1中对概念的实验实现在这方面有缺陷。
-\end{tcolorbox}
+\begin{notice}GCC 7.1中对概念的实验实现在这方面有缺陷。
+\end{notice}
 
 
 

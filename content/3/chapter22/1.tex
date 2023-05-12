@@ -2,7 +2,7 @@
 函数对象对于为模板提供可定制的行为，下面的函数模板枚举从0到某个值的整数值，并将每个值提供给给定的函数对象f:
 
 \filename{bridge/forupto1.cpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include <vector>
 #include <iostream>
 
@@ -35,14 +35,14 @@ int main()
 			printInt); // prints 0 1 2 3 4
 	std::cout << ’\n’;
 }
-\end{lstlisting}
+\end{cpp}
 
 forUpTo()函数模板可以与函数对象一起使用，包括Lambda、函数指针、函数操作符或转换为函数指针/引用的类，每次使用forUpTo()都可能产生不同的实例化。示例函数模板非常小，但若模板很大，这些实例化可能会增加代码量。
 
 限制代码量增加的方法，是将函数模板转换为不需要实例化的非模板。可以尝试使用函数指针:
 
 \filename{bridge/forupto2.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 void forUpTo(int n, void (*f)(int))
 {
 	for (int i = 0; i != n; ++i)
@@ -50,11 +50,11 @@ void forUpTo(int n, void (*f)(int))
 		f(i); // call passed function f for i
 	}
 }
-\end{lstlisting}
+\end{cpp}
 
 虽然这个实现在传递printInt()时正常工作，但在传递Lambda时将产生错误:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 forUpTo(5,
 printInt); // OK: prints 0 1 2 3 4
 
@@ -62,12 +62,12 @@ forUpTo(5,
 		[&values](int i) { // ERROR: lambda not convertible to a function pointer
 			values.push_back(i);
 		});
-\end{lstlisting}
+\end{cpp}
 
 标准库的类模板std::function<>允许使用forUpTo()的替代表达式:
 
 \filename{bridge/forupto3.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include <functional>
 void forUpTo(int n, std::function<void(int)> f)
 {
@@ -76,7 +76,7 @@ void forUpTo(int n, std::function<void(int)> f)
 		f(i); // call passed function f for i
 	}
 }
-\end{lstlisting}
+\end{cpp}
 
 std::function<>的模板参数是一个函数类型，描述了函数对象将接收的参数类型和应该产生的返回类型，就像函数指针描述参数和结果类型一样。
 

@@ -5,7 +5,7 @@
 
 当重载解析的所有方面都相同时，非模板函数优先于模板的实例(该实例是从泛型模板定义生成，还是作为显式特化提供，都无关紧要)。例如:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T> int f(T); // #1
 void f(int); // #2
 
@@ -13,7 +13,7 @@ int main()
 {
 	return f(7); // ERROR: selects #2 , which doesn’t return a value
 }
-\end{lstlisting}
+\end{cpp}
 
 这个例子还清楚地说明了重载解析通常不涉及所选函数的返回类型。
 
@@ -25,7 +25,7 @@ int main()
 
 隐式转换通常可以是转换的序列。考虑下面的代码示例:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 class Base {
 	public:
 	operator short() const;
@@ -40,7 +40,7 @@ void process(Derived const& object)
 {
 	count(object); // matches with user-defined conversion
 }
-\end{lstlisting}
+\end{cpp}
 
 调用count(object)有效，是因为object可以隐式转换为int。这种转换需要几步:
 
@@ -59,9 +59,9 @@ short升为int
 
 重载解析的一个重要原则是，作为另一个转换序列的子序列的转换序列要优于后一个序列。若有其他候选函数
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 void count(short);
-\end{lstlisting}
+\end{cpp}
 
 因为不需要转换序列中的第三步(类型提升)，所以调用count(object)会将其作为首选。
 
@@ -87,7 +87,7 @@ void count(short);
 
 首先，到bool类型的转换(无论是从普通指针还是从指向成员的指针)，认为比其他类型的标准转换都要糟糕。例如:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 void check(void*); // #1
 void check(bool); // #2
 
@@ -96,11 +96,11 @@ void rearrange (Matrix* m)
 	check(m); // calls #1
 	...
 }
-\end{lstlisting}
+\end{cpp}
 
 常规指针转换的类别中，void*类型的转换认为比从派生类指针到基类指针的转换更糟糕。此外，若存在到与继承相关的不同类的转换，则首选到最派生类的转换。下面是另一个例子:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 class Interface {
 	...
 };
@@ -121,7 +121,7 @@ void dump (Machine* machine)
 	char* buffer = serialize(machine); // calls #2
 	...
 }
-\end{lstlisting}
+\end{cpp}
 
 从Machine*到CommonProcesses*的转换优于到Interface*的转换，后者非常直观。
 
@@ -132,7 +132,7 @@ void dump (Machine* machine)
 初始化列表参数(初始化列表参数用大括号传递)可以转换为几种不同类型的参数:initializer\_lists、带有initializer\_list构造函数的类类型、初始化列表元素可以作为构造函数(单独)参数的类类型，或者聚合类类型，其成员可以由初始化列表的元素初始化。下面的程序阐明了这些情况:
 
 \filename{overload/initlist.cpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include <initializer_list>
 #include <string>
 #include <vector>
@@ -170,18 +170,17 @@ int main()
 	h({1.5, 2.5}); // prints #4
 	i({1, 2}); // prints #5
 }	
-\end{lstlisting}
+\end{cpp}
 
 在对f()的前两次调用中，初始化式列表参数转换为std::initializer\_list值，这将初始化式列表中的每个元素转换为std::initializer\_list的元素类型。第一个调用中，所有元素都已经是int类型，因此不需要进行额外的转换。第二次调用中，通过调用string(char const*)构造函数，初始化式列表中的每个字符串字面值都转换为std::string。第三个调用(g())使用std::vector(std::initializer\_list<int>)构造函数执行用户定义的转换。下一个调用std::complex(double, double)构造函数，就好像编写了std::complex<double>(1.5, 2.5)。最后一个调用执行聚合初始化，从初始化式列表中的元素初始化Point类实例的成员，而不调用Point的构造函数。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}聚合初始化只适用于C++中的聚合类型，即数组或简单的类C，这些类没有用户提供的构造函数，没有private或protected的非静态数据成员，没有基类，也没有虚函数。C++14前，也不能有默认的成员初始化式。C++17后，可以使用公共基类。
-\end{tcolorbox}
+\begin{notice}聚合初始化只适用于C++中的聚合类型，即数组或简单的类C，这些类没有用户提供的构造函数，没有private或protected的非静态数据成员，没有基类，也没有虚函数。C++14前，也不能有默认的成员初始化式。C++17后，可以使用公共基类。
+\end{notice}
 
 对于初始化式列表，有几种重载情况。当将初始化式列表转换为initializer\_list时，如上例的前两次调用，整个转换排名与初始化式列表中给定元素到initializer\_list元素类型的最差转换相同(即initializer\_list<T>中的T)。这可能会导致一些意外出现，比如下面的例子:
 
 \filename{overload/initlist.cpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include <initializer_list>
 #include <iostream>
 
@@ -198,7 +197,7 @@ int main()
 	ovl({’h’, ’e’, ’l’, ’l’, ’o’, ’\0’}); // prints #1
 	ovl({’h’, ’e’, ’l’, ’l’, ’o’, 0}); // prints #2
 }
-\end{lstlisting}
+\end{cpp}
 
 对ovl()的第一次调用中，初始化式列表的每个元素都是一个字符。对于第一个ovl()函数，这些元素根本不需要转换。对于第二个ovl()函数，这些元素需要提升为int。因为完美匹配比类型升级要好，所以对ovl()的第一次调用的是\#1。
 
@@ -219,7 +218,7 @@ int main()
 该规则的效果是，任何初始化式列表构造函数，比非初始化式列表构造函数更匹配:
 
 \filename{overload/initlistctor.cpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include <initializer_list>
 #include <string>
 #include <iostream>
@@ -248,7 +247,7 @@ int main()
 	arr2({"hello", "initializer", "list"}); // prints #1
 	arr2({10, "hello"}); // prints #2
 }
-\end{lstlisting}
+\end{cpp}
 
 第二个构造函数接受一个unsigned和一个T const\&参数，从初始化列表初始化Array<int>对象时不会调用，因为其初始化列表构造函数总是比非初始化列表构造函数更匹配。但对于Array<string>，当初始化列表构造函数不可用时，就会调用非初始化列表构造函数，就像对arr2()的第二次调用一样。
 
@@ -260,13 +259,12 @@ int main()
 
 当类对象包含指向函数类型指针(或指向函数类型引用)的隐式转换操作符时，重载集就会出现不那么明显的增加。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}转换操作符也必须适用于以下情况，例如：const对象不考虑非const操作符。
-\end{tcolorbox}
+\begin{notice}转换操作符也必须适用于以下情况，例如：const对象不考虑非const操作符。
+\end{notice}
 
 这种情况下，将向重载集添加一个虚拟(或代理)函数。除了具有与该转换函数的目标类型中，参数类型对应的参数外，这个代理函数候选函数认为具有转换函数指定的类型的参数。下面的例子清楚地说明了这一点:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 using FuncType = void (double, int);
 
 class IndirectFunctor {
@@ -280,7 +278,7 @@ void activate(IndirectFunctor const& funcObj)
 {
 	funcObj(3, 5); // ERROR: ambiguous
 }
-\end{lstlisting}
+\end{cpp}
 
 调用funcObj(3, 5)视为带有三个参数的调用:funcObj、3和5。候选函数包括成员operator()(视为具有IndirectFunctor const\&、double和double参数类型)和参数类型为FuncType*、double和int的代理函数。代理函数与隐含参数的匹配较差(因为它需要用户定义的转换)，但与最后一个参数的匹配较好;因此，不能使用这俩候选。因此，该调用具有歧义。
 
@@ -292,18 +290,18 @@ void activate(IndirectFunctor const& funcObj)
 
 第一个上下文发生在需要函数地址的时候。考虑下面的例子:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 int numElems(Matrix const&); // #1
 int numElems(Vector const&); // #2
 ...
 int (*funcPtr)(Vector const&) = numElems; // selects #2
-\end{lstlisting}
+\end{cpp}
 
 这里，numElems指的是一个重载集，但我们希望知道其中一个函数的地址。然后重载解析尝试将所需的函数类型(本例中是funcPtr的类型)与可用的候选函数匹配。
 
 另一个需要重载解析的上下文是初始化，但这是一个和微妙的主题，超出了附录所能涵盖的范围。一个简单的例子说明了重载解析的特殊情况:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include <string>
 class BigNum {
 	public:
@@ -322,7 +320,7 @@ void initDemo()
 	BigNum bn2("7057103224.095764"); // selects #3
 	int in = bn1; // selects #5
 }
-\end{lstlisting}
+\end{cpp}
 
 本例中，需要重载解析来选择适当的构造函数或转换操作符。具体来说，bn1的初始化调用第一个构造函数，bn2的初始化调用第三个构造函数，in()的初始化调用operator long()。大多数情况下，重载规则会产生直观的结果。但这些规则的细节相当复杂，一些(少量)应用程序会依赖于C++语言这一领域中的技术。
 

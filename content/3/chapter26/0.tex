@@ -2,20 +2,19 @@
 
 本章中，我们开发了一个类模板Variant，可以动态存储给定的一组值类型中的一个值，类似于C++17标准库的std::variant<>。Variant是可辨识联合，从而其值的类型是动态的，并提供了比C++联合更好的类型安全性。Variant本身是一个可变参数模板，可接受动态值可能具有的类型列表。
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 Variant<int, double, string> field;
-\end{lstlisting}
+\end{cpp}
 
 可以存储整型、双精度或字符串，但只能存储其中一个值。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}类型列表在声明Variant时是固定的，所以Variant是封闭的可辨识联合。开放的可辨识联合允许在创建时不知道有哪些类型的值存储在联合中。第22章中讨论的FunctionPtr类可以看作是一种开放可识别联合。
-\end{tcolorbox}
+\begin{notice}类型列表在声明Variant时是固定的，所以Variant是封闭的可辨识联合。开放的可辨识联合允许在创建时不知道有哪些类型的值存储在联合中。第22章中讨论的FunctionPtr类可以看作是一种开放可识别联合。
+\end{notice}
 
 下面的程序演示了Variant的行为:
 
 \filename{variant/variant.cpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include "variant.hpp"
 #include <iostream>
 #include <string>
@@ -32,14 +31,14 @@ int main()
 	std::cout << "Field now stores the string ’"
 			<< field.get<std::string>() << "’\n";
 }
-\end{lstlisting}
+\end{cpp}
 
 输出：
 
-\begin{tcblisting}{commandshell={}}
+\begin{shell}
 Field stores the integer 17
 Field now stores the string "hello"
-\end{tcblisting}
+\end{shell}
 
 可以赋值给Variant任何类型的值，可以使用成员函数is<T>()来测试Variant当前是否包含类型为T的值，然后使用成员函数get<T>()获取存储值。
 

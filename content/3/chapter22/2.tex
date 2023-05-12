@@ -19,7 +19,7 @@ std::function<>类型实际上是C++函数指针的泛化形式，提供了相�
 本节的剩余部分，将构建自己的通用函数指针类模板——FunctionPtr，需要提供这些核心操作和功能，并用来替代std::function:
 
 \filename{bridge/forupto4.cpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include "functionptr.hpp"
 #include <vector>
 #include <iostream>
@@ -52,12 +52,12 @@ int main()
 			printInt); // prints 0 1 2 3 4
 	std::cout << ’\n’;
 }
-\end{lstlisting}
+\end{cpp}
 
 FunctionPtr的接口相当简单，提供函数对象的构造、复制、移动、销毁、初始化和赋值，以及底层函数对象的调用。该接口最有趣的部分是，如何在类模板偏特化中进行描述，其将模板参数(一个函数类型)分解为其组件(结果类型和参数类型):
 
 \filename{bridge/functionptr.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 // primary template:
 template<typename Signature>
 class FunctionPtr;
@@ -116,7 +116,7 @@ class FunctionPtr<R(Args...)>
 	// invocation:
 	R operator()(Args... args) const; // see functionptr-cpinv.hpp
 };
-\end{lstlisting}
+\end{cpp}
 
 该实现包含非静态成员变量bridge，负责存储和操作存储的函数对象。这个指针的所有权与FunctionPtr对象绑定，因此大多数实现仅去管理这个指针。未实现的函数包含实现中的部分，将在下面的小节中进行描述。
 

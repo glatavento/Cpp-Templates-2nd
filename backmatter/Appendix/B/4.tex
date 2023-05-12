@@ -15,23 +15,23 @@ C++中的引用类型(如int\&)以两种重要的方式与值类别交互。第�
 
 下面的示例中，将演示引用类型和值类别之间的交互。
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 int& lvalue();
 int&& xvalue();
 int prvalue();
-\end{lstlisting}
+\end{cpp}
 
 给定表达式的值类别和类型可以通过decltype来确定。如第15.10.2节所述，使用引用类型来描述表达式何时为左值或xvalue:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 std::is_same_v<decltype(lvalue()), int&> // yields true because result is lvalue
 std::is_same_v<decltype(xvalue()), int&&> // yields true because result is xvalue
 std::is_same_v<decltype(prvalue()), int> // yields true because result is prvalue
-\end{lstlisting}
+\end{cpp}
 
 因此，可以进行以下的调用:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 int& lref1 = lvalue(); // OK: lvalue reference can bind to an lvalue
 int& lref3 = prvalue(); // ERROR: lvalue reference cannot bind to a prvalue
 int& lref2 = xvalue(); // ERROR: lvalue reference cannot bind to an xvalue
@@ -39,7 +39,7 @@ int& lref2 = xvalue(); // ERROR: lvalue reference cannot bind to an xvalue
 int&& rref1 = lvalue(); // ERROR: rvalue reference cannot bind to an lvalue
 int&& rref2 = prvalue(); // OK: rvalue reference can bind to a prvalue
 int&& rref3 = xvalue(); // OK: rvalue reference can bind to an xrvalue
-\end{lstlisting}
+\end{cpp}
 
 
 

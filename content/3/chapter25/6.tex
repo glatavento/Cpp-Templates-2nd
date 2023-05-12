@@ -2,29 +2,29 @@
 
 在第24.3节中介绍的类模板CTValue，可以在类型中编码数字索引，可以用其将operator[]定义为Tuple的成员:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T, T Index>
 auto& operator[](CTValue<T, Index>) {
 	return get<Index>(*this);
 }
-\end{lstlisting}
+\end{cpp}
 
 这里，在CTValue参数的类型中传递索引值来进行相应的get<>()调用。
 
 可以这样使用这个类:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 auto t = makeTuple(0, ’1’, 2.2f, std::string{"hello"});
 auto a = t[CTValue<unsigned, 2>{}];
 auto b = t[CTValue<unsigned, 3>{}];
-\end{lstlisting}
+\end{cpp}
 
 a和b将由Tuple t中的第三和第四个值的类型和值初始化。
 
 为了更方便地使用常量索引，可以使用constexpr实现字面操作符，从后缀为\_c的文字直接计算编译时的数字:
 
 \filename{tuples/literals.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include "ctvalue.hpp"
 #include <cassert>
 #include <cstddef>
@@ -82,7 +82,7 @@ template<char... cs>
 constexpr auto operator"" _c() {
 	return CTValue<int, parseInt<sizeof...(cs)>({cs...})>{};
 }
-\end{lstlisting}
+\end{cpp}
 
 对于数字字面值，可以使用字面值操作符来推导出字面值的每个字符作为模板参数(详细信息请参阅第15.5.1节)。可以将字符传递给constexpr辅助函数parseInt()，该函数在编译时计算字符序列的值，并将其生成为CTValue。例如:
 
@@ -96,20 +96,19 @@ constexpr auto operator"" _c() {
 \item 
 0b1111'1111\_c生成CTValue<int,255>
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}C++14开始，就支持二进制字面值的前缀0b和分隔数字的单引号字符。
-\end{tcolorbox}
+\begin{notice}C++14开始，就支持二进制字面值的前缀0b和分隔数字的单引号字符。
+\end{notice}
 \end{itemize}
 
 解析器不处理浮点字面值，断言会导致编译时错误，这是一个不能在编译时上下文中使用的运行时特性。
 
 现在，就可以这样使用元组了:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 auto t = makeTuple(0, ’1’, 2.2f, std::string{"hello"});
 auto c = t[2_c];
 auto d = t[3_c];
-\end{lstlisting}
+\end{cpp}
 
 Boost.Hana(参见[boostana]，适合对类型和值进行计算的元编程库)就使用了这种方法。
 

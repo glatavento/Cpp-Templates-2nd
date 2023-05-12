@@ -8,7 +8,7 @@ C++上下文中，泛型编程有时定义为使用模板编程(而面向对象�
 
 因此，可以实现这样的操作，比如：计算序列中的最大值，而不需要知道值如何存储在序列中的:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename Iterator>
 Iterator max_element (Iterator beg, // refers to start of collection
 					  Iterator end) // refers to end of collection
@@ -18,11 +18,11 @@ Iterator max_element (Iterator beg, // refers to start of collection
 	// and return its position as Iterator
 	...
 }
-\end{lstlisting}
+\end{cpp}
 
 与为每个线性容器提供所有有用的操作(如max\_element())不同，容器只需要提供一个迭代器类型来遍历所包含的值序列，以及创建迭代器的相应成员函数:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 namespace std {
 	template<typename T, ...>
 	class vector {
@@ -44,12 +44,12 @@ namespace std {
 		...
 	};
 }
-\end{lstlisting}
+\end{cpp}
 
 现在，可以通过max\_element()操作，以集合的开始和结束为参数来找到集合中的最大值(空集合的特殊处理省略了):
 
 \filename{poly/printmax.cpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include <vector>
 #include <list>
 #include <algorithm>
@@ -79,7 +79,7 @@ int main()
 	printMax(c1);
 	printMax(c2);
 }
-\end{lstlisting}
+\end{cpp}
 
 通过用这些迭代器参数化其操作，STL避免了操作定义数量的激增。开发者也不再为每个容器实现每个操作，而是只实现一次算法，每个容器就可以使用。通用的粘合剂是迭代器，因为迭代器有一个特定的接口，该接口由容器提供，并由算法使用。这个接口通常称为概念，表示模板必须满足的一组约束，以适应这个框架。此外，这个概念对其他操作和数据结构开放。
 

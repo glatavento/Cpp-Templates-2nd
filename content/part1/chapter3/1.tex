@@ -3,7 +3,7 @@
 为此，可以将size定义为模板参数:
 
 \filename{basics/stacknontype.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include <array>
 #include <cassert>
 
@@ -53,22 +53,22 @@ T const& Stack<T,Maxsize>::top () const
 	assert(!empty());
 	return elems[numElems-1]; // return last element
 }
-\end{lstlisting}
+\end{cpp}
 
 第二个模板形参Maxsize是std::size\_t类型，指定了堆栈元素内部数组的容量:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T, std::size_t Maxsize>
 class Stack {
 private:
 	std::array<T,Maxsize> elems; // elements
 	...
 };
-\end{lstlisting}
+\end{cpp}
 
 另外，在push()中，可以使用它来检查堆栈是否已满:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T, std::size_t Maxsize>
 void Stack<T,Maxsize>::push (T const& elem)
 {
@@ -76,12 +76,12 @@ void Stack<T,Maxsize>::push (T const& elem)
 	elems[numElems] = elem; // append element
 	++numElems; // increment number of elements
 }
-\end{lstlisting}
+\end{cpp}
 
 要使用这个类模板，必须同时指定元素类型和最大容量:
 
 \filename{basics/stacknontype.cpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include "stacknontype.hpp"
 #include <iostream>
 #include <string>
@@ -102,18 +102,18 @@ int main()
 	std::cout << stringStack.top() << '\n';
 	stringStack.pop();
 }
-\end{lstlisting}
+\end{cpp}
 
 每个模板实例化都是独立的类型。因此，int20Stack和int40Stack是两种不同的类型。不能使用其中一个来代替另一个，也不能将其中一个分配给另一个。
 
 同样，可以指定模板参数的默认值:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T = int, std::size_t Maxsize = 100>
 class Stack {
 	...
 };
-\end{lstlisting}
+\end{cpp}
 
 但从设计的角度来看，这样的写法在本例中可能不太合适。默认参数是正确的，但对于一般的堆栈类型来说，int类型和最大容量为100似乎都不直观。因此，最好显式地指定这两个值，以便在声明期间进行记录。
 

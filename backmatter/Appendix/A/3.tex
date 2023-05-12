@@ -18,17 +18,17 @@
 
 例如，由以下两个翻译单元组成的C++程序无效:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 // translation unit 1:
 int counter;
 
 // translation unit 2:
 int counter; // ERROR: defined twice (ODR violation)
-\end{lstlisting}
+\end{cpp}
 
 此规则不适用于具有内部链接的实体(本质上是在全局作用域或命名空间作用域中，使用静态说明符声明的实体)，即使两个这样的实体具有相同的名称，也会认为是不同的。同样，在匿名命名空间中声明的实体，若出现在不同的翻译单元中，则认为是不同的;C++11及以后的版本中，这些实体默认也具有内部链接，但在C++11前，默认具有外部链接。以下两个翻译单元可以组合成一个有效的C++程序:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 // translation unit 1:
 static int counter = 2; // unrelated to other translation units
 
@@ -50,19 +50,18 @@ int main()
 {
 	unique();
 }
-\end{lstlisting}
+\end{cpp}
 
 此外，若在conexpr if语句的丢弃分支之外的上下文中使用，则程序中必须只有前面提到的一项(该特性仅在C++17中可用;参见第14.6节)。在上下文中使用的术语具有确切的含义，表明在程序的某个地方存在对实体的某种引用，所以在直接的代码生成中需要实体。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}各种优化技术可能会对实体进行删除，但该语言没有假设这种优化。
-\end{tcolorbox}
+\begin{notice}各种优化技术可能会对实体进行删除，但该语言没有假设这种优化。
+\end{notice}
 
 此引用可以是对变量值的访问、对函数的调用或此类实体的地址。这个引用可以在源文件中显式引用，也可以隐式引用。new表达式可以隐式地创建对delete操作符的调用，以处理当构造函数抛出异常要求清理未使用(但已分配)内存时的情况。另一个例子包括复制构造函数，即使最终优化掉了，也必须定义(除非语言要求优化，C++17中经常出现这种情况)。虚函数也是隐式使用(支持虚函数调用的内部结构使用)，除非是纯虚函数。还有其他几种隐式用法，但为了简明起见，这里暂时忽略它们。
 
 有些引用不构成使用:出现在未求值操作数中的引用(sizeof或decltype操作符的操作数)。typeid操作符(参见第9.1.1节)的操作数只在某些情况下不计算，若引用作为typeid操作符的一部分出现就不使用，除非typeid操作符的参数最终指定了一个多态对象(可能继承了虚函数的对象)。例如，以下单文件程序:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include <typeinfo>
 
 class Decider {
@@ -79,7 +78,7 @@ int main()
 	char const* name = typeid(d).name();
 	return (int)sizeof(d);
 }
-\end{lstlisting}
+\end{cpp}
 
 当预处理器符号DYNAMIC未定义时，这是一个有效的程序。变量d没有定义，但是sizeof(d)中对d的引用并不构成使用，而typeid(d)中的引用，只有在d是多态类型对象时才构成使用(在运行时之前，不总确定多态类型id操作的结果)。
 
@@ -89,20 +88,20 @@ int main()
 
 翻译单元中，实体都不能定义超过一次。所以下面的例子无效:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 inline void f() {}
 inline void f() {} // ERROR: duplicate definition
-\end{lstlisting}
+\end{cpp}
 
 这也是在头文件中使用守卫包围代码的主要原因之一:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 // guarddemo.hpp:
 #ifndef GUARDDEMO_HPP
 #define GUARDDEMO_HPP
 ...
 #endif // GUARDDEMO_HPP
-\end{lstlisting}
+\end{cpp}
 
 这样的保护确保头文件第二次\#include时，丢弃内容，从而避免其类、内联实体、模板等的重复定义。
 
@@ -137,7 +136,7 @@ ODR还指定必须在某些情况下定义某些实体。这可能是类类型�
 
 内联函数必须使用每个翻译单元中定义(这些翻译单元中调用它们或获取它们的地址)，但与类类型不同，它们的定义可以遵循以下使用要点:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 inline int notSoFast();
 
 int main()
@@ -147,7 +146,7 @@ int main()
 
 inline int notSoFast()
 { }
-\end{lstlisting}
+\end{cpp}
 
 虽然这是有效的C++代码，但基于旧技术的编译器实际上并不会“内联”调用尚未看到主体的函数;因此，预期的效果可能无法达到。
 
@@ -159,15 +158,14 @@ inline int notSoFast()
 
 多个翻译单元中定义某些类型可能会带来新的错误:多个定义不匹配。但传统的编译器每次只处理一个翻译单元，所以很难检测到这些错误。因此，C++标准并不要求检测或诊断多个定义之间的差异，但若违反交叉转换单元的约束，C++标准将其限定为未定义行为，从而任何合理或不合理的事情都可能发生。通常，这种未诊断的错误可能导致程序崩溃或错误的结果，但也可能导致其他更直接的损害(例如，文件损坏)。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}gcc编译器的第1版实际上没有做到了这一点，只是某些情况下启动了“肉鸽游戏”。
-\end{tcolorbox}
+\begin{notice}gcc编译器的第1版实际上没有做到了这一点，只是某些情况下启动了“肉鸽游戏”。
+\end{notice}
 
 交叉翻译单元约束指定，实体在两个不同的地方定义时，这两个地方必须包含完全相同的标记序列(预处理之后保留的关键字、操作符、标识符等)。此外，这些标记必须在它们各自的上下文中的表示相同(例如，标识符可能需要引用相同的变量)。
 
 考虑下面的例子:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 // translation unit 1:
 static int counter = 0;
 inline void increaseCounter()
@@ -184,21 +182,20 @@ inline void increaseCounter()
 {
 	++counter;
 }
-\end{lstlisting}
+\end{cpp}
 
 这个例子是错误的，因为即使内联函数incrementounter()的标记序列在两个翻译单元中看起来相同，从而包含一个指向两个不同实体的标记计数器。不过，因为名为counter的两个变量具有内部链接(静态说明符)，所以尽管名称相同，但不相关。即使没有实际使用内联函数，这也是一个错误。
 
 \#included头文件中可以放置在多个翻译单元中的实体定义，无论何时需要定义，都要包含这些定义，确保在所有情况下标记序列都相同。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}条件编译指令在不同的翻译单元中会有不同的计算结果，所以小心使用这些指令。其他更不常见差异也可能存在。
-\end{tcolorbox}
+\begin{notice}条件编译指令在不同的翻译单元中会有不同的计算结果，所以小心使用这些指令。其他更不常见差异也可能存在。
+\end{notice}
 
 使用这种方法，两个相同的标记引用不同事物的情况将变得相当罕见。发生时，产生的错误往往是隐秘的，难以查找。
 
 交叉翻译单元约束不仅可以在多个地方定义的实体，还适用于声明中的默认参数。换句话说，下面的程序有未定义行为:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 // translation unit 1:
 void unused(int = 3);
 int main()
@@ -206,11 +203,11 @@ int main()
 
 // translation unit 2:
 void unused(int = 4);
-\end{lstlisting}
+\end{cpp}
 
 这里，标记流的等价有时会涉及微妙的隐式影响。下面的例子是从C++标准中提取出来的(稍微修改了一下):
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 // translation unit 1:
 class X {
 	public:
@@ -242,13 +239,13 @@ class D : public X {
 };
 
 D d2; // X(int, int, int) called by D()
-\end{lstlisting}
+\end{cpp}
 
 本例中，出现问题是因为类D隐式生成的默认构造函数在两个翻译单元中不同。一个调用带两个参数的X构造函数，另一个调用带三个参数的X构造函数。如果有什么区别的话，就是将默认参数限制在程序中的一个位置(可能的话，这个位置应该在头文件中)的动机。幸运的是，在类外定义上放置默认参数是一种少见的做法。
 
 对于相同的标记必须引用相同的实体规则，当然也有例外。如果相同的标记引用了具有相同值的不相关常量，并且没有使用结果表达式的地址(甚至通过将引用绑定到产生该常量的变量，也没有隐式地使用)，那么这些标记等价。该异常允许的程序结构如下所示:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 // header.hpp:
 #ifndef HEADER_HPP
 #define HEADER_HPP
@@ -261,7 +258,7 @@ class MiniBuffer {
 };
 
 #endif // HEADER_HPP
-\end{lstlisting}
+\end{cpp}
 
 原则上，当头文件包含在两个不同的翻译单元中时，将创建两个名为length的不同常量。因为在此上下文中，const意味着static。然而，这种常量变量通常用于定义编译时常量值，而不是运行时的特定存储位置。因此，若不强制存在这样一个存储位置(通过引用变量的地址)，两个常量有相同的值就够了。
 

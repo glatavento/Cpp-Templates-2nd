@@ -9,9 +9,9 @@
 \setCJKmainfont{HYXuanSong}[BoldFont=HYXuanSong 75S, ItalicFont=FZNewKai-Z03]
 \setmainfont{Libertinus Serif}
 \setsansfont{Libertinus Sans}
-\setmonofont{Fira Code}
+\setmonofont{Iosevka Fixed Slab}
 
-\usepackage{tabularx,booktabs,graphicx,subfigure,hyperref,url,subfiles,enumitem,listings}
+\usepackage{tabularx,booktabs,graphicx,subfigure,hyperref,url,subfiles,enumitem,minted}
 
 \usepackage[a5paper, scale=0.8]{geometry}
 \usepackage[most]{tcolorbox}
@@ -29,48 +29,6 @@
 \definecolor{webgreen}{rgb}{0,.5,0}
 \definecolor{bgcolor}{rgb}{0.92,0.92,0.92}
 
-\input{cmake-syntax.tex}
-
-\lstdefinestyle{styleCXX}{
-	language=C++,
-    basicstyle=\ttfamily\footnotesize,
-	tabsize=2,
-    breaklines=true,                
-    numbers=left,                    
-    numbersep=0.5em,
-    frame=single,
-}
-
-\lstdefinestyle{styleCMake}{
-	language=CMake,
-    basicstyle=\ttfamily\footnotesize,
-    breaklines=true,                
-    numbers=left,                    
-    numbersep=0.5em,
-    frame=single,
-}
-
-\lstdefinestyle{stylePython}{
-	language=Python, 
-    basicstyle=\ttfamily\footnotesize,
-    breaklines=true,                
-    numbers=left,                    
-    numbersep=0.5em,
-    frame=single,
-}
-
-\tcbset{
-	commandshell/.style={
-		listing only,
-		colback=black!75!white,
-		colupper=white,
-		lowerbox=ignored,
-		listing options={
-			language={bash},
-			basicstyle=\ttfamily\footnotesize,
-		}
-}}
-
 % URL 正确换行
 % https://liam.page/2017/05/17/help-the-url-command-from-hyperref-to-break-at-line-wrapping-point/
 \makeatletter
@@ -87,7 +45,33 @@
 \g@addto@macro{\UrlBreaks}{\UrlDigits}
 \makeatother
 
-\NewDocumentCommand{\filename}{m}{\noindent\textit{#1}}
+\ExplSyntaxOn
+\NewDocumentCommand { \filename } { m }
+{ \noindent \textit { #1 } }
+
+\setminted { obeytabs, tabsize=2, breaklines=true, fontsize=\footnotesize, frame=single }
+
+\NewDocumentEnvironment { cpp } { }
+{ 
+  \VerbatimEnvironment
+  \begin { minted } [ linenos=true ] { cpp } 
+} 
+{ \end   { minted } }
+
+\NewDocumentEnvironment { shell } { }
+{ 
+  \VerbatimEnvironment
+  \begin { minted } { bash } 
+} 
+{ \end   { minted } }
+
+\NewDocumentEnvironment { notice } { }
+{ 
+  \begin { tcolorbox } [ colback = webgreen!5!white, colframe=webgreen!75!black ]
+} 
+{ \end   { tcolorbox } }
+
+\ExplSyntaxOff
 
 \begin{document}
 	
@@ -104,7 +88,7 @@
 	\tableofcontents
 
     \mainmatter
-    \setcounter{secnumdepth}{4}
+    \setcounter{secnumdepth}{2}
 
 	\subfile{content/part1.tex}
 

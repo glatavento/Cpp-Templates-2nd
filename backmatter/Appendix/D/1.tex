@@ -1,33 +1,33 @@
 
 使用类型特征时，必须包含头文件<type\_traits>:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include <type_traits>
-\end{lstlisting}
+\end{cpp}
 
 然后，该用法取决于特征是否产生类型或值:
 
 \begin{itemize}
 \item 
 对于产生类型的特征，使用如下方式访问该类型:
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 typename std::trait<...>::type
 std::trait_t<...> // since C++14
-\end{lstlisting}
+\end{cpp}
 
 \item 
 对于产生值的特征，可以通过如下方式访问该值:
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 std::trait<...>::value
 std::trait<...>() // implicit conversion to its type
 std::trait_v<...> // since C++17
-\end{lstlisting}
+\end{cpp}
 \end{itemize}
 
 例如:
 
 \filename{utils/traits1.cpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include <type_traits>
 #include <iostream>
 
@@ -47,7 +47,7 @@ int main()
 		std::cout << "same \n";
 	}
 }
-\end{lstlisting}
+\end{cpp}
 
 参见第2.8节，了解traits的\_t版本的定义方式。关于特征的\_v版本的定义方式，请参见5.6节。
 
@@ -55,7 +55,7 @@ int main()
 
 所有产生值的标准类型特征都派生自辅助类模板实例std::integral\_constant:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 namespace std {
 	template<typename T, T val>
 	struct integral_constant {
@@ -70,7 +70,7 @@ namespace std {
 		}
 	};
 }
-\end{lstlisting}
+\end{cpp}
 
 就是说:
 
@@ -90,25 +90,24 @@ C++14(以及以后的版本)中，类型特征的对象也可为函数对象(函
 
 若特征产生布尔值，也可以这样
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 	namespace std {
 		template<bool B>
 		using bool_constant = integral_constant<bool, B>; // since C++17
 		using true_type = bool_constant<true>;
 		using false_type = bool_constant<false>;
 	}
-\end{lstlisting}
+\end{cpp}
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}C++17前，该标准不包括别名模板bool\_constant<>。std::true\_type和std::false\_type在C++11和C++14中确实存在，但分别指定为integral\_constant<bool,true>和integral\_constant<bool,false>。
-\end{tcolorbox}
+\begin{notice}C++17前，该标准不包括别名模板bool\_constant<>。std::true\_type和std::false\_type在C++11和C++14中确实存在，但分别指定为integral\_constant<bool,true>和integral\_constant<bool,false>。
+\end{notice}
 
 以便这些布尔特征在特定属性适用时继承std::true\_type，否则继承std::false\_type，所以它们对应的值成员等于true和false。为结果值设置不同的类型true和false，可以基于类型特征的结果进行标签调度(参见第19.3.3节和第20.2节)。
 
 例如:
 
 \filename{utils/traits2.cpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include <type_traits>
 #include <iostream>
 
@@ -139,7 +138,7 @@ int main()
 	}
 	static_assert(!std::is_const<MyType>{}, "MyType should not be const");
 }
-\end{lstlisting}
+\end{cpp}
 
 各种元编程上下文中，具有不同的非布尔integral\_constant特化类型。参见第24.3节对类似类型CTValue的讨论，以及第25.6节对元组元素访问的使用。
 
@@ -151,7 +150,7 @@ int main()
 \item 
 类型特征应用于类型，但decltype允许测试表达式、变量和函数的属性，decltype只在变量或函数的命名没有附加括号的情况下才会产生类型;对于任何其他表达式，生成的类型也反映表达式的类型类别。例如:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 void foo (std::string&& s)
 {
 	// check the type of s:
@@ -161,7 +160,7 @@ void foo (std::string&& s)
 	std::is_lvalue_reference<decltype((s))>::value // true, s used as lvalue
 	std::is_rvalue_reference<decltype((s))>::value // false
 }
-\end{lstlisting}
+\end{cpp}
 
 详见第15.10.2节。
 
@@ -171,9 +170,8 @@ void foo (std::string&& s)
 \item 
 有些特征是有要求或前提条件，违反这些前提条件会导致未定义行为。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}C++标准委员会考虑了C++17的提议，要求违反类型特征的前提条件会导致编译时错误。然而，因为一些类型特征目前的需求比严格的必要条件更强(比如总是需要完整的类型)，所以这个改变推迟了。
-\end{tcolorbox}
+\begin{notice}C++标准委员会考虑了C++17的提议，要求违反类型特征的前提条件会导致编译时错误。然而，因为一些类型特征目前的需求比严格的必要条件更强(比如总是需要完整的类型)，所以这个改变推迟了。
+\end{notice}
 
 参见第11.2.1节中的一些示例。
 

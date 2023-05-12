@@ -2,7 +2,7 @@
 
 就ODR而言，以下两个文件
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 // header.hpp:
 #ifdef DO_DEBUG
 #define debug(x) std::cout << x << ’\n’
@@ -19,18 +19,18 @@ int main()
 	debugInit();
 	debug("main()");
 }
-\end{lstlisting}
+\end{cpp}
 
 等价于以下单个文件:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 // myprog.cpp:
 void debugInit();
 int main()
 {
 	debugInit();
 }
-\end{lstlisting}
+\end{cpp}
 
 跨翻译单元的连接，是通过在两个翻译单元中具有相应的外部链接声明(例如，两个全局函数debugInit()的声明)来建立的。
 

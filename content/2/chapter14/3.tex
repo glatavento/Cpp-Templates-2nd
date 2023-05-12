@@ -5,9 +5,8 @@
 
 第13章中，看到在解析模板时不能解析依赖名称。相反，它们会在实例化时再次进行查找。但是，非依赖名称会提前查找，以便在模板第一次出现时就能诊断出错误。这就引出了两阶段查找的概念:
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}除了两阶段查找外，有时还使用了两阶段查找或两阶段名称查找等术语进行描述。
-\end{tcolorbox}
+\begin{notice}除了两阶段查找外，有时还使用了两阶段查找或两阶段名称查找等术语进行描述。
+\end{notice}
 
 第一个阶段是解析模板，第二个阶段是实例化模板:
 
@@ -21,7 +20,7 @@
 
 对于非限定的名称型依赖，初始的普通查找(不是完整的)用于确定该名称是否为模板。考虑下面的例子:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 namespace N {
 	template<typename> void g() {}
 	enum E { e };
@@ -37,7 +36,7 @@ template<typename T> void h(T p) {
 int main() {
 	h(N::e); // calls template h with T = N::E
 }
-\end{lstlisting}
+\end{cpp}
 
 在\#1行中，看到名称f后面跟着一个<时，编译器必须判断<是尖括号还是小于号。这取决于是否知道f是模板的名称;在本例中，普通查找查找f的声明，它实际上是一个模板，因此使用尖括号解析成功。
 
@@ -47,7 +46,7 @@ int main() {
 
 在模板源代码中有一些点，C++编译器必须访问模板实体的声明或定义。当代码构造引用模板特化时，需要实例化相应模板的定义来创建该特化，就会创建实例化点(POI)。POI是源中的一个点，在这里可以插入替换模板。例如:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 class MyInt {
 	public:
 	MyInt(int i);
@@ -74,7 +73,7 @@ void g(Int)
 	// #3
 }
 // #4
-\end{lstlisting}
+\end{cpp}
 
 C++编译器看到调用f<int>(42)时，就知道模板f需要实例化，以便用MyInt替换T:创建一个POI。\#2和\#3非常接近调用点，但它们不是POI，因为C++不允许在那里插入::f<int>(Int)的定义。\#1和\#4之间的本质区别是，\#4上函数g(Int)是可见的，因此可以解析依赖于模板的调用g(-i)。然而，如果\#1是POI，因为g(Int)还不可见，则该调用无法解析。幸运的是，C++将函数模板特化引用的POI，定义在包含该引用最近的名称空间作用域声明或定义之后，例子中是\#4。
 
@@ -82,13 +81,13 @@ C++编译器看到调用f<int>(42)时，就知道模板f需要实例化，以便
 
 因此，如果将Int的类型别名声明替换为
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 using Int = int;
-\end{lstlisting}
+\end{cpp}
 
 前面的示例将不再编译。下面的例子也存在类似的问题:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 void f1(T x)
 {
@@ -103,19 +102,18 @@ int main()
 	f1(7); // ERROR: g1 not found!
 }
 // #2 POI for f1<int>(int)
-\end{lstlisting}
+\end{cpp}
 
 调用f1(7)为f1<int>(int)在main()之外的\#2创建一个POI。在这个实例化中，关键问题是函数g1的查找。当第一次遇到模板f1的定义时，注意到非限定g1是名称型依赖，因此具有依赖参数的函数调用中的函数名(参数x的类型取决于模板参数T)。因此，g1在\#1使用普通查找规则查找，此时g1还不可见。在\#2函数在相关的名称空间和类中再次查找，但是唯一的参数类型是int，并且没有相关的名称空间和类。因此，即使在POI上普通查找可以找到g1，也找不到g1。
 
 变量模板实例化点与函数模板的处理类似。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}在撰写本文时，标准中并没有明确规定。然而，估计这也不会成为一个有争议的问题。
-\end{tcolorbox}
+\begin{notice}在撰写本文时，标准中并没有明确规定。然而，估计这也不会成为一个有争议的问题。
+\end{notice}
 
 对于类模板特化，情况不同:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 class S {
 	public:
@@ -129,19 +127,18 @@ unsigned long h()
 	// #3
 }
 // #4
-\end{lstlisting}
+\end{cpp}
 
 同样，函数作用域\#2和\#3不能是POI，因为命名空间作用域类S<int>的定义不能出现在那(模板不能出现在函数作用域中)。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}泛型Lambda的调用操作符是一个例外。
-\end{tcolorbox}
+\begin{notice}泛型Lambda的调用操作符是一个例外。
+\end{notice}
 
 如果遵循函数模板实例的规则，POI将在\#4设置，但是表达式sizeof(S<int>)无效，因为S<int>的大小在点\#4之前不确定。因此，对生成类实例引用的POI定义为，紧接最近的名称空间作用域声明或定义之前的点，该声明或定义包含对实例的引用。例子中就是\#1。
 
 当模板实际实例化时，可能会出现其他实例化的需求。举一个简单的例子:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 class S {
 	public:
@@ -161,7 +158,7 @@ int main()
 	f<double>();
 }
 // #2 : #2a , #2b
-\end{lstlisting}
+\end{cpp}
 
 前面的讨论已经建立了f<double>()的POI在\#2的基础上。函数模板f()也引用了类特化S<char>，其POI位于\#1。它也引用S<T>，但因为这仍然有依赖，不能在这里实例化它。然而，如果在\#2实例化f<double>()，还需要实例化S<double>的定义。这种次要或可传递的POI定义略有不同。对于函数模板，次要POI与主POI完全相同。对于类实体，次要POI位于主POI之前(在最近的封闭命名空间范围内)。例子中，f<double>()的POI可以放置在\#2b，在它之前的点(\#2a)是S<double>的辅助POI，这与S<char>的POI完全不同。
 
@@ -169,9 +166,8 @@ int main()
 
 实际中，大多数编译器将大多数函数模板的实例化延迟到翻译单元的末尾。有些实例化不能延迟，包括需要实例化来确定导出返回类型的情况(参见15.10.1节和15.10.4节)，以及constexpr函数，必须求值以产生常量结果的情况。一些编译器在首次用于内联调用时会立刻实例化内联函数。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}现代编译器中，可调用的内联通常是由编译器中一个主要独立于语言的专门优化组件(“后端”或“中端”)来处理的。然而，早期设计的C++“前端”(C++编译器中特定于C++的部分)也可能具有内联扩展调用的能力，因为旧的后端在考虑内联扩展调用时过于保守。
-\end{tcolorbox}
+\begin{notice}现代编译器中，可调用的内联通常是由编译器中一个主要独立于语言的专门优化组件(“后端”或“中端”)来处理的。然而，早期设计的C++“前端”(C++编译器中特定于C++的部分)也可能具有内联扩展调用的能力，因为旧的后端在考虑内联扩展调用时过于保守。
+\end{notice}
 
 C++标准允许的替代POI，这可将对应模板特化的POI移动到翻译单元的末尾。
 
@@ -179,9 +175,8 @@ C++标准允许的替代POI，这可将对应模板特化的POI移动到翻译�
 
 无论何时遇到POI，都必须以某种方式访问相应模板的定义。对于特化类，类模板定义必须在翻译单元中更早看到。对于函数和变量模板(以及成员函数和类模板的静态数据成员)的POI，这也是需要的。通常模板定义会添加到包含在翻译单元中的头文件中，即使是非类型模板。这个模板定义的源模型称为包含模型，是当前C++标准支持模板的自动源模型。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}C++98标准也提供了一个分离模型。但从未流行起来，在发布C++11标准之前就删除了。
-\end{tcolorbox}
+\begin{notice}C++98标准也提供了一个分离模型。但从未流行起来，在发布C++11标准之前就删除了。
+\end{notice}
 
 尽管包含模型鼓励程序员将所有的模板定义放在头文件中，这样就可以满足可能出现的POI，也可以使用显式的实例化声明和显式的实例化定义来显式地管理实例化(参见14.5节)。大多数时候开发者更喜欢依赖于自动实例化的机制。使用自动模式实现的挑战是处理不同翻译单元具有函数或变量模板(或类模板实例的相同成员函数或静态数据成员)的相同特化POI的可能性。接下来我们讨论这个问题的解决方法。
 

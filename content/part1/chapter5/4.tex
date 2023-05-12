@@ -3,7 +3,7 @@
 注意，还可以提供专门处理原始数组或字符串字面量的模板。例如:
 
 \filename{basics/lessarray.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T, int N, int M>
 bool less (T(&a)[N], T(&b)[M])
 {
@@ -13,30 +13,30 @@ bool less (T(&a)[N], T(&b)[M])
 	}
 	return N < M;
 }
-\end{lstlisting}
+\end{cpp}
 
 这里使用
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 int x[] = {1, 2, 3};
 int y[] = {1, 2, 3, 4, 5};
 std::cout << less(x,y) << '\n';
-\end{lstlisting}
+\end{cpp}
 
 less<>()实例化，T为int，N为3，M为5。
 
 也可以将此模板用于字符串字面值:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 std::cout << less("ab","abc") << '\n';
-\end{lstlisting}
+\end{cpp}
 
 这种情况下，less<>()实例化，T为char const，N为3，M为4。
 
 若想为字符串(和其他字符数组)提供一个函数模板，可以这样:
 
 \filename{basics/lessstring.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<int N, int M>
 bool less (char const(&a)[N], char const(&b)[M])
 {
@@ -46,12 +46,12 @@ bool less (char const(&a)[N], char const(&b)[M])
 	}
 	return N < M;
 }
-\end{lstlisting}
+\end{cpp}
 
 注意，对于边界未知的数组，可以(有时必须)重载或偏特化。下面的代码演示了数组所有可能的重载:
 
 \filename{basics/arrays.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include <iostream>
 
 template<typename T>
@@ -86,12 +86,12 @@ struct MyClass<T*> // partial specialization for pointers
 {
 	static void print() { std::cout << "print() for T*\n"; }
 };
-\end{lstlisting}
+\end{cpp}
 
 类模板MyClass<>用于各种类型:已知和未知边界的数组、对已知和未知边界的数组的引用，以及指针。每种情况都不同，可以在使用数组时产生:
 
 \filename{basics/arrays.cpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include "arrays.hpp"
 
 template<typename T1, typename T2, typename T3>
@@ -122,19 +122,18 @@ int main()
 }
 
 int x[] = {0, 8, 15}; // define forward-declared array
-\end{lstlisting}
+\end{cpp}
 
 注意，由语言规则声明为数组(带或不带长度)的调用参数实际上具有指针类型。未知边界的数组模板可以用于不完整类型，例如
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 extern int i[];
-\end{lstlisting}
+\end{cpp}
 
 当通过引用传递时，就变成了一个int(\&)[]，也可以用作模板参数。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}类型X(\&)[]——对于某些任意类型X——参数仅在C++17中有效，通过核心问题393的解决。在语言的早期版本中，许多编译器也可以接受这样的参数。
-\end{tcolorbox}
+\begin{notice}类型X(\&)[]——对于某些任意类型X——参数仅在C++17中有效，通过核心问题393的解决。在语言的早期版本中，许多编译器也可以接受这样的参数。
+\end{notice}
 
 泛型代码中使用不同数组类型的另一种例子可参见19.3.1节。
 

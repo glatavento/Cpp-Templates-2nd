@@ -6,7 +6,7 @@
 上一节中，根据另一种类型特征HasPlusT的结果，PlusResultT特征的最终定义是一个完全不同的实现。可以用一个特殊的类型模板IfThenElse来表达这个if-else行为，其接受一个布尔型非类型模板参数，可以从两个类型参数中选择一个:
 
 \filename{traits/ifthenelse.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #ifndef IFTHENELSE_HPP
 #define IFTHENELSE_HPP
 
@@ -27,12 +27,12 @@ struct IfThenElseT<false, TrueType, FalseType> {
 template<bool COND, typename TrueType, typename FalseType>
 using IfThenElse = typename IfThenElseT<COND, TrueType, FalseType>::Type;
 #endif // IFTHENELSE_HPP
-\end{lstlisting}
+\end{cpp}
 
 下面的示例，通过定义一个类型函数来确定给定值的最低整数类型，来演示此模板的应用:
 
 \filename{traits/smallestint.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include <limits>
 #include "ifthenelse.hpp"
 template<auto N>
@@ -51,11 +51,11 @@ struct SmallestIntT {
 	>::Type
 	>::Type;
 };
-\end{lstlisting}
+\end{cpp}
 
 ，与普通C++的if-then-else不同，"then"和"else"分支的模板参数在选择前求值，因此两个分支不可能包含格式错误的代码，或者格式错误。考虑一个特征，为给定的有符号类型生成相应的无符号类型。有一个标准特征std::make\_unsigned，可以执行这个转换，但是要求传递的类型必须是有符号的整型，并且不能是bool类型;否则，将导致未定义行为(参见第D.4节)。可以实现特征来产生相应的无符号类型，否则直接传递的类型(若给出了不恰当的类型，就可以避免了未定义行为)可能是一个好主意。简单的实现不起任何作用:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 // ERROR: undefined behavior if T is bool or no integral type:
 template<typename T>
 struct UnsignedT {
@@ -64,17 +64,17 @@ struct UnsignedT {
 	typename std::make_unsigned<T>::type,
 	T>;
 };
-\end{lstlisting}
+\end{cpp}
 
 UnsignedT<bool>的实例化仍具有未定义行为，因为编译器仍然会试图对这个类型进行转换
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 typename std::make_unsigned<T>::type
-\end{lstlisting}
+\end{cpp}
 
 为了解决这个问题，需要添加间接层，以便将IfThenElse参数本身作为封装结果的类型函数使用:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 // yield T when using member Type:
 template<typename T>
 struct IdentityT {
@@ -95,13 +95,13 @@ struct UnsignedT {
 									IdentityT<T>
 									>::Type;
 };
-\end{lstlisting}
+\end{cpp}
 
 UnsignedT这个定义中，IfThenElse的类型参数都是类型函数本身的实例。但在IfThenElse选择一个类型函数前，类型函数不会进行实际计算。不过，IfThenElse选择类型函数实例(MakeUnsignedT或IdentityT)。然后，::Type计算选定的Type函数实例以生成Type。
 
 这完全依赖于IfThenElse构造中，未选择的包装器类型从未完全实例化。特别地，以下代码无效:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 struct UnsignedT {
 	using Type = typename IfThenElse<std::is_integral<T>::value
@@ -110,22 +110,22 @@ struct UnsignedT {
 		T
 	>::Type;
 };
-\end{lstlisting}
+\end{cpp}
 
 必须在以后为MakeUnsignedT<T>添加::Type，还需要IdentityT助手在else分支中为T添加::Type。
 
 所以，不能这样使用
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 	using Identity = typename IdentityT<T>::Type;
-\end{lstlisting}
+\end{cpp}
 
 可以声明这样一个别名模板，可能在其他地方有用，但是不能在IfThenElse的定义中使用。因为Identity<T>会立即导致IdentityT<T>的完整实例化，从而会检测其Type成员。
 
 IfThenElseT模板在C++标准库中可用，格式为std::conditional<>(参见第D.5节)。UnsignedT特征将有如下定义:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 struct UnsignedT {
 	using Type
@@ -135,13 +135,13 @@ struct UnsignedT {
 								IdentityT<T>
 								>::Type;
 };
-\end{lstlisting}
+\end{cpp}
 
 \subsection{检测非抛出操作}
 
 确定某个特定操作是否会引发异常有时有用。例如，移动构造函数应该标记为noexcept，表明在任何情况下都不会抛出异常。然而，特定类的移动构造函数是否抛出异常，通常取决于其成员和基类的移动构造函数是否抛出异常。考虑一个简单的类模板Pair的移动构造函数:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T1, typename T2>
 class Pair {
 	T1 first;
@@ -152,22 +152,22 @@ class Pair {
 	second(std::forward<T2>(other.second)) {
 	}
 };
-\end{lstlisting}
+\end{cpp}
 
 当T1或T2的移动操作可以抛出异常时，Pair的移动构造函数可以抛出异常。给定一个特征IsNothrowMoveConstructibleT，可以通过在Pair的移动构造函数中使用计算出来的noexcept异常规范来表示这个属性:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 Pair(Pair&& other) noexcept(IsNothrowMoveConstructibleT<T1>::value &&
 		 IsNothrowMoveConstructibleT<T2>::value)
 : first(std::forward<T1>(other.first)),
 second(std::forward<T2>(other.second))
 { }
-\end{lstlisting}
+\end{cpp}
 
 剩下的工作就是实现IsNothrowMoveConstructibleT特征。可以使用noexcept操作符直接实现此特征，确定给定表达式是否不抛出异常:
 
 \filename{traits/isnothrowmoveconstructible1.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include <utility> // for declval
 #include <type_traits> // for bool_constant
 
@@ -176,31 +176,30 @@ struct IsNothrowMoveConstructibleT
 : std::bool_constant<noexcept(T(std::declval<T>()))>
 {
 };
-\end{lstlisting}
+\end{cpp}
 
 这里使用了操作符版本的noexcept，用于确定表达式不抛出异常。因为结果是一个布尔值，可以直接传递它来定义基类std::bool\_constant<>，可用于定义std::true\_type和std::false\_type(参见19.3.3节)。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}C++11和C++14中，必须将基类指定为std::integral\_constant<bool,…>，而非std::bool\_constant<…>。
-\end{tcolorbox}
+\begin{notice}C++11和C++14中，必须将基类指定为std::integral\_constant<bool,…>，而非std::bool\_constant<…>。
+\end{notice}
 
 因为不是SFINAE友好的(参见19.4.4节)，所以这个实现应该改进:若特征实例化的类型没有可用的移动或复制构造函数——使得表达式T(std::declval<T\&\&>())无效——整个程序呈现病态:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 lass E {
 	public:
 	E(E&&) = delete;
 };
 ...
 std::cout << IsNothrowMoveConstructibleT<E>::value; // compile-time ERROR
-\end{lstlisting}
+\end{cpp}
 
 类型特征应该产生false值，而不是终止编译。
 
 必须在计算结果的表达式求值之前检查其是否有效，要先弄清楚移动构造是否有效，然后再检查是否有例外。因此，修改了特征的第一个版本，添加了一个默认为void的模板参数参和一个使用std::void\_t的局部参数，该参数只有当移动构造有效时才有效:
 
 \filename{traits/isnothrowmoveconstructible2.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include <utility> // for declval
 #include <type_traits> // for true_type, false_type, and bool_constant<>
 
@@ -217,7 +216,7 @@ struct IsNothrowMoveConstructibleT
 : std::bool_constant<noexcept(T(std::declval<T>()))>
 {
 };
-\end{lstlisting}
+\end{cpp}
 
 若替换偏特化中的std::void\_t<…>有效，特化版本匹配，基类说明符中的noexcept(…)表达式可以安全地求值。否则，非实例化偏特化就会丢弃，而会实例化主模板(产生std::false\_type结果)。
 
@@ -229,7 +228,7 @@ C++标准库提供了相应的类型特征std::is\_move\_constructible<>，在�
 
 对于类型特征的常见抱怨是它们非常冗长，因为类型特征的每次使用通常需要尾随::type，并在上下文中需要前置typename关键字，两者都是样板。当组合多个类型特征时，这可能会导致一些尴尬的格式化，比如在运行的数组加法操作符的例子中，若正确地实现它，确保没有返回常量或引用类型:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T1, typename T2>
 Array<
 	typename RemoveCVT<
@@ -239,16 +238,15 @@ Array<
 	>::Type
 >
 operator+ (Array<T1> const&, Array<T2> const&);
-\end{lstlisting}
+\end{cpp}
 
 通过使用别名模板和变量模板，可以更方便地使用特征，分别生成类型或值。但这些快捷方式有时可能不可用的，这时必须使用原始的类模板。我们已经在MemberPointerToIntT示例中讨论过这样的情况，但接下来将进行更通用的讨论。
 
-\noindent
-\textbf{别名模板和特征}
+\subsubsection{别名模板和特征}
 
 别名模板提供了一种减少代码冗长的方法。可以直接使用别名模板，而不是将类型特征表示为具有类型成员type的类模板。例如，以下三个别名模板包装了上面使用的类型特征:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 using RemoveCV = typename RemoveCVT<T>::Type;
 
@@ -257,15 +255,15 @@ using RemoveReference = typename RemoveReferenceT<T>::Type;
 
 template<typename T1, typename T2>
 using PlusResult = typename PlusResultT<T1, T2>::Type;
-\end{lstlisting}
+\end{cpp}
 
 有了这些别名模板，可以将加法操作符简化为
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T1, typename T2>
 Array<RemoveCV<RemoveReference<PlusResult<T1, T2>>>>
 operator+ (Array<T1> const&, Array<T2> const&);
-\end{lstlisting}
+\end{cpp}
 
 第二个版本显然更短，使特征的组成更明显。这样的改进使别名模板更适合于类型特征的某些使用。
 
@@ -288,38 +286,36 @@ operator+ (Array<T1> const&, Array<T2> const&);
 
 由于历史原因，C++标准库有不同的约定。类型特征类模板产生类型中的类型，并且没有特定的后缀(很多是在C++11中引入的)。因为没有后缀的名称已经标准化(参见D.1节)，相应的别名模板(直接产生类型)在C++14中引入，并赋予了\_t后缀。
 
-\noindent
-\textbf{可变参模板和特征}
+\subsubsection{可变参模板和特征}
 
 返回值的特征需要添加::value(或类似的成员选择)来产生特征的结果。constexpr变量模板(在第5.6节中介绍)提供了一种减少这种冗长的方法。
 
 下面的变量模板包装了第19.3.3节定义的IsSameT特征和第19.5节定义的IsConvertibleT特征:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T1, typename T2>
 	constexpr bool IsSame = IsSameT<T1,T2>::value;
 	
 template<typename FROM, typename TO>
 	constexpr bool IsConvertible = IsConvertibleT<FROM, TO>::value;
-\end{lstlisting}
+\end{cpp}
 
 可以将代码简化为
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 if (IsSame<T,int> || IsConvertible<T,char>) ...
-\end{lstlisting}
+\end{cpp}
 
 从而替代原始方式
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 if (IsSameT<T,int>::value || IsConvertibleT<T,char>::value) ...
-\end{lstlisting}
+\end{cpp}
 
 由于历史原因，C++标准库有不同的约定。产生值结果的特征类模板没有特定的后缀，它们中的许多在C++11标准中引入。直接产生结果值的相应变量模板在C++17中使用了\_v后缀(参见D.1节)。
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}C++标准化委员会受到长期存在的传统约束，即所有标准名称都由小写字符和可选的下划线分隔。也就是说，像isSame或isSame这样的名称不太可能加入标准中(使用这种拼写风格的概念除外)。
-\end{tcolorbox}
+\begin{notice}C++标准化委员会受到长期存在的传统约束，即所有标准名称都由小写字符和可选的下划线分隔。也就是说，像isSame或isSame这样的名称不太可能加入标准中(使用这种拼写风格的概念除外)。
+\end{notice}
 
 
 

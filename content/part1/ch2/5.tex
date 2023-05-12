@@ -4,26 +4,26 @@
 
 要特化类模板，必须用template<>和类模板特化的类型声明类。这些类型可用作模板参数，必须直接在类名之后指定:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<>
 class Stack<std::string> {
 	...
 };
-\end{lstlisting}
+\end{cpp}
 
 对于这些特化，成员函数的定义必须是一个“普通的”成员函数，每次出现T都会使用特化类型替换:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 void Stack<std::string>::push (std::string const& elem)
 {
 	elems.push_back(elem); // append copy of passed elem
 }
-\end{lstlisting}
+\end{cpp}
 
 下面是std::string类型的Stack<>特化:
 
 \filename{basics/stack2.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 #include "stack1.hpp"
 #include <deque>
 #include <string>
@@ -58,7 +58,7 @@ std::string const& Stack<std::string>::top () const
 	assert(!elems.empty());
 	return elems.back(); // return last element
 }
-\end{lstlisting}
+\end{cpp}
 
 例子中，特化使用引用语义将字符串参数传递给push()，这对这个特定类型有意义(不过，应该更好地传递转发引用，将在第6.1节中讨论)。
 

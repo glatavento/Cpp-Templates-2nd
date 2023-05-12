@@ -55,9 +55,8 @@ prvalue的例子有:
 \item 
 由非字符串字面量或用户定义字面量的字面量组成的表达式
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}用户定义的字面量可以生成左值或右值，这取决于相关字面量操作符的返回类型。
-\end{tcolorbox}
+\begin{notice}用户定义的字面量可以生成左值或右值，这取决于相关字面量操作符的返回类型。
+\end{notice}
 
 \item 
 内置的一元\&操作符的应用(例如，取表达式的地址)
@@ -86,27 +85,25 @@ xvalue的例子有:
 
 需要强调的是，glvalue、prvalue、xvalue等都是表达式，而不是值
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}这些术语属于用词不当。
-\end{tcolorbox}
+\begin{notice}这些术语属于用词不当。
+\end{notice}
 
 或实体。例如，变量不是左值，尽管表示该变量的表达式是左值:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 int x = 3; // x here is a variable, not an lvalue. 3 is a prvalue initializing
 		  // the variable x.
 int y = x; // x here is an lvalue. The evaluation of that lvalue expression does not
 		  // produce the value 3, but a designation of an object containing the value 3.
 		  // That lvalue is then then converted to a prvalue, which is what initializes y.
-\end{lstlisting}
+\end{cpp}
 
 \subsection{B.2.1\hspace{0.2cm}临时实现}
 
 前面提到过，左值通常要进行到右值的转换
 
-\begin{tcolorbox}[colback=webgreen!5!white,colframe=webgreen!75!black]
-\hspace*{0.75cm}使用C++11的值分类，短语glvalue到prvalue的转换会更准确，但传统术语仍然更为常见。
-\end{tcolorbox}
+\begin{notice}使用C++11的值分类，短语glvalue到prvalue的转换会更准确，但传统术语仍然更为常见。
+\end{notice}
 
 因为值是初始化对象(或为大多数内置操作符提供操作数)的表达式类型。
 
@@ -141,7 +138,7 @@ prvalue是“expr;”形式的语句中的顶层表达式，或者将表达式�
 
 C++17中，由prvalue初始化的对象由上下文决定，因此临时对象只在真正需要时才创建。C++17前，prvalue(特别是类)总是隐含一个临时变量。这些临时变量的副本以后可以有选择地省略，但是编译器仍然需要强制执行复制操作的大多数语义约束(需要复制构造函数可调用)。下面的例子展示了C++17修改规则的结果:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 class N {
 	public:
 	N();
@@ -156,7 +153,7 @@ N make_N() {
 auto n = make_N(); // ERROR prior to C++17 because the prvalue needs a
 				// conceptual copy. OK since C++17, because n is
 				// initialized directly from the prvalue.
-\end{lstlisting}
+\end{cpp}
 
 C++17前，prvalue N\{\}生成了一个类型为N的临时变量，允许编译器删除该临时变量的复制和移动构造(实际上它们总是这样做的)。这意味着调用make\_N()的临时结果可以直接在N的存储中构造，不需要进行复制或移动操作。但C++17前的编译器仍需要检查，是否可以进行复制或移动操作，在本例中这是不可能的，因为N的复制构造函数删除了(并且没有生成移动构造函数)。因此，C++11和C++14编译器必须对这个例子产生错误信息。
 
@@ -164,7 +161,7 @@ C++17中，prvalue N本身不会产生一个临时变量，会初始化了一个
 
 我们以一个展示各种值类别情况的例子作为结束:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 class X {
 };
 
@@ -179,7 +176,7 @@ f(v); // passes a modifiable lvalue to the first f()
 f(c); // passes a nonmodifiable lvalue to the first f()
 f(X()); // passes a prvalue (since C++17 materialized as xvalue) to the 2nd f()
 f(std::move(v)); // passes an xvalue to the second f()
-\end{lstlisting}
+\end{cpp}
 
 
 

@@ -4,7 +4,7 @@
 
 为了完整起见，这里说一个已经讨论过的语法概念:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T,
 	typename Move = defaultMove<T>,
 	typename Copy = defaultCopy<T>,
@@ -19,18 +19,18 @@ void test(MatrixList ml)
 {
 	mySort (ml, Mutator <Matrix, .Swap = matrixSwap>);
 }
-\end{lstlisting}
+\end{cpp}
 
 参数名称前的句点用来表示我们通过名称引用模板参数，这种语法类似于1999年C标准中引入的“指定初始化式”语法:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 struct Rectangle { int top, left, width, height; };
 struct Rectangle r = { .width = 10, .height = 10, .top = 0, .left = 0 };
-\end{lstlisting}
+\end{cpp}
 
 当然，引入命名模板参数意味着模板的模板参数名称现在是该模板的公共接口的一部分，不能随意更改。这可以通过更明确的、可选择的语法来解决，例如:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T,
 	Move: typename M = defaultMove<T>,
 	Copy: typename C = defaultCopy<T>,
@@ -45,7 +45,7 @@ void test(MatrixList ml)
 {
 	mySort (ml, Mutator <Matrix, .Swap = matrixSwap>);
 }
-\end{lstlisting}
+\end{cpp}
 
 
 

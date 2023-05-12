@@ -52,25 +52,25 @@ C++11后，可以使用constexpr提供在编译时计算某些值的能力。对
 例如，为了能够在编译时使用maximum函数，必须声明它:
 
 \filename{basics/maxconstexpr.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T1, typename T2>
 constexpr auto max (T1 a, T2 b)
 {
 	return b < a ? a : b;
 }
-\end{lstlisting}
+\end{cpp}
 
 这样，就可以在有编译时使用maximum函数模板，比如在声明原始数组的大小时:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 int a[::max(sizeof(char),1000u)];
-\end{lstlisting}
+\end{cpp}
 
 或者定义\texttt{std::array<>}的大小:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 std::array<std::string, ::max(sizeof(char),1000u)> arr;
-\end{lstlisting}
+\end{cpp}
 
 注意，将1000作为unsigned int传递是为了避免在模板中比较有符号值和无符号值时，编译器发出的警告。
 

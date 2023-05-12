@@ -3,12 +3,12 @@ C++17后，有一个特性可以对参数包的所有参数
 
 例如，下面的函数会返回所有入参的和:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename... T>
 auto foldSum (T... s) {
 	return (... + s); // ((s1 + s2) + s3) ...
 }
-\end{lstlisting}
+\end{cpp}
 
 若参数包为空，表达式通常是错误格式的(除了操作符\&\&的值为true，操作符||的值为false，逗号操作符空参数包的值为void())。
 
@@ -30,7 +30,7 @@ auto foldSum (T... s) {
 几乎所有的二元运算符都可以使用折叠表达式(详见12.4.6节)。例如，可以使用折叠表达式来遍历一个二叉树的路径，使用操作符\texttt{->*}:
 
 \filename{basics/foldtraverse.cpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 // define binary tree structure and traverse helpers:
 struct Node {
 	int value;
@@ -61,30 +61,30 @@ int main()
 	Node* node = traverse(root, left, right);
 	...
 }
-\end{lstlisting}
+\end{cpp}
 
 这里，
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 (np ->* ... ->* paths)
-\end{lstlisting}
+\end{cpp}
 
 使用折叠表达式遍历从np开始的可变元素路径。
 
 这种使用初始化器的折叠表达式，可以简化可变参数模板来打印上面的所有参数:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename... Types>
 void print (Types const&... args)
 {
 	(std::cout << ... << args) << '\n';
 }
-\end{lstlisting}
+\end{cpp}
 
 但无法为参数包中的每个元素输出添加打印空格。要添加空格，需要一个额外的类模板，确保参数的输出都会添加一个空格:
 
 \filename{basics/addspace.hpp}
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 class AddSpace
 {
@@ -102,7 +102,7 @@ template<typename... Args>
 void print (Args... args) {
 	( std::cout << ... << AddSpace(args) ) << '\n';
 }
-\end{lstlisting}
+\end{cpp}
 
 表达式AddSpace(args)使用类模板参数推断(参见2.9节)产生AddSpace<Args>(args)，这为每个参数创建一个AddSpace对象，该对象引用传递的参数，并在输出表达式时使用该参数添加一个空格。
 

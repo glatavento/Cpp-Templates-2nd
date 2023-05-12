@@ -4,7 +4,7 @@
 
 例如，类Stack<>提供成员函数printOn()打印堆栈中的全部内容，并对每个元素使用操作符<{}<:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 class Stack {
 	...
@@ -14,23 +14,23 @@ class Stack {
 		}
 	}
 };
-\end{lstlisting}
+\end{cpp}
 
 对于没有定义操作符<{}<的类型，仍然可以使用这个类:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 Stack<std::pair<int,int>> ps; // 注意: std::pair<>不支持<<
 ps.push({4, 5}); // OK
 ps.push({6, 7}); // OK
 std::cout << ps.top().first << '\n'; // OK
 std::cout << ps.top().second << '\n'; // OK
-\end{lstlisting}
+\end{cpp}
 
 只在使用printOn()时代码才会出错，因为不能实例化特定元素类型的操作符<{}<:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 ps.printOn(std::cout); // ERROR: 元素类型不支持操作符<<
-\end{lstlisting}
+\end{cpp}
 
 \subsection{概念}
 
@@ -42,7 +42,7 @@ ps.printOn(std::cout); // ERROR: 元素类型不支持操作符<<
 
 从C++11开始，可以通过使用static\_assert和预定义类型特征来检查约束。例如:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T>
 class C
 {
@@ -50,7 +50,7 @@ class C
 	"Class C requires default-constructible elements");
 	...
 };
-\end{lstlisting}
+\end{cpp}
 
 使用默认构造函数，若没有这个断言，编译会失败。然而，错误消息描述的是整个模板实例化的过程，从最初的实例化原因到检测到错误的实际模板的定义(参见章节9.4)。
 

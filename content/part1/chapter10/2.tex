@@ -8,7 +8,7 @@
 
 C++中实例化过程并不是产生特化的唯一方法。替代机制允许开发者显式地指定与模板参数的特殊替换绑定的声明。如在2.5节中看到的，这样的特化是通过前缀template<>引入的:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T1, typename T2> // primary class template
 class MyClass {
   ...
@@ -18,13 +18,13 @@ template<> // explicit specialization
 class MyClass<std::string,float> {
   ...
 };
-\end{lstlisting}
+\end{cpp}
 
 严格地说，这称为显式特化(与实例化或生成的特化相对)。
 
 如2.6节所述，仍有模板参数的特化称为偏特化:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 template<typename T> // partial specialization
 class MyClass<T,T> {
   ...
@@ -34,6 +34,6 @@ template<typename T> // partial specialization
 class MyClass<bool,T> {
   ...
 };
-\end{lstlisting}
+\end{cpp}
 
 当说到(显式或部分)特化时，通用模板也称为主模板。

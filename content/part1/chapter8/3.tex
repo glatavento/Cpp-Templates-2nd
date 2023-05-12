@@ -2,7 +2,7 @@ isPrime()等编译时测试的一种应用是，在编译时使用偏特化在�
 
 例如，可以根据模板参数是否是素数来选择不同的实现:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 // primary helper template:
 template<int SZ, bool = isPrime(SZ)>
 struct Helper;
@@ -27,13 +27,13 @@ long foo (std::array<T,SZ> const& coll)
 	Helper<SZ> h; // implementation depends on whether array has prime number as size
 	...
 }
-\end{lstlisting}
+\end{cpp}
 
 根据std::array<>参数的大小是否为素数，使用了Helper<>类的两种不同实现。这种偏特化的应用广泛适用于函数根据模板参数，选择不同的实现。
 
 上面，使用了两个偏特化来实现两个可能的替代方案，也可以对其中一个替代(默认)情况使用主模板，并对其他情况使用偏特化实现:
 
-\begin{lstlisting}[style=styleCXX]
+\begin{cpp}
 // primary helper template (used if no specialization fits):
 template<int SZ, bool = isPrime(SZ)>
 struct Helper
@@ -47,7 +47,7 @@ struct Helper<SZ, true>
 {
 	...
 };
-\end{lstlisting}
+\end{cpp}
 
 因为函数模板不支持偏特化，所以必须使用其他机制根据某些约束来更改函数实现。可供的选择包括:
 
