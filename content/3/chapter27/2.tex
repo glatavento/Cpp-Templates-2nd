@@ -29,13 +29,11 @@ A_Add<A_Mult<A_Scalar<double>,Array<double>>,
 图27.1. 表达式1.2*x+x*y的树型表示
 \end{center}
 
-\subsubsubsection{27.2.1\hspace{0.2cm}表达式模板的操作数}
+\subsection{表达式模板的操作数}
 
 为了完成表达式的表示，必须在每个A\_Add和A\_Mult对象中存储对参数的引用，并记录A\_Scalar对象的值(或对其的引用)。以下是相应操作数的定义:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{exprtmpl/exprops1.hpp}
+\filename{exprtmpl/exprops1.hpp}
 \begin{lstlisting}[style=styleCXX]
 #include <cstddef>
 #include <cassert>
@@ -101,9 +99,7 @@ class A_Mult {
 
 对于只涉及数组的操作，结果的大小是两个操作数的大小。对于同时涉及数组和标量的操作，结果的大小是数组操作数的大小。为了区分数组操作数和标量操作数，定义标量的大小为0。因此，A\_Scalar模板的定义如下:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{exprtmpl/exprscalar.cpp}
+\filename{exprtmpl/exprscalar.cpp}
 \begin{lstlisting}[style=styleCXX]
 // class for objects that represent scalars:
 template<typename T>
@@ -162,9 +158,7 @@ OP2 op2; // refer to second operand by value
 
 这是特性类的完美应用。特性类定义了一个类型，通常是常量引用，但对于标量是普通值:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{exprtmpl/exprops1a.hpp}
+\filename{exprtmpl/exprops1a.hpp}
 \begin{lstlisting}[style=styleCXX]
 // helper traits class to select how to refer to an expression template node
 // - in general by reference
@@ -189,7 +183,7 @@ class A_Traits<A_Scalar<T>> {
 
 因为A\_Scalar对象引用顶层表达式中的标量，所以这些标量可以使用引用类型，从而A\_Scalar<T>::s是引用成员变量。
 
-\subsubsubsection{27.2.2\hspace{0.2cm}数组类型}
+\subsection{数组类型}
 
 有了使用轻量级表达式模板表达式的能力，现在必须创建一个Array类型，控制实际的存储，并且了解表达式模板。对于工程目的来说，保持具有存储功能的真实数组的接口，与产生数组的表达式的表示的接口最好尽可能相似。可以声明Array模板:
 
@@ -208,9 +202,7 @@ class Array;
 
 这是定义。该功能主要局限于SArray模板所提供的功能，在理解了代码意图后，添加该功能并不难:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{exprtmpl/exprarray.hpp}
+\filename{exprtmpl/exprarray.hpp}
 \begin{lstlisting}[style=styleCXX]
 #include <cstddef>
 #include <cassert>
@@ -280,15 +272,13 @@ class Array {
 
 下标操作符需要更多的讨论，该操作符的const版本使用的是推导的返回类型，而不是传统的T const\&。若Rep代表是A\_Mult或A\_Add，其下标操作符需要返回一个临时值(即prvalue)，不能通过引用返回(decltype(auto)将为prvalue情况推导出非引用类型)。另一方面，若Rep是SArray<T>，则底层下标操作符产生一个const左值，并且推导出的返回类型将是匹配的const引用。
 
-\subsubsubsection{27.2.3\hspace{0.2cm}运算符}
+\subsection{运算符}
 
 除了运算符本身之外，我们已经具备了为数值数组模板创建高效数值运算符的大部分机制。这些操作符只组装表达式模板对象——并不实际计算结果数组。
 
 对于每个普通的二元运算符，必须实现三个版本:数组-数组、数组-标量和标量-数组。为了能够计算初始值，我们需要以下操作符:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{exprtmpl/exprops2.hpp}
+\filename{exprtmpl/exprops2.hpp}
 \begin{lstlisting}[style=styleCXX]
 // addition of two Arrays:
 template<typename T, typename R1, typename R2>
@@ -345,7 +335,7 @@ return Array<T,A_Mult<T,A_Scalar<T>,R2>> (...);
 
 其他非成员二元操作符非常类似，可以使用宏来实现大多数操作符。另一个(较小的)宏可用于非成员一元操作符。
 
-\subsubsubsection{27.2.4\hspace{0.2cm}审查}
+\subsection{审查}
 
 第一次发现表达式模板思想时，各种声明和定义之间的交互可能会令人生畏。因此，对示例代码所发生的事情进行自上而下的审查，有助于理解。这里将要分析的代码如下所示(可以在meta/exprmain.cpp中找到):
 
@@ -472,7 +462,7 @@ A_Add<double,
 
 这正是我们想要的。
 
-\subsubsubsection{27.2.5\hspace{0.2cm}表达式模板赋值}
+\subsection{表达式模板赋值}
 
 我们示例的A\_Mult和A\_Add表达式模板上，不可能构建一个Rep参数数组的实例化写操作。(事实上，a+b=c毫无意义)但完全可以编写其他表达式模板，对其结果赋值，对整数值数组进行索引将对应于子集选择。换句话说，表达式
 
@@ -490,9 +480,7 @@ for (std::size_t idx = 0; idx<y.size(); ++idx) {
 
 启用此功能意味着构建在表达式模板上，数组的行为类似于左值(可写)。这类操作的表达式模板组件与A\_Mult没有本质上的区别，只是提供了下标操作符的const版本和非const版本，可以返回左值(引用):
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{exprtmpl/exprops3.hpp}
+\filename{exprtmpl/exprops3.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename T, typename A1, typename A2>
 class A_Subscript {
@@ -524,9 +512,7 @@ class A_Subscript {
 
 前面建议的具有子集语义的扩展下标操作符，需要向Array模板添加额外的下标操作符。其中一个操作符可以这样定义(可能还需要对应的const版本):
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{exprtmpl/exprops4.hpp}
+\filename{exprtmpl/exprops4.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename T, typename R>
 template<typename T2, typename R2>

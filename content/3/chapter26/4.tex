@@ -3,13 +3,11 @@
 当动态值的类型为T时，每个VariantChoice基类负责处理初始化、赋值和销毁。本节通过填充VariantChoice类模板的详细信息，来实现这些操作。
 
 
-\subsubsubsection{26.4.1\hspace{0.2cm}初始化}
+\subsection{初始化}
 
 从变量所存储的类型之一的值开始初始化变量，用双精度值初始化Variant<int, double, string>，可以通过VariantChoice的构造函数完成，它接受T类型的值:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{variant/variantchoiceinit.hpp}
+\filename{variant/variantchoiceinit.hpp}
 \begin{lstlisting}[style=styleCXX]
 #include <utility> // for std::move()
 
@@ -63,13 +61,11 @@ Variant(string const&);
 Variant(string&&);
 \end{lstlisting}
 
-\subsubsubsection{26.4.2\hspace{0.2cm}销毁}
+\subsection{销毁}
 
 初始化Variant时，将在其缓冲区中构造一个值。destroy操作为该值的销毁过程:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{variant/variantchoicedestroy.hpp}
+\filename{variant/variantchoicedestroy.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename T, typename... Types>
 bool VariantChoice<T, Types...>::destroy() {
@@ -85,9 +81,7 @@ bool VariantChoice<T, Types...>::destroy() {
 当辨别器匹配时，通过使用\texttt{->}~T()调用适当的析构函数，可以显式地销毁缓冲区中的内容。 
 VariantChoice::destroy()操作只有在辨别器匹配时才有用。但我们通常希望销毁存储在Variant中的值，而不考虑当前的类型。因此，Variant::destroy()在基类中调用VariantChoice::destroy()的操作:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{variant/variantdestroy.hpp}
+\filename{variant/variantdestroy.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename... Types>
 void Variant<Types...>::destroy() {
@@ -104,9 +98,7 @@ void Variant<Types...>::destroy() {
 
 数组结果本身只是提供了一个使用初始化列表的上下文;它的实际值会忽略。C++17中，可以使用折叠表达式(在第12.4.6节中讨论过)来消除这个变量:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{variant/variantdestroy17.hpp}
+\filename{variant/variantdestroy17.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename... Types>
 void Variant<Types...>::destroy()
@@ -120,13 +112,11 @@ void Variant<Types...>::destroy()
 \end{lstlisting}
 
 
-\subsubsubsection{26.4.3\hspace{0.2cm}赋值}
+\subsection{赋值}
 
 赋值构建在初始化和销毁的基础上，如赋值操作符所示:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{variant/variantchoiceassign.hpp}
+\filename{variant/variantchoiceassign.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename T, typename... Types>
 auto VariantChoice<T, Types...>::operator= (T const& value) -> Derived& {
@@ -182,7 +172,6 @@ using VariantChoice<Types, Types...>::operator=...;
 std::launder()
 \end{itemize}
 
-\hspace*{\fill} \\ %插入空行
 \noindent
 \textbf{自赋值}
 
@@ -194,7 +183,6 @@ v = v.get<T>()
 
 上面实现的两步过程中，源值将在复制之前销毁，这可能会导致内存损坏。不过，自赋值意味着辨别器匹配，所以这样的代码将调用T的赋值操作符。
 
-\hspace*{\fill} \\ %插入空行
 \noindent
 \textbf{异常}
 
@@ -202,9 +190,7 @@ v = v.get<T>()
 
 下面的程序演示了如何通过复制构造函数，抛出的类型的值来生成无值Variant:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{variant/variantexception.cpp}
+\filename{variant/variantexception.cpp}
 \begin{lstlisting}[style=styleCXX]
 include "variant.hpp"
 #include <exception>
@@ -258,9 +244,7 @@ Variant has no value.
 
 对没有值的Variant访问，无论是通过get()还是通过下面一节描述的访问者机制，都会抛出EmptyVariant异常，并允许程序从这种异常情况中恢复。empty()成员函数检查变量可以检查，Variant实例是否处于空状态:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{variant/variantempty.hpp}
+\filename{variant/variantempty.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename... Types>
 bool Variant<Types...>::empty() const {
@@ -270,7 +254,6 @@ bool Variant<Types...>::empty() const {
 
 两步赋值的第三个问题很微妙，C++标准化委员会直到C++17标准化结束时才意识到这个问题。下面先简要地解释一下。
 
-\hspace*{\fill} \\ %插入空行
 \noindent
 \textbf{std::launder()}
 

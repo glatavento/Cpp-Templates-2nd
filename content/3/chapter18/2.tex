@@ -29,9 +29,7 @@ void myDraw (GeoObj const& obj) // GeoObj is template parameter
 
 可以尝试使用静态多态性重新写前一节的示例。首先，有几个单独的几何类，而不是几何类的层次结构:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{poly/statichier.hpp}
+\filename{poly/statichier.hpp}
 \begin{lstlisting}[style=styleCXX]
 #include "coord.hpp"
 // concrete geometric object class Circle
@@ -56,9 +54,7 @@ class Line {
 
 这些类的应用如下所示:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{poly/statichier.cpp}
+\filename{poly/statichier.cpp}
 \begin{lstlisting}[style=styleCXX]
 #include "statichier.hpp"
 #include <vector>

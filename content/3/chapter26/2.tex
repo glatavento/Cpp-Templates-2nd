@@ -3,9 +3,7 @@
 
 下面定义的类模板VariantChoice提供了在变量的活动值为(或将为)T类型时，对缓冲区进行操作所需的操作:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{variant/variantchoice.hpp}
+\filename{variant/variantchoice.hpp}
 \begin{lstlisting}[style=styleCXX]
 #include "findindexof.hpp"
 template<typename T, typename... Types>
@@ -31,9 +29,7 @@ class VariantChoice {
 
 模板参数包Types将包含变体中的所有类型，其可以形成Derived类型(用于CRTP)，从而提供向下转换操作getDerived()。类型的第二个有趣用法是，在类型列表中查找特定类型T的位置，可以通过元函数FindIndexOfT完成:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{variant/findindexof.hpp}
+\filename{variant/findindexof.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename List, typename T, unsigned N = 0,
 		bool Empty = IsEmpty<List>::value>
@@ -59,9 +55,7 @@ struct FindIndexOfT<List, T, N, true>
 
 Variant的框架如下，表明了Variant、VariantStorage和VariantChoice之间的关系:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{variant/variant-skel.hpp}
+\filename{variant/variant-skel.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename... Types>
 class Variant
@@ -110,9 +104,7 @@ VariantChoice<std::string, int, double, std::string>
 
 Variant的完整定义如下所示，下面几节将描述Variant每个成员的实现。
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{variant/variant.hpp}
+\filename{variant/variant.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename... Types>
 class Variant

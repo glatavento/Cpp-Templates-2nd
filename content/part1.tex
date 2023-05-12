@@ -1,0 +1,307 @@
+\pagecolor{mygray}
+\color{white}
+
+\part{第一部分：基础知识}
+
+介绍C++模板的基础概念和语言特性，通过函数模板和类模板讨论其目的和概念。再介绍其他的模板特性，比如:非类型模板参数，可变参模板，typename关键字和成员模板。并且，讨论如何处理移动语义，如何声明模板参数，以及如何使用泛型进行编译时编程。本节最后会对一些术语和模板在实际中的应用，给开发工程师和泛型库的开发者们提供一些建议。
+
+\section*{为何需要模板？}
+
+C++要求使用特定类型声明变量、函数和大多数其他类型的实体。但是，对于不同的类型，很多代码看起来一样。例如，算法快速排序的实现对于不同的数据结构(比如array<int>或vector<string>)在结构上看就是相同的，只要所包含的类型可以相互比较。
+
+如果编程语言不支持这种泛型特性，就只有这些(糟糕的)替代方案了:
+
+\begin{enumerate}
+  \item 对不同类型重复实现相同的算法。
+  \item 公共基类(比如\texttt{Object}和\texttt{void*})里面实现通用算法。
+  \item 使用预处理。
+\end{enumerate}
+
+若从其它语言转投C++，可能已经使用过以上的方法了。这里来说说他们的缺点：
+
+\begin{enumerate}
+  \item 重复实现相同算法，就是重复地造轮子！并且会犯相同的错误。为了避免犯更多的错误，不会使用复杂但高效的算法。
+
+  \item 公共基类里实现统一的代码，就等于放弃了类型检查。而且，有时候某些类必须要从特殊的基类派生出来，这会增加代码维护的成本。
+
+  \item 采用预处理的方式，就需要实现一些“笨拙的文本替换”，这很难兼顾作用域和类型检查，更容易引发奇怪的错误。
+\end{enumerate}
+
+而模板就不会有这些问题，它就是为了一种或多种未明确定义的类型而定义的函数或者类。使用模板时，需要显式地或隐式地指定模板参数。由于模板是C++的特性，肯定会检查类型和作用域。
+
+目前模板使用的很广，在C++标准库中，几乎所有的代码都用到了模板。标准库提供了一些针对某种特定类型的值或对象的排序算法，也提供一些数据结构(也叫容器)来维护某种特定类型的元素，对于字符串而言，“特定类型”就是“字符”。当然，这只是最基础的功能。模板还允许参数化函数或类的行为，优化代码以及参数化其他信息。这些高级特性会在后面介绍，先从简单的模板开始吧。
+
+\pagecolor{white}
+\color{black}
+
+\subfile{part1/ch1.tex}
+\subfile{part1/ch2.tex}
+
+% \chapter{非类型模板参数}
+% \addcontentsline{toc}{section}{第3章\hspace{0.5cm}非类型模板参数}
+% \subfile{part1/chapter3/0.tex}
+
+% \section{类模板参数}
+% \addcontentsline{toc}{section}{3.1.\hspace{0.2cm}类模板参数}
+% \subfile{part1/chapter3/1.tex}
+
+% \section{函数模板参数}
+% \addcontentsline{toc}{section}{3.2.\hspace{0.2cm}函数模板参数}
+% \subfile{part1/chapter3/2.tex}
+
+% \section{模板参数的限制}
+% \addcontentsline{toc}{section}{3.3.\hspace{0.2cm}模板参数的限制}
+% \subfile{part1/chapter3/3.tex}
+
+% \section{模板参数类型auto}
+% \addcontentsline{toc}{section}{3.4.\hspace{0.2cm}模板参数类型auto}
+% \subfile{part1/chapter3/4.tex}
+
+% \section{总结}
+% \addcontentsline{toc}{section}{3.5.\hspace{0.2cm}总结}
+% \subfile{part1/chapter3/5.tex}
+% \newpage
+
+% \chapter{可变参数模板}
+% \addcontentsline{toc}{section}{第4章\hspace{0.5cm}可变参数模板}
+% \subfile{part1/chapter4/0.tex}
+
+% \section{介绍}
+% \addcontentsline{toc}{section}{4.1.\hspace{0.2cm}介绍}
+% \subfile{part1/chapter4/1.tex}
+
+% \section{折叠表达式}
+% \addcontentsline{toc}{section}{4.2.\hspace{0.2cm}折叠表达式}
+% \subfile{part1/chapter4/2.tex}
+
+% \section{应用}
+% \addcontentsline{toc}{section}{4.3.\hspace{0.2cm}应用}
+% \subfile{part1/chapter4/3.tex}
+
+% \section{类模板和表达式}
+% \addcontentsline{toc}{section}{4.4.\hspace{0.2cm}类模板和表达式}
+% \subfile{part1/chapter4/4.tex}
+
+% \section{总结}
+% \addcontentsline{toc}{section}{4.5.\hspace{0.2cm}总结}
+% \subfile{part1/chapter4/5.tex}
+% \newpage
+
+% \chapter{基础技巧}
+% \addcontentsline{toc}{section}{第5章\hspace{0.5cm}基础技巧}
+% \subfile{part1/chapter5/0.tex}
+
+% \section{关键字typename}
+% \addcontentsline{toc}{section}{5.1.\hspace{0.2cm}关键字typename}
+% \subfile{part1/chapter5/1.tex}
+
+% \section{零值初始化}
+% \addcontentsline{toc}{section}{5.2.\hspace{0.2cm}零值初始化}
+% \subfile{part1/chapter5/2.tex}
+
+% \section{使用this\texttt{->}}
+% \addcontentsline{toc}{section}{5.3.\hspace{0.2cm}使用this\texttt{->}}
+% \subfile{part1/chapter5/3.tex}
+
+% \section{原始数组和字符串字面量的模板}
+% \addcontentsline{toc}{section}{5.4.\hspace{0.2cm}原始数组和字符串字面量的模板}
+% \subfile{part1/chapter5/4.tex}
+
+% \section{成员模板}
+% \addcontentsline{toc}{section}{5.5.\hspace{0.2cm}成员模板}
+% \subfile{part1/chapter5/5.tex}
+
+% \section{变量模板}
+% \addcontentsline{toc}{section}{5.6.\hspace{0.2cm}变量模板}
+% \subfile{part1/chapter5/6.tex}
+
+% \section{双重模板参数}
+% \addcontentsline{toc}{section}{5.7.\hspace{0.2cm}双重模板参数}
+% \subfile{part1/chapter5/7.tex}
+
+% \section{总结}
+% \addcontentsline{toc}{section}{5.8.\hspace{0.2cm}总结}
+% \subfile{part1/chapter5/8.tex}
+% \newpage
+
+% \chapter{移动语义与enable\_if<>}
+% \addcontentsline{toc}{section}{第6章\hspace{0.5cm}移动语义与enable\_if<>}
+% \subfile{part1/chapter6/0.tex}
+
+% \section{完美转发}
+% \addcontentsline{toc}{section}{6.1.\hspace{0.2cm}完美转发}
+% \subfile{part1/chapter6/1.tex}
+
+% \section{特殊成员函数模板}
+% \addcontentsline{toc}{section}{6.2.\hspace{0.2cm}特殊成员函数模板}
+% \subfile{part1/chapter6/2.tex}
+
+% \section{使用enable\_if<>禁用模板}
+% \addcontentsline{toc}{section}{6.3.\hspace{0.2cm}使用enable\_if<>禁用模板}
+% \subfile{part1/chapter6/3.tex}
+
+% \section{使用enable\_if<>}
+% \addcontentsline{toc}{section}{6.4.\hspace{0.2cm}使用enable\_if<>}
+% \subfile{part1/chapter6/4.tex}
+
+% \section{使用概念简化enable\_if<>表达式}
+% \addcontentsline{toc}{section}{6.5.\hspace{0.2cm}使用概念简化enable\_if<>表达式}
+% \subfile{part1/chapter6/5.tex}
+
+% \section{总结}
+% \addcontentsline{toc}{section}{6.6.\hspace{0.2cm}总结}
+% \subfile{part1/chapter6/6.tex}
+% \newpage
+
+% \chapter{使用值还是引用?}
+% \addcontentsline{toc}{section}{第7章\hspace{0.5cm}使用值还是引用?}
+% \subfile{part1/chapter7/0.tex}
+
+% \section{按值传递}
+% \addcontentsline{toc}{section}{7.1.\hspace{0.2cm}按值传递}
+% \subfile{part1/chapter7/1.tex}
+
+% \section{按引用传递}
+% \addcontentsline{toc}{section}{7.2.\hspace{0.2cm}按引用传递}
+% \subfile{part1/chapter7/2.tex}
+
+% \section{使用std::ref()和std::cref()}
+% \addcontentsline{toc}{section}{7.3.\hspace{0.2cm}使用std::ref()和std::cref()}
+% \subfile{part1/chapter7/3.tex}
+
+% \section{处理字符串字面值和数组}
+% \addcontentsline{toc}{section}{7.4.\hspace{0.2cm}处理字符串字面值和数组}
+% \subfile{part1/chapter7/4.tex}
+
+% \section{处理返回值}
+% \addcontentsline{toc}{section}{7.5.\hspace{0.2cm}处理返回值}
+% \subfile{part1/chapter7/5.tex}
+
+% \section{推荐的模板参数声明}
+% \addcontentsline{toc}{section}{7.6.\hspace{0.2cm}推荐的模板参数声明}
+% \subfile{part1/chapter7/6.tex}
+
+% \section{总结}
+% \addcontentsline{toc}{section}{7.7.\hspace{0.2cm}总结}
+% \subfile{part1/chapter7/7.tex}
+% \newpage
+
+% \chapter{编译时编程}
+% \addcontentsline{toc}{section}{第8章\hspace{0.5cm}编译时编程}
+% \subfile{part1/chapter8/0.tex}
+
+% \section{模板元编程}
+% \addcontentsline{toc}{section}{8.1.\hspace{0.2cm}模板元编程}
+% \subfile{part1/chapter8/1.tex}
+
+% \section{使用constexpr进行计算}
+% \addcontentsline{toc}{section}{8.2.\hspace{0.2cm}使用constexpr进行计算}
+% \subfile{part1/chapter8/2.tex}
+
+% \section{使用偏特化的执行路径选择}
+% \addcontentsline{toc}{section}{8.3.\hspace{0.2cm}使用偏特化的执行路径选择}
+% \subfile{part1/chapter8/3.tex}
+
+% \section{SFINAE(替换失败不为过)}
+% \addcontentsline{toc}{section}{8.4.\hspace{0.2cm}SFINAE(替换失败不为过)}
+% \subfile{part1/chapter8/4.tex}
+
+% \section{编译时if}
+% \addcontentsline{toc}{section}{8.5.\hspace{0.2cm}编译时if}
+% \subfile{part1/chapter8/5.tex}
+
+% \section{总结}
+% \addcontentsline{toc}{section}{8.6.\hspace{0.2cm}总结}
+% \subfile{part1/chapter8/6.tex}
+% \newpage
+
+% \chapter{实际使用模板}
+% \addcontentsline{toc}{section}{第9章\hspace{0.5cm}实际使用模板}
+% \subfile{part1/chapter9/0.tex}
+
+% \section{包含模型}
+% \addcontentsline{toc}{section}{9.1.\hspace{0.2cm}包含模型}
+% \subfile{part1/chapter9/1.tex}
+
+% \section{模板和内联}
+% \addcontentsline{toc}{section}{9.2.\hspace{0.2cm}模板和内联}
+% \subfile{part1/chapter9/2.tex}
+
+% \section{预编译头文件}
+% \addcontentsline{toc}{section}{9.3.\hspace{0.2cm}预编译头文件}	
+% \subfile{part1/chapter9/3.tex}
+
+% \section{解析编译错误}
+% \addcontentsline{toc}{section}{9.4.\hspace{0.2cm}解析编译错误}
+% \subfile{part1/chapter9/4.tex}
+
+% \section{后记}
+% \addcontentsline{toc}{section}{9.5.\hspace{0.2cm}后记}
+% \subfile{part1/chapter9/5.tex}
+
+% \section{总结}
+% \addcontentsline{toc}{section}{9.6.\hspace{0.2cm}总结}
+% \subfile{part1/chapter9/6.tex}
+% \newpage
+
+% \chapter{基本模板的术语}
+% \addcontentsline{toc}{section}{第10章\hspace{0.5cm}基本模板的术语}
+% \subfile{part1/chapter10/0.tex}
+
+% \section{“类模板”还是“模板类”?}
+% \addcontentsline{toc}{section}{10.1.\hspace{0.2cm}“类模板”还是“模板类”?}
+% \subfile{part1/chapter10/1.tex}
+
+% \section{替换、实例化和特化}
+% \addcontentsline{toc}{section}{10.2.\hspace{0.2cm}替换、实例化和特化}
+% \subfile{part1/chapter10/2.tex}
+
+% \section{声明和定义}
+% \addcontentsline{toc}{section}{10.3.\hspace{0.2cm}声明和定义}
+% \subfile{part1/chapter10/3.tex}
+
+% \section{定义规则}
+% \addcontentsline{toc}{section}{10.4.\hspace{0.2cm}定义规则}
+% \subfile{part1/chapter10/4.tex}
+
+% \section{模板实参与模板形参}
+% \addcontentsline{toc}{section}{10.5.\hspace{0.2cm}模板实参与模板形参}
+% \subfile{part1/chapter10/5.tex}
+
+% \section{总结}
+% \addcontentsline{toc}{section}{10.6.\hspace{0.2cm}总结}
+% \subfile{part1/chapter10/6.tex}
+% \newpage
+
+% \chapter{通用库}
+% \addcontentsline{toc}{section}{第11章\hspace{0.5cm}通用库}
+% \subfile{part1/chapter11/0.tex}
+
+% \section{可调用类型}
+% \addcontentsline{toc}{section}{11.1.\hspace{0.2cm}可调用类型}
+% \subfile{part1/chapter11/1.tex}
+
+% \section{实现通用库}
+% \addcontentsline{toc}{section}{11.2.\hspace{0.2cm}实现通用库}
+% \subfile{part1/chapter11/2.tex}
+
+% \section{完美转发临时变量}
+% \addcontentsline{toc}{section}{11.3.\hspace{0.2cm}完美转发临时变量}
+% \subfile{part1/chapter11/3.tex}
+
+% \section{模板参数的引用}
+% \addcontentsline{toc}{section}{11.4.\hspace{0.2cm}模板参数的引用}
+% \subfile{part1/chapter11/4.tex}
+
+% \section{缓式评估}
+% \addcontentsline{toc}{section}{11.5.\hspace{0.2cm}缓式评估}
+% \subfile{part1/chapter11/5.tex}
+
+% \section{编写泛型库}
+% \addcontentsline{toc}{section}{11.6.\hspace{0.2cm}编写泛型库}
+% \subfile{part1/chapter11/6.tex}
+
+% \section{总结}
+% \addcontentsline{toc}{section}{11.7.\hspace{0.2cm}总结}
+% \subfile{part1/chapter11/7.tex}
+% \newpage

@@ -36,7 +36,7 @@ template<typename T, // the first parameter is used
 class Structure;
 \end{lstlisting}
 
-\subsubsubsection{12.2.1\hspace{0.2cm}类型参数}
+\subsection{类型参数}
 
 类型参数是通过关键字typename或关键字class引入的:两者等价。
 
@@ -57,7 +57,7 @@ class List {
 };
 \end{lstlisting}
 
-\subsubsubsection{12.2.2\hspace{0.2cm}非类型参数}
+\subsection{非类型参数}
 
 非类型模板参数表示可在编译或链接时确定的常量。
 
@@ -145,7 +145,7 @@ struct LocalIncrement {
 
 并且，不允许右值引用。
 
-\subsubsubsection{12.2.3\hspace{0.2cm}双重模板参数}
+\subsection{双重模板参数}
 
 双重参数是类模板或别名模板的占位符。声明很像类模板，但关键字struct和union不能使用:
 
@@ -201,7 +201,7 @@ class Adaptation {
 };
 \end{lstlisting}
 
-\subsubsubsection{12.2.4\hspace{0.2cm}模板参数包}
+\subsection{模板参数包}
 
 C++11后，任何类型的模板参数都可以通过在模板参数名之前引入省略号(…)转换为模板参数包。若板参数未命名，需要对模板参数进行命名:
 
@@ -280,7 +280,7 @@ ArgList<int, char, char>::Vals<3, ’x’, ’y’> tada;
 
 因为能接受可变数量的模板参数，所以包含模板参数包的模板称为可变参数模板。第4章和第12.4节在描述了可变参数模板的使用。
 
-\subsubsubsection{12.2.5\hspace{0.2cm}默认模板参数}
+\subsection{默认模板参数}
 
 非模板参数包中的模板参数都可以配备一个默认参数，必须在类型上与相应的参数匹配(例如，类型参数不能有非类型的默认参数)。默认参数不能依赖于自己的参数，因为参数名直到默认参数之后才在作用域中。但是，其可能取决于之前的参数:
 

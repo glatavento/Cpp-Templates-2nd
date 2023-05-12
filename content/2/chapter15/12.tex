@@ -26,7 +26,7 @@ C<> c11(22, 44.3, 42); // ERROR: neither T1 nor T2 explicitly specified
 C<string,string> c12("hi","my"); // OK: T1 and T2 are deduced, T3 has default
 \end{lstlisting}
 
-\subsubsubsection{15.12.1\hspace{0.2cm}推导指引}
+\subsection{推导指引}
 
 考虑对15.8.2节中前面例子做的一个改动:
 
@@ -128,7 +128,7 @@ A a5(42); // ERROR: not aggregate initialization
 A a6 = 42; // ERROR: not aggregate initialization
 \end{lstlisting}
 
-\subsubsubsection{15.12.2\hspace{0.2cm}隐式推导指引}
+\subsection{隐式推导指引}
 
 通常，类模板中的每个构造函数都需要推导指引。这导致类模板参数推导的设计者为推导设计了一种隐式机制。这相当于为主类模板的每个构造函数和构造函数模板引入一个隐式推导指引，如下所示:
 
@@ -219,9 +219,8 @@ template<typename> S(typename ValueArg<T>::Type) -> S<T>;
 
 库作者该怎么做?建议仔细考虑每个构造函数是否希望在库的生命周期中，将其作为隐式推导指引的来源。如果不是，则用typename ValueArg<X>::Type替换类型为X(可推导构造函数参数)的每个实例。但是，没有更简单的方法可以“退出”隐式推导指引。
 
-\subsubsubsection{15.12.3\hspace{0.2cm}其他要点}
+\subsection{其他要点}
 
-\hspace*{\fill} \\ %插入空行
 \noindent
 \textbf{注入类名}
 
@@ -241,7 +240,6 @@ template<typename T> struct X {
 为了保持向后兼容性，若模板的名称是注入类名，则禁用类模板参数进行推导。
 
 
-\hspace*{\fill} \\ %插入空行
 \noindent
 \textbf{转发引用}
 
@@ -270,7 +268,6 @@ template<typename T> Y(T&&) -> Y<T>; // #2
 
 因此，C++标准化委员会决定在隐式推导指引执行推导时，禁用T的特殊推导指引。若T最初是一个类模板参数(与构造函数模板参数相反;对于这些，特殊的推导规则仍然存在)，如上例推断T为std::string那样。
 
-\hspace*{\fill} \\ %插入空行
 \noindent
 \textbf{explicit关键字}
 
@@ -291,7 +288,6 @@ Z z2{2}; // prefers #2 ; same as: Z<int, int> z2{2};
 
 注意，z1的初始化是复制初始化。因为它是显式声明的，所以推导指引\#2没用到。
 
-\hspace*{\fill} \\ %插入空行
 \noindent
 \textbf{复制构造和初始化列表}
 
@@ -341,7 +337,6 @@ auto e = Tuple{x};
 
 这里，e推导为一个Tuple<int, int>，而不是Tuple<Tuple<int>{}>。
 
-\hspace*{\fill} \\ %插入空行
 \noindent
 \textbf{指引仅为推导所用}
 

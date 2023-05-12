@@ -1,13 +1,11 @@
 
 最后，介绍并讨论一些定义特征的其他方法。
 
-\subsubsubsection{19.7.1\hspace{0.2cm}If-Then-Else}
+\subsection{If-Then-Else}
 
 上一节中，根据另一种类型特征HasPlusT的结果，PlusResultT特征的最终定义是一个完全不同的实现。可以用一个特殊的类型模板IfThenElse来表达这个if-else行为，其接受一个布尔型非类型模板参数，可以从两个类型参数中选择一个:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/ifthenelse.hpp}
+\filename{traits/ifthenelse.hpp}
 \begin{lstlisting}[style=styleCXX]
 #ifndef IFTHENELSE_HPP
 #define IFTHENELSE_HPP
@@ -33,9 +31,7 @@ using IfThenElse = typename IfThenElseT<COND, TrueType, FalseType>::Type;
 
 下面的示例，通过定义一个类型函数来确定给定值的最低整数类型，来演示此模板的应用:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/smallestint.hpp}
+\filename{traits/smallestint.hpp}
 \begin{lstlisting}[style=styleCXX]
 #include <limits>
 #include "ifthenelse.hpp"
@@ -141,7 +137,7 @@ struct UnsignedT {
 };
 \end{lstlisting}
 
-\subsubsubsection{19.7.2\hspace{0.2cm}检测非抛出操作}
+\subsection{检测非抛出操作}
 
 确定某个特定操作是否会引发异常有时有用。例如，移动构造函数应该标记为noexcept，表明在任何情况下都不会抛出异常。然而，特定类的移动构造函数是否抛出异常，通常取决于其成员和基类的移动构造函数是否抛出异常。考虑一个简单的类模板Pair的移动构造函数:
 
@@ -170,9 +166,7 @@ second(std::forward<T2>(other.second))
 
 剩下的工作就是实现IsNothrowMoveConstructibleT特征。可以使用noexcept操作符直接实现此特征，确定给定表达式是否不抛出异常:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/isnothrowmoveconstructible1.hpp}
+\filename{traits/isnothrowmoveconstructible1.hpp}
 \begin{lstlisting}[style=styleCXX]
 #include <utility> // for declval
 #include <type_traits> // for bool_constant
@@ -205,9 +199,7 @@ std::cout << IsNothrowMoveConstructibleT<E>::value; // compile-time ERROR
 
 必须在计算结果的表达式求值之前检查其是否有效，要先弄清楚移动构造是否有效，然后再检查是否有例外。因此，修改了特征的第一个版本，添加了一个默认为void的模板参数参和一个使用std::void\_t的局部参数，该参数只有当移动构造有效时才有效:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/isnothrowmoveconstructible2.hpp}
+\filename{traits/isnothrowmoveconstructible2.hpp}
 \begin{lstlisting}[style=styleCXX]
 #include <utility> // for declval
 #include <type_traits> // for true_type, false_type, and bool_constant<>
@@ -233,7 +225,7 @@ struct IsNothrowMoveConstructibleT
 
 C++标准库提供了相应的类型特征std::is\_move\_constructible<>，在第D.3.2节中描述。
 
-\subsubsubsection{19.7.3\hspace{0.2cm}特征的便利性}
+\subsection{特征的便利性}
 
 对于类型特征的常见抱怨是它们非常冗长，因为类型特征的每次使用通常需要尾随::type，并在上下文中需要前置typename关键字，两者都是样板。当组合多个类型特征时，这可能会导致一些尴尬的格式化，比如在运行的数组加法操作符的例子中，若正确地实现它，确保没有返回常量或引用类型:
 
@@ -251,7 +243,6 @@ operator+ (Array<T1> const&, Array<T2> const&);
 
 通过使用别名模板和变量模板，可以更方便地使用特征，分别生成类型或值。但这些快捷方式有时可能不可用的，这时必须使用原始的类模板。我们已经在MemberPointerToIntT示例中讨论过这样的情况，但接下来将进行更通用的讨论。
 
-\hspace*{\fill} \\ %插入空行
 \noindent
 \textbf{别名模板和特征}
 
@@ -297,7 +288,6 @@ operator+ (Array<T1> const&, Array<T2> const&);
 
 由于历史原因，C++标准库有不同的约定。类型特征类模板产生类型中的类型，并且没有特定的后缀(很多是在C++11中引入的)。因为没有后缀的名称已经标准化(参见D.1节)，相应的别名模板(直接产生类型)在C++14中引入，并赋予了\_t后缀。
 
-\hspace*{\fill} \\ %插入空行
 \noindent
 \textbf{可变参模板和特征}
 

@@ -1,8 +1,6 @@
 FunctorBridge的每个实例都是抽象类，因此其派生类负责提供虚函数的实现。为了支持潜在函数对象的完整范围(无界集合)，需要无界的派生类。可以通过对派生类存储的函数对象类型，进行参数化来实现:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{bridge/specificfunctorbridge.hpp}
+\filename{bridge/specificfunctorbridge.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename Functor, typename R, typename... Args>
 class SpecificFunctorBridge : public FunctorBridge<R, Args...> {
@@ -23,9 +21,7 @@ class SpecificFunctorBridge : public FunctorBridge<R, Args...> {
 
 每个SpecificFunctorBridge实例存储一个函数对象的副本(类型是Functor)，可以调用、复制或销毁(析构函数中隐式进行)。当一个FunctionPtr初始化为新的函数对象时，特定的functorbridge实例将创建，完成FunctionPtr示例:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{bridge/functionptr-init.hpp}
+\filename{bridge/functionptr-init.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename R, typename... Args>
 template<typename F>

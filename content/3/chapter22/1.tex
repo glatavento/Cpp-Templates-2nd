@@ -1,9 +1,7 @@
 
 函数对象对于为模板提供可定制的行为，下面的函数模板枚举从0到某个值的整数值，并将每个值提供给给定的函数对象f:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{bridge/forupto1.cpp}
+\filename{bridge/forupto1.cpp}
 \begin{lstlisting}[style=styleCXX]
 #include <vector>
 #include <iostream>
@@ -43,9 +41,7 @@ forUpTo()函数模板可以与函数对象一起使用，包括Lambda、函数�
 
 限制代码量增加的方法，是将函数模板转换为不需要实例化的非模板。可以尝试使用函数指针:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{bridge/forupto2.hpp}
+\filename{bridge/forupto2.hpp}
 \begin{lstlisting}[style=styleCXX]
 void forUpTo(int n, void (*f)(int))
 {
@@ -70,9 +66,7 @@ forUpTo(5,
 
 标准库的类模板std::function<>允许使用forUpTo()的替代表达式:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{bridge/forupto3.hpp}
+\filename{bridge/forupto3.hpp}
 \begin{lstlisting}[style=styleCXX]
 #include <functional>
 void forUpTo(int n, std::function<void(int)> f)

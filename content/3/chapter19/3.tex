@@ -3,9 +3,7 @@
 
 sizeof是一个有用的内置类型函数，其返回一个常量，描述给定类型参数的大小(以字节为单位)。类模板也可以用作类型函数。类型函数的参数是模板参数，结果作为成员类型或成员常量提取。sizeof操作符可以实现如下接口:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/sizeof.cpp}
+\filename{traits/sizeof.cpp}
 \begin{lstlisting}[style=styleCXX]
 #include <cstddef>
 #include <iostream>
@@ -26,13 +24,11 @@ int main()
 
 接下来的内容中，将开发更多的通用类型函数，并可以以这种方式作为特征类。
 
-\subsubsubsection{19.3.1\hspace{0.2cm}元素类型}
+\subsection{元素类型}
 
 假设有许多容器模板(std::vector<>和std::list<>)，以及内置数组。需要一个类型函数，给定这样的容器类型，该类型函数生成元素类型。这可以通过使用偏特化来实现:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/elementtype.hpp}
+\filename{traits/elementtype.hpp}
 \begin{lstlisting}[style=styleCXX]
 #include <vector>
 #include <list>
@@ -67,9 +63,7 @@ struct ElementT<T[]> { // partial specialization for arrays of unknown bounds
 
 可以这样使用类型函数:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/elementtype.cpp}
+\filename{traits/elementtype.cpp}
 \begin{lstlisting}[style=styleCXX]
 #include "elementtype.hpp"
 #include <vector>
@@ -150,19 +144,16 @@ template<typename C>
 ElementType<C> sumOfElements (C const& c);
 \end{lstlisting}
 
-\subsubsubsection{19.3.2\hspace{0.2cm}特征变换}
+\subsection{特征变换}
 
 除了提供对主参数类型的特定方面的访问外，特征还可以对类型执行转换，例如添加或删除引用或const和volatile限定符。
 
-\hspace*{\fill} \\ %插入空行
 \noindent
 \textbf{删除引用}
 
 可以实现一个RemoveReferenceT特征，将引用类型转换为的底层对象或函数类型，只保留非引用类型:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/removereference.hpp}
+\filename{traits/removereference.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename T>
 struct RemoveReferenceT {
@@ -191,15 +182,12 @@ using RemoveReference = typename RemoveReferenceT<T>::Type;
 
 C++标准库提供了相应的类型特征std::remove\_reference<>，在第D.4节中描述。
 
-\hspace*{\fill} \\ %插入空行
 \noindent
 \textbf{添加引用}
 
 可以找一个已存在的类型，并从中创建一个左值或右值引用(以及别名模板):
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/addreference.hpp}
+\filename{traits/addreference.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename T>
 struct AddLValueReferenceT {
@@ -258,15 +246,12 @@ AddRValueReferenceT也类似，必须根据类模板来制定别名模板，以�
 
 C++标准库提供了相应的类型特征std::add\_lvalue\_reference<>和std::add\_rvalue\_reference<>，在第D.4节中有描述。标准模板包括void类型的特化。
 
-\hspace*{\fill} \\ %插入空行
 \noindent
 \textbf{删除限定符}
 
 转换特征可以分解或引入任何类型的复合类型，而不仅仅是引用。如果存在const限定符，可以删除:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/removeconst.hpp}
+\filename{traits/removeconst.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename T>
 struct RemoveConstT {
@@ -284,9 +269,7 @@ using RemoveConst = typename RemoveConstT<T>::Type;
 
 此外，特征转换可以组合，比如创建一个RemoveCVT特征，可以同时删除const和volatile:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/removecv.hpp}
+\filename{traits/removecv.hpp}
 \begin{lstlisting}[style=styleCXX]
 #include "removeconst.hpp"
 #include "removevolatile.hpp"
@@ -318,7 +301,6 @@ using RemoveCV = RemoveConst<RemoveVolatile<T>>;
 
 C++标准库也提供了相应的类型特征std::remove\_volatile<>， std::remove\_const<>，和std::remove\_cv<>，在第D.4节中有描述。
 
-\hspace*{\fill} \\ %插入空行
 \noindent
 \textbf{衰变}
 
@@ -326,9 +308,7 @@ C++标准库也提供了相应的类型特征std::remove\_volatile<>， std::rem
 
 这种按值传递的效果可以在下面的程序中看到，打印出编译器衰变指定类型后产生的实际参数类型:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/passbyvalue.cpp}
+\filename{traits/passbyvalue.cpp}
 \begin{lstlisting}[style=styleCXX]
 #include <iostream>
 #include <typeinfo>
@@ -410,9 +390,7 @@ struct DecayT<R(Args..., ...)> {
 
 主DecayT模板和它的四个偏特化一起实现参数类型衰变，如下例程序所示:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/decay.cpp}
+\filename{traits/decay.cpp}
 \begin{lstlisting}[style=styleCXX]
 #include <iostream>
 #include <typeinfo>
@@ -447,19 +425,16 @@ using Decay = typename DecayT<T>::Type;
 
 C++标准库还提供了相应的类型特征std::decay<>，在第D.4节中描述。
 
-\subsubsubsection{19.3.3\hspace{0.2cm}谓词特征}
+\subsection{谓词特征}
 
 我们已经研究和开发了单一类型的类型函数:给定一个类型，提供其他相关的类型或常量。但是，通常可以开发依赖多个参数的类型函数。这也导致了一种特殊形式的类型特征，类型谓词(产生布尔值的类型函数)。
 
-\hspace*{\fill} \\ %插入空行
 \noindent
 \textbf{IsSameT}
 
 IsSameT特征会产生两种类型是否相等:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/issame0.hpp}
+\filename{traits/issame0.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename T1, typename T2>
 struct IsSameT {
@@ -489,15 +464,12 @@ constexpr bool isSame = IsSameT<T1, T2>::value;
 
 C++标准库提供了相应的类型特征std::is\_same<>，在第D.3.3节中详述。
 
-\hspace*{\fill} \\ %插入空行
 \noindent
 \textbf{true\_type和false\_type}
 
 可以通过为两种结果，提供不同的类型来改进IsSameT的定义。若声明一个类模板BoolConstant，其中包含TrueType和FalseType两种可能的实例化:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/boolconstant.hpp}
+\filename{traits/boolconstant.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<bool val>
 struct BoolConstant {
@@ -510,9 +482,7 @@ using FalseType = BoolConstant<false>;
 
 可以定义IsSameT，根据这两种类型是否匹配，其派生自TrueType或FalseType:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/issame.hpp}
+\filename{traits/issame.hpp}
 \begin{lstlisting}[style=styleCXX]
 #include "boolconstant.hpp"
 
@@ -535,9 +505,7 @@ IsSameT<T,int>
 
 隐式转换为其基类TrueType或FalseType，不仅提供了相应的值成员，而且可以在编译时，分配给不同的函数实现或类模板偏特化。例如:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/issame.cpp}
+\filename{traits/issame.cpp}
 \begin{lstlisting}[style=styleCXX]
 #include "issame.hpp"
 #include <iostream>
@@ -609,7 +577,7 @@ using bool_constant = integral_constant<bool, B>;
 
 由于这个原因，本书后面章节将直接使用std::true\_type和std::false\_type，特别是在定义类型谓词时。
 
-\subsubsubsection{19.3.4\hspace{0.2cm}结果类型特征} 
+\subsection{结果类型特征} 
 
 处理多种类型函数的另一个例子是结果类型特征，在编写操作符模板时非常有用。为了了解其用法，我们编写一个函数模板，可以添加两个数组容器:
 
@@ -643,9 +611,7 @@ operator+ (Array<T1> const&, Array<T2> const&);
 
 PlusResultT特征通过加法操作符将两种(可能是不同的)类型的值相加，从而确定产生的类型:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/plus1.hpp}
+\filename{traits/plus1.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename T1, typename T2>
 struct PlusResultT {
@@ -677,7 +643,6 @@ operator+ (Array<T1> const&, Array<T2> const&);
 
 当将两个元素类型(可能是不同的)数组相加时，数组加法操作符将正确地计算结果类型。但PlusResultT对元素类型T1和T2添加了一个限制，因为表达式T1()+T2()尝试对T1和T2类型的值进行初始化，这两种类型必须具有可访问的、非删除的默认构造函数(或者是非类类型)。Array类本身可能不需要元素类型的值初始化，因此这是一个不必要的限制。
 
-\hspace*{\fill} \\ %插入空行
 \noindent
 \textbf{declval}
 
@@ -708,9 +673,7 @@ noexcept异常说明说明declval不会导致表达式认为抛出异常。当�
 
 使用declval，可以消除PlusResultT的值初始化要求:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/plus2.hpp}
+\filename{traits/plus2.hpp}
 \begin{lstlisting}[style=styleCXX]
 #include <utility>
 

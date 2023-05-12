@@ -1,15 +1,13 @@
 
 元组是基本的异构容器，有必要考虑如何在运行时(存储、执行时)和编译时(模板实例化数量)优化元组的使用。本节讨论对Tuple实现的一些特定优化。
 
-\subsubsubsection{25.5.1\hspace{0.2cm}元组和EBCO}
+\subsection{元组和EBCO}
 
 元组存储公式使用了更多的存储空间。一个问题是尾部成员最终将是一个空元组，每个非空元组都以一个空元组结束，而且数据成员必须始终有至少一个字节的存储空间。
 
 为了提高元组的存储效率，可以通过继承尾元组而不是使其成为成员来应用21.1节中讨论的空基类优化(EBCO):
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{tuples/tuplestorage1.hpp}
+\filename{tuples/tuplestorage1.hpp}
 \begin{lstlisting}[style=styleCXX]
 // recursive case:
 template<typename Head, typename... Tail>
@@ -33,9 +31,7 @@ class Tuple<Head, Tail...> : private Tuple<Tail...>
 
 这个问题可以通过将头部成员嵌入到基类列表中，位于尾部之前的基类来解决。直接实现将引入一个TupleElt模板，用于封装每个元素类型，以便Tuple可以继承:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{tuples/tuplestorage2.hpp}
+\filename{tuples/tuplestorage2.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename... Types>
 class Tuple;
@@ -87,9 +83,7 @@ class Tuple<> {
 \hspace*{0.75cm}更直观的做法是简单地使用元组元素的索引，而不是高度。因为给定的元组既可能作为独立元组出现，也可能作为另一个元组的尾部出现，所以这些信息在元组中并不容易获得。然而，给定的元组确实知道自己的尾部有多少元素。
 \end{tcolorbox}
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{tuples/tupleelt1.hpp}
+\filename{tuples/tupleelt1.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<unsigned Height, typename T>
 class TupleElt {
@@ -107,9 +101,7 @@ class TupleElt {
 
 通过这个解决方案，可以产生一个Tuple，其使用EBCO，同时保持初始化顺序，并支持同一类型的多个元素:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{tuples/tuplestorage3.hpp}
+\filename{tuples/tuplestorage3.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename... Types>
 class Tuple;
@@ -140,9 +132,7 @@ class Tuple<> {
 
 有了这个实现，再看看下面的程序:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{tuples/compressedtuple1.cpp}
+\filename{tuples/compressedtuple1.cpp}
 \begin{lstlisting}[style=styleCXX]
 #include <algorithm>
 #include "tupleelt1.hpp"
@@ -179,9 +169,7 @@ B()
 
 EBCO删除了一个字节(对于空元组Tuple<>)。但A和B都是空类，这意味着在Tuple中有更多的机会使用EBCO。TupleElt可以进行扩展，在安全的情况下继承元素类型，不需要更改Tuple:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{tuples/tupleelt2.hpp}
+\filename{tuples/tupleelt2.hpp}
 \begin{lstlisting}[style=styleCXX]
 #include <type_traits>
 
@@ -225,15 +213,13 @@ B()
 2 bytes
 \end{lstlisting}
 
-\subsubsubsection{25.5.2\hspace{0.2cm}常量时间的get()}
+\subsection{常量时间的get()}
 
 使用元组时，get()操作非常常见，但它的递归实现需要线性数量的模板实例化，这会影响编译时间。在上一节介绍的EBCO优化已经实现了更有效的get实现，我们将在这里进行描述。
 
 关键的理解是模板参数推导(第15章)，当形参(基类类型)与实参(派生类类型)匹配时，需要推导基类的模板实参。若可以计算想要提取的元素的高度H，就可以靠从Tuple特化到TupleElt<H, T>(其中T需要进行推导)的转换来提取，而无需遍历所有索引:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{tuples/constantget.hpp}
+\filename{tuples/constantget.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<unsigned H, typename T>
 T& getHeight(TupleElt<H,T>& te)

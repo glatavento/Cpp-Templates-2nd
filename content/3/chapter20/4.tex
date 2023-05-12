@@ -27,7 +27,7 @@ class Dictionary
 
 若键类型支持小于操作符，则可以基于标准库的map容器提供更有效的实现。类似地，若键类型支持哈希操作，可以使用标准库的unordered\_map。
 
-\subsubsubsection{20.4.1\hspace{0.2cm}启用/禁用类模板}
+\subsection{启用/禁用类模板}
 
 启用/禁用类模板的不同实现的方法是使用启用/禁用类模板的偏特化。要在类模板偏特化中使用EnableIf，首先向Dictionary引入一个未命名的默认模板参数:
 
@@ -86,7 +86,7 @@ EnableIf<HasHash<Key>>>
 };
 \end{lstlisting}
 
-\subsubsubsection{20.4.2\hspace{0.2cm}类模板的标签调度}
+\subsection{类模板的标签调度}
 
 标签调度也可以用于在类模板偏特化之间进行选择。我们定义了一个函数对象类型Advance<Iterator>，类似于前面章节中使用的advanceIter()算法，将迭代器向前推进若干步。我们提供了通用实现(用于输入迭代器)，以及双向和随机访问迭代器的特化实现，依赖于一个辅助特征BestMatchInSet(如下所述)来为迭代器的类别标签选择最佳匹配:
 

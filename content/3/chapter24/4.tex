@@ -1,8 +1,6 @@
 包扩展(在第12.4.1节中有详细描述)是一种机制，可将类型列表迭代的工作转移给编译器。因为需要对列表中的每个元素应用相同的操作(进行包扩展)，这里可以使用在第24.2.5节中开发的Transform算法。这为类型列表的Transform提供了一个特化算法(通过偏特化):
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{typelist/variadictransform.hpp}
+\filename{typelist/variadictransform.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename... Elements, template<typename T> class MetaFun>
 class TransformT<Typelist<Elements...>, MetaFun, false>
@@ -18,9 +16,7 @@ class TransformT<Typelist<Elements...>, MetaFun, false>
 
 选择给定索引列表中的元素以生成新的类型列表时，可以使用Pack扩展。Select元函数接受一个类型列表和一个包含该类型列表索引的值列表，然后生成一个包含由值列表指定元素的新类型列表:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{typelist/select.hpp}
+\filename{typelist/select.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename Types, typename Indices>
 class SelectT;

@@ -5,9 +5,7 @@
 
 模板实例化并不简单:即使是相对普通的类模板，也可以为每个实例分配超过1千字节的存储空间，并且在编译完成之前不能回收这些存储空间。因此，可以来研究一下使用Sqrt模板的编程细节:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{meta/sqrt1.cpp}
+\filename{meta/sqrt1.cpp}
 \begin{lstlisting}[style=styleCXX]
 #include <iostream>
 #include "sqrt1.hpp"
@@ -87,7 +85,7 @@ value = (16<4*4) ? Sqrt<16,3,3>::value
 value = 4
 \end{lstlisting}
 
-\subsubsubsection{23.3.1\hspace{0.2cm}跟踪所有实例化}
+\subsection{跟踪所有实例化}
 
 上面的分析计算16的平方根，当编译器计算表达式时
 
@@ -100,9 +98,7 @@ value = 4
 
 有一些技术可以减少实例化数量的激增。为了介绍这样的技术，这里重写Sqrt元程序:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{meta/sqrt2.hpp}
+\filename{meta/sqrt2.hpp}
 \begin{lstlisting}[style=styleCXX]
 #include "ifthenelse.hpp"
 

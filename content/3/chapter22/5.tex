@@ -42,9 +42,7 @@ operator==的问题由类型擦除导致，因为当对FunctionPtr赋值或初�
 
 这里可以使用基于SFINAE的特征(第19.4节中讨论)，在调用operator==之前，使用一个复杂的特征查询是否可用:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{bridge/isequalitycomparable.hpp}
+\filename{bridge/isequalitycomparable.hpp}
 \begin{lstlisting}[style=styleCXX]
 #include <utility> // for declval()
 #include <type_traits> // for true_type and false_type
@@ -75,9 +73,7 @@ IsEqualityComparable特征应用了表达式测试特征的形式，如第19.4.1
 
 使用IsEqualityComparable特征，可以构造TryEquals类模板，对给定类型调用==(当该类型可用时)，或者在没有合适的==存在时抛出异常:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{bridge/tryequals.hpp}
+\filename{bridge/tryequals.hpp}
 \begin{lstlisting}[style=styleCXX]
 #include <exception>
 #include "isequalitycomparable.hpp"

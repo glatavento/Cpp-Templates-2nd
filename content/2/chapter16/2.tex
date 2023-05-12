@@ -2,9 +2,7 @@
 
 上一节中，了解了名称相同的两个函数模板可以共存，即使以相同的参数类型实例化。下面是另一个例子:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{deduce/funcoverload1.hpp}
+\filename{deduce/funcoverload1.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename T>
 int f(T)
@@ -23,9 +21,7 @@ int f(T*)
 
 下面演示了如何使用显式模板参数语法，调用这两个生成的函数(假设前面对模板进行了声明):
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{deduce/funcoverload1.cpp}
+\filename{deduce/funcoverload1.cpp}
 \begin{lstlisting}[style=styleCXX]
 #include <iostream>
 #include "funcoverload1.hpp"
@@ -46,7 +42,7 @@ int main()
 
 对于第二次调用，创建的重载集包含f<int>(int)(从第一个模板生成)和f<int>(int*)(从第二个模板生成)，因此只有第二个模板匹配。
 
-\subsubsubsection{16.2.1\hspace{0.2cm}签名}
+\subsection{签名}
 
 如果两个函数有不同的签名，可以在一个程序中共存。函数签名的定义如下所示:
 
@@ -170,7 +166,7 @@ f1(T2, T1)
 f1(T1, T2)
 \end{tcblisting}
 
-\subsubsubsection{16.2.2\hspace{0.2cm}重载函数模板的部分排序}
+\subsection{重载函数模板的部分排序}
 
 重新考虑前面的例子:发现在替换了给定的模板参数列表(<int*>和<int>)后，重载解析最终调用了正确的函数:
 
@@ -181,9 +177,7 @@ std::cout << f<int>((int*)nullptr); // calls f<T>(T*)
 
 因为模板参数推导发挥了作用，即使没有提供显式模板参数，函数也会选中。稍微修改一下前面例子中的main():
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{deduce/funcoverload2.cpp}
+\filename{deduce/funcoverload2.cpp}
 \begin{lstlisting}[style=styleCXX]
 #include <iostream>
 
@@ -217,7 +211,7 @@ f(nullptr):参数的类型是std::nullptr\_t，也只能匹配第一个模板。
 112
 \end{tcblisting}
 
-\subsubsubsection{16.2.3\hspace{0.2cm}正式的排序规则}
+\subsection{正式的排序规则}
 
 上一个示例中，因为第一个模板可以接受任何参数类型，所以第二个模板似乎比第一个模板更特化，而第二个模板只接受指针类型。然而，其他例子并不一定如此直观。接下来，描述了确定参与重载集的函数模板，是否比另一个更特化的过程。这些是部分排序规则:有可能给定两个模板，其中一个比另一个更特化。若重载解析必须在两个这样的模板之间进行选择，则无法做出决定，并且程序包含一个模糊错误。
 
@@ -270,13 +264,11 @@ void example(int* p)
 
 正式的排序规则通常会直接选择函数模板。然而，有时会出现规则与直觉不符的例子。因此，将来可能会修改规则，从而适用于所有例子。
 
-\subsubsubsection{16.2.4\hspace{0.2cm}模板和非模板}
+\subsection{模板和非模板}
 
 函数模板可以用非模板函数重载。在其他条件相同的情况下，选择要调用的函数时，会首选非模板函数:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{details/nontmpl1.cpp}
+\filename{details/nontmpl1.cpp}
 \begin{lstlisting}[style=styleCXX]
 #include <string>
 #include <iostream>
@@ -307,9 +299,7 @@ Nontemplate
 
 但当const限定符和引用限定符不同时，重载解析的优先级可能会改变。例如:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{details/nontmpl2.cpp}
+\filename{details/nontmpl2.cpp}
 \begin{lstlisting}[style=styleCXX]
 #include <string>
 #include <iostream>
@@ -355,9 +345,7 @@ std::string f(T const&)
 
 当成员函数定义接受与复制或移动构造函数相同的参数时，很容易发生意外。例如:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{details/tmplconstr.cpp}
+\filename{details/tmplconstr.cpp}
 \begin{lstlisting}[style=styleCXX]
 #include <string>
 #include <iostream>
@@ -401,13 +389,11 @@ template constructor
 
 当成员函数模板可能隐藏复制或移动构造函数时，通常必须部分禁用这些成员函数模板。这在第6.4节中有解释。
 
-\subsubsubsection{16.2.5\hspace{0.2cm}可变参函数模板}
+\subsection{可变参函数模板}
 
 可变参数函数模板(参见第12.4节)在部分排序过程中需要特殊处理，参数包的推导(在第15.5节中描述)会将单个参数与多个参数匹配。这种行为为函数模板排序引入了几种有趣的情况:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{details/variadicoverload.cpp}
+\filename{details/variadicoverload.cpp}
 \begin{lstlisting}[style=styleCXX]
 #include <iostream>
 
@@ -463,9 +449,7 @@ f<int,double>((int*)nullptr, (double*)nullptr) // for third template
 
 上面描述的规则同样适用于函数签名中的类型中的包扩展。可以将前面示例中每个函数模板的形参和实参包装到可变参数类模板Tuple中，从而得到一个不涉及函数参数包的示例:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{details/tupleoverload.cpp}
+\filename{details/tupleoverload.cpp}
 \begin{lstlisting}[style=styleCXX]
 #include <iostream>
 

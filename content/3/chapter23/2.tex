@@ -1,8 +1,6 @@
 前面描述了基于constexpr计算的值元编程和基于递归模板实例化的类型元编程，两项在现代C++中都有使用，涉及不同的方法来驱动计算。值元编程也可以通过递归模板实例化来驱动，C++11中引入constexpr函数之前，这是首选的机制。下面的代码使用递归实例化计算整数的平方根:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{bridge/sqrt1.hpp}
+\filename{bridge/sqrt1.hpp}
 \begin{lstlisting}[style=styleCXX]
 // primary template to compute sqrt(N)
 template<int N, int LO=1, int HI=N>

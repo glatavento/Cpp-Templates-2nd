@@ -1,8 +1,6 @@
 引入可变参数模板前，可以使用模仿LISP的cons单元的递归数据结构来制定类型列表。每个Cons单元格包含一个值(列表头部)和一个嵌套列表，后者可以是另一个Cons单元格，也可以是空列表nil。这个概念可以直接用C++表示:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{typelist/cons.hpp}
+\filename{typelist/cons.hpp}
 \begin{lstlisting}[style=styleCXX]
 class Nil { };
 
@@ -29,9 +27,7 @@ using SignedIntegralTypes = Cons<signed char, Cons<short, Cons<int,
 
 提取Cons样式列表中的第一个元素直接指向列表的头:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{typelist/consfront.hpp}
+\filename{typelist/consfront.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename List>
 class FrontT {
@@ -45,9 +41,7 @@ using Front = typename FrontT<List>::Type;
 
 前面添加一个元素将对现有列表进行限制:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{typelist/conspushfront.hpp}
+\filename{typelist/conspushfront.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename List, typename Element>
 class PushFrontT {
@@ -61,9 +55,7 @@ using PushFront = typename PushFrontT<List, Element>::Type;
 
 最后，从递归类型列表中删除第一个元素将提取列表的尾部:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{typelist/conspopfront.hpp}
+\filename{typelist/conspopfront.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename List>
 class PopFrontT {
@@ -77,9 +69,7 @@ using PopFront = typename PopFrontT<List>::Type;
 
 Nil的IsEmpty特化完成了核心类型列表操作集:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{typelist/consisempty.hpp}
+\filename{typelist/consisempty.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename List>
 struct IsEmpty {
@@ -94,9 +84,7 @@ struct IsEmpty<Nil> {
 
 有了这些类型列表操作，就可以使用在24.2.7节中定义的InsertionSort算法，这次使用Cons风格的列表:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{typelist/conslisttest.hpp}
+\filename{typelist/conslisttest.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename T, typename U>
 struct SmallerThanT {

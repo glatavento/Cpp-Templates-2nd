@@ -78,7 +78,6 @@ void shell (T const& env)
 
 若T是不能解引用T::Index的类型，则会在局部类ShallowChecks上出现编译错误。因为没有使用局部类，所以添加的代码不会影响shell()函数的运行时间，但许多编译器会警告说没有使用ShallowChecks(成员也是如此)。可以使用ignore()模板等技巧来抑制此类警告，但也会增加代码的复杂性。
 
-\hspace*{\fill} \\ %插入空行
 \noindent
 \textbf{概念检查}
 

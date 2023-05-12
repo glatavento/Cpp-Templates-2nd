@@ -1,13 +1,11 @@
 
 
 
-\subsubsubsection{25.2.1\hspace{0.2cm}比较}
+\subsection{比较}
 
 元组是包含其他值的结构类型。要比较两个元组，比较元素就足够了，可以实现operator==的定义来比较两个定义的元素:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{typelist/tupleeq.hpp}
+\filename{typelist/tupleeq.hpp}
 \begin{lstlisting}[style=styleCXX]
 // basis case:
 bool operator==(Tuple<> const&, Tuple<> const&)
@@ -26,13 +24,11 @@ bool operator==(Tuple<> const&, Tuple<> const&)
 
 与许多关于类型列表和元组的算法一样，元素比较先访问头部元素，然后递归访问尾部元素。操作符!=、<、>、<=和>=的顺序类似。
 
-\subsubsubsection{25.2.2\hspace{0.2cm}输出}
+\subsection{输出}
 
 本章将创建新的元组类型，因此能够在执行程序中看到这些元组是很有用的。以下操作符<{}<可以打印任何可打印的元组元素类型:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{typelist/tupleio.hpp}
+\filename{typelist/tupleio.hpp}
 \begin{lstlisting}[style=styleCXX]
 #include <iostream>
 

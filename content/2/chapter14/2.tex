@@ -3,7 +3,7 @@
 
 那模板实例化程度如何?一个模糊的答案是:达到需要的程度即可。换句话说，编译器在实例化模板时是“延迟的”。来看看这种懒惰到底意味着什么。
 
-\subsubsubsection{14.2.1\hspace{0.2cm}部分实例化和完全实例化}
+\subsection{部分实例化和完全实例化}
 
 正如所看到的，编译器有时不需要替换类或函数模板的完整定义。例如:
 
@@ -39,7 +39,7 @@ v<int>的完整实例化会引起错误，但只是需要变量模板实例类�
 
 C++谈到“模板实例化”而不确定是完整还是部分实例化时，通常说的是“完整实例化”。也就是说，实例化在默认情况下是完全实例化。
 
-\subsubsubsection{14.2.2\hspace{0.2cm}实例化组件}
+\subsection{实例化组件}
 
 当类模板隐式(完全)实例化时，其成员的声明也会实例化，但相应的定义不会(即成员部分实例化)，当然也有一些例外。首先，若类模板包含匿名联合，则该联合定义的成员也会实例化。
 
@@ -55,8 +55,7 @@ C++谈到“模板实例化”而不确定是完整还是部分实例化时，�
 
 结合一些例子来说明这些原则:
 
-\noindent
-\textit{details/lazy1.hpp}
+\filename{details/lazy1.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename T>
 class Safe {
@@ -110,8 +109,7 @@ Tricky<int, -1> inst;
 
 实例化模板时，实际上也应该提供虚成员的定义。否则，可能会发生链接错误。例如:
 
-\noindent
-\textit{details/lazy2.cpp}
+\filename{details/lazy2.cpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename T>
 class VirtualClass {

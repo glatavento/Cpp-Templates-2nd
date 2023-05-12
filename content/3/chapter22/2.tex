@@ -18,9 +18,7 @@ std::function<>类型实际上是C++函数指针的泛化形式，提供了相�
 
 本节的剩余部分，将构建自己的通用函数指针类模板——FunctionPtr，需要提供这些核心操作和功能，并用来替代std::function:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{bridge/forupto4.cpp}
+\filename{bridge/forupto4.cpp}
 \begin{lstlisting}[style=styleCXX]
 #include "functionptr.hpp"
 #include <vector>
@@ -58,9 +56,7 @@ int main()
 
 FunctionPtr的接口相当简单，提供函数对象的构造、复制、移动、销毁、初始化和赋值，以及底层函数对象的调用。该接口最有趣的部分是，如何在类模板偏特化中进行描述，其将模板参数(一个函数类型)分解为其组件(结果类型和参数类型):
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{bridge/functionptr.hpp}
+\filename{bridge/functionptr.hpp}
 \begin{lstlisting}[style=styleCXX]
 // primary template:
 template<typename Signature>

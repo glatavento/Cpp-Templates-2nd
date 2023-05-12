@@ -1,8 +1,6 @@
 为了激发表达式模板的灵感，先从一种简单的方法开始，来实现支持数字数组操作的模板。基本数组模板可能如下所示(SArray代表简单数组):
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{exprtmpl/sarray1.hpp}
+\filename{exprtmpl/sarray1.hpp}
 \begin{lstlisting}[style=styleCXX]
 #include <cstddef>
 #include <cassert>
@@ -72,9 +70,7 @@ class SArray {
 
 数字运算符的代码如下:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{exprtmpl/sarrayops1.hpp}
+\filename{exprtmpl/sarrayops1.hpp}
 \begin{lstlisting}[style=styleCXX]
 // addition of two SArrays
 template<typename T>
@@ -119,9 +115,7 @@ SArray<T> operator* (T const& s, SArray<T> const& a)
 
 这些操作符和其他操作符的许多其他版本都可以这样写，这些足够我们的示例表达式使用:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{exprtmpl/sarray1.cpp}
+\filename{exprtmpl/sarray1.cpp}
 \begin{lstlisting}[style=styleCXX]
 #include "sarray1.hpp"
 #include "sarrayops1.hpp"
@@ -161,9 +155,7 @@ x = tmp3; // 1,000 read operations and 1,000 write operations
 
 数字数组库的早期实现也面临这个问题，并鼓励用户使用计算赋值(如+=、*=等)。这些赋值的优点是参数和目的地都是由调用方提供的，因此不需要临时变量。可以这样添加SArray成员:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{exprtmpl/sarrayops2.hpp}
+\filename{exprtmpl/sarrayops2.hpp}
 \begin{lstlisting}[style=styleCXX]
 // additive assignment of SArray
 template<typename T>
@@ -200,9 +192,7 @@ SArray<T>& SArray<T>::operator*= (T const& s)
 
 使用这样的运算符，计算示例可以重写为
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{exprtmpl/sarray2.cpp}
+\filename{exprtmpl/sarray2.cpp}
 \begin{lstlisting}[style=styleCXX]
 #include "sarray2.hpp"
 #include "sarrayops1.hpp"

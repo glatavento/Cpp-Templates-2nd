@@ -36,9 +36,7 @@ void g (int*** ppp)
 
 这些限制并不奇怪，因为推导过程通常不唯一(甚至是有限的)，尽管限定类型名的这种限制有时容易忽略。非推导上下文不会表示程序出错，甚至不会说明分析的参数不能参与类型推导。为了说明这一点，看看下面这个更复杂的例子:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{basics/fppm.cpp}
+\filename{basics/fppm.cpp}
 \begin{lstlisting}[style=styleCXX]
 template<int N>
 class X {

@@ -3,15 +3,13 @@ SFINAE原则(替换失败不为过;参见第8.4节和第15.7节)将模板参数�
 
 实现基于SFINAE特性的两种主要方法：SFINAE排除函数重载和SFINAE排除偏特化。
 
-\subsubsubsection{19.4.1\hspace{0.2cm}去除函数重载}
+\subsection{去除函数重载}
 
 对基于SFINAE的特征的第一次尝试说明，使用带有函数重载的SFINAE来确定类型是否默认可构造的基本技术，这样就可以创建不需要初始化值的对象。对于给定的类型T，像T()这样的表达式必须有效。
 
 实现如下所示:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/isdefaultconstructible1.hpp}
+\filename{traits/isdefaultconstructible1.hpp}
 \begin{lstlisting}[style=styleCXX]
 #include "issame.hpp"
 
@@ -87,7 +85,6 @@ struct IsDefaultConstructibleT {
 
 这样不行，对于任何T替换所有成员函数，因此对于不是默认可构造的类型，代码无法编译，而不忽略第一个test()重载。通过将类模板参数T传递给函数模板参数U，仅为第二次test()重载创建了特定的SFINAE。
 
-\hspace*{\fill} \\ %插入空行
 \noindent
 \textbf{基于SFINAE特征的替代实现策略}
 
@@ -150,7 +147,6 @@ template<...> static Size2T test(...); // fallback
 enum { value = sizeof(test<...>(42)) == 1 };
 \end{lstlisting}
 
-\hspace*{\fill} \\ %插入空行
 \noindent
 \textbf{使基于SFINAE的特征成为特征}
 
@@ -173,9 +169,7 @@ using Type = decltype(test<FROM>(nullptr));
 
 因此，IsDefaultConstructibleT的完整改进实现如下所示:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/isdefaultconstructible2.hpp}
+\filename{traits/isdefaultconstructible2.hpp}
 \begin{lstlisting}[style=styleCXX]
 #include <type_traits>
 
@@ -201,13 +195,11 @@ struct IsDefaultConstructibleT : IsDefaultConstructibleHelper<T>::Type {
 
 若第一个test()函数模板无效，会因为SFINAE而禁用，IsDefaultConstructibleHelper::Type由test()回退的返回类型初始化，也就是std::false\_type。结果，IsDefaultConstructibleT<…>派生自std::false\_type。
 
-\subsubsubsection{19.4.2\hspace{0.2cm}去除偏特化}
+\subsection{去除偏特化}
 
 实现基于SFINAE的特征的第二种方法使用偏特化，可以使用这个例子来找出T类型是否默认可构造:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/isdefaultconstructible3.hpp}
+\filename{traits/isdefaultconstructible3.hpp}
 \begin{lstlisting}[style=styleCXX]
 #include "issame.hpp"
 #include <type_traits> // defines true_type and false_type
@@ -266,15 +258,13 @@ C++14开始，C++标准化委员会建议编译器和标准库通过定义一致
 
 显然，这种定义类型特征的方法看起来比重载函数模板的第一种方法更简洁，但需要在模板参数声明中明确条件的能力。使用带有函数重载的类模板，使我们能够使用辅助函数或类型。
 
-\subsubsubsection{19.4.3\hspace{0.2cm}使用Lambda}
+\subsection{使用Lambda}
 
 无论使用哪种技术，总是需要一些样板代码来定义特征:重载和调用两个test()成员函数或实现多个偏特化。接下来，将展示在C++17中如何通过在泛型Lambda中指定要检查的条件，来最小化这个样板代码。
 
 首先，引入一个由两个嵌套的泛型Lambda表达式构造的工具:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/isvalid.hpp}
+\filename{traits/isvalid.hpp}
 \begin{lstlisting}[style=styleCXX]
 #include <utility>
 
@@ -382,15 +372,13 @@ constexpr auto hasFirst
 	});
 \end{lstlisting}
 
-\subsubsubsection{19.4.4\hspace{0.2cm}SFINAE友好的特征}
+\subsection{SFINAE友好的特征}
 
 类型特征能够回应特定的查询，而不会导致程序病态。基于SFINAE的特征通过SFINAE捕捉来解决这个问题，将这些错误会转化为负面结果。
 
 然而，目前出现的一些特征(如第19.3.4节中描述的PlusResultT特征)在出现错误时表现不佳。回想一下该节中对PlusResultT的定义:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/plus2.hpp}
+\filename{traits/plus2.hpp}
 \begin{lstlisting}[style=styleCXX]
 #include <utility>
 
@@ -468,9 +456,7 @@ struct PlusResultT {
 
 按照上一节描述的PlusResultT的例子，定义了一个HasPlusT特性，其可以检测给定类型是否有合适的加法操作:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/hasplus.hpp}
+\filename{traits/hasplus.hpp}
 \begin{lstlisting}[style=styleCXX]
 #include <utility> // for declval
 #include <type_traits> // for true_type, false_type, and void_t
@@ -494,9 +480,7 @@ struct HasPlusT<T1, T2, std::void_t<decltype(std::declval<T1>()
 
 下面的PlusResultT实现了这种行为:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/plus3.hpp}
+\filename{traits/plus3.hpp}
 \begin{lstlisting}[style=styleCXX]
 #include "hasplus.hpp"
 

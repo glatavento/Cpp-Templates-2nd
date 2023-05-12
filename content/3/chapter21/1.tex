@@ -3,9 +3,7 @@ C++类通常是“空的”，内部表示在运行时不需要内存位。对�
 
 即使是空类，其大小也是非零的。若想验证这一点，可以试试下面的代码:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{inherit/empty.cpp}
+\filename{inherit/empty.cpp}
 \begin{lstlisting}[style=styleCXX]
 #include <iostream>
 
@@ -20,7 +18,7 @@ int main()
 
 对于多数平台，这个程序将输出1作为EmptyClass的大小。一些系统对类类型有更严格的对齐要求，可能会打印另一个小整数(通常为4)。
 
-\subsubsubsection{21.1.1\hspace{0.2cm}结构布置原则}
+\subsection{结构布置原则}
 
 C++的设计者有各种理由来避免零大小的类。一个由零大小类组成的数组的大小应该也为零，但是指针算法的属性将不再适用。假设ZeroSizedT是一个零大小的类型:
 
@@ -34,9 +32,7 @@ ZeroSizedT z[10];
 
 然而，即使在C++中没有零大小的类型，C++标准指定一个空类作为基类时，不需要为它分配空间，只要不分配到与另一个相同类型对象或子对象相同地址中即可。我们通过一些示例来阐明这个空基类优化(EBCO)在实践中的含义:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{inherit/ebco1.cpp}
+\filename{inherit/ebco1.cpp}
 \begin{lstlisting}[style=styleCXX]
 #include <iostream>
 
@@ -72,9 +68,7 @@ int main()
 
 考虑遇到EBCO约束的情况:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{inherit/ebco2.cpp}
+\filename{inherit/ebco2.cpp}
 \begin{lstlisting}[style=styleCXX]
 #include <iostream>
 
@@ -109,7 +103,7 @@ NonEmpty类不是一个空类！没有任何成员，基类也没有。但NonEmp
 
 即使有这个约束，EBCO仍然是模板库的重要优化，因为许多技术依赖于基类引入，只是为了引入新类型别名或提供额外的功能，而不添加新数据。
 
-\subsubsubsection{21.1.2\hspace{0.2cm}基类的成员}
+\subsection{基类的成员}
 
 EBCO对于数据成员没有同等功能，因为(其他方面)会在成员指针的表示方面产生一些问题。因此，有时需要将成员变量实现为(私有)基类，这很有挑战性。
 
@@ -177,9 +171,7 @@ class Optimizable {
 
 BaseMemberPair的实现可以很紧凑:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{inherit/basememberpair.hpp}
+\filename{inherit/basememberpair.hpp}
 \begin{lstlisting}[style=styleCXX]
 #ifndef BASE_MEMBER_PAIR_HPP
 #define BASE_MEMBER_PAIR_HPP

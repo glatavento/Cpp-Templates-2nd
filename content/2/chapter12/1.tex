@@ -9,9 +9,7 @@ C++17引入了通过参数化子句引入的构造:推导策略(请参阅2.9节�
 
 将在后面的章节中回到模板参数声明。首先，使用一些示例展示这四种模板，其可以出现在命名空间中(全局或在一个命名空间中):
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{details/definitions1.hpp}
+\filename{details/definitions1.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename T> // a namespace scope class template
 class Data {
@@ -39,9 +37,7 @@ using DataList = Data<T*>;
 
 下面的例子展示了，四种模板作为成员，在如何在父类中进行定义:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{details/definitions2.hpp}
+\filename{details/definitions2.hpp}
 \begin{lstlisting}[style=styleCXX]
 class Collection {
 	public:
@@ -67,9 +63,7 @@ C++17中，变量(包括静态数据成员)和变量模板可以“内联”，�
 
 最后，下面的代码演示了如何在类外定义非别名模板的成员模板:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{details/definitions3.hpp}
+\filename{details/definitions3.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename T> // a namespace scope class template
 class List {
@@ -114,7 +108,6 @@ List() = default;
 
 确保List<T>的实例是默认可构造的，具有隐式声明构造函数的语义。
 
-\hspace*{\fill} \\ %插入空行
 \noindent
 \textbf{联合模板}
 
@@ -128,7 +121,6 @@ union AllocChunk {
 };
 \end{lstlisting}
 
-\hspace*{\fill} \\ %插入空行
 \noindent
 \textbf{默认参数}
 
@@ -165,7 +157,6 @@ void init (Array<Value>& array)
 }
 \end{lstlisting}
 
-\hspace*{\fill} \\ %插入空行
 \noindent
 \textbf{类模板的非模板成员}
 
@@ -217,7 +208,7 @@ class CupBoard
 
 尽管这种参数化的定义通常称为模板，但这个术语并不适用于。对这些实体的一个术语是temploid。C++17起，标准确实定义了模板化实体的概念，包括模板和temploid，以及递归地在模板化实体中定义或创建的实体(例如，包括在类模板中定义的友元函数(参见2.4节)或模板中出现的Lambda表达式的闭包类型)。目前，temploid和模板实体都没有获得太多的关注，但将来可以使用这些使用这些术语，在讨论与C++模板的话题时进行精确的表达。
 
-\subsubsubsection{12.1.1\hspace{0.2cm}虚拟成员函数}
+\subsection{虚拟成员函数}
 
 成员函数模板不能进行虚声明。这个约束是因为虚函数调用机制的实现，是使用一个固定大小的表，每个虚函数只有一个条目。但成员函数模板的实例化，直到整个程序翻译后才固定。因此，支持虚成员函数模板需要在C++编译器和链接器中支持一套全新的机制。
 
@@ -236,7 +227,7 @@ class Dynamic {
 };
 \end{lstlisting}
 
-\subsubsubsection{12.1.2\hspace{0.2cm}链接模板}
+\subsection{链接模板}
 
 每个模板都必须有一个名字，并且这个名字在其作用域内必须唯一(除了函数模板可以重载(参见第16章))。与类类型不同，类模板不能与其他类型的实体共享名称:
 
@@ -320,7 +311,7 @@ template<typename T> int const max_volume = 11;
 
 有外部链接，所有这些实例化也有int const类型。
 
-\subsubsubsection{12.1.3\hspace{0.2cm}主模板}
+\subsection{主模板}
 
 模板的普通声明为主模板，就不需要模板名称后加上尖括号中的模板参数:
 

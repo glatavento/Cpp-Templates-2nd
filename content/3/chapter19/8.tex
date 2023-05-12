@@ -39,13 +39,11 @@ C++标准库定义了几个类似的特征，以确定类型的主要类型和�
 
 参见第D.2.1节和第D.2.2节的详细信息。
 
-\subsubsubsection{19.8.1\hspace{0.2cm}基本类型}
+\subsection{基本类型}
 
 首先，开发一个模板来确定一个类型是否是基本类型。默认情况下，假设一个类型不是基本类型，我们特化了基础模板:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/isfunda.hpp}
+\filename{traits/isfunda.hpp}
 \begin{lstlisting}[style=styleCXX]
 #include <cstddef> // for nullptr_t
 #include <type_traits> // for true_type, false_type, and
@@ -112,9 +110,7 @@ template<> struct IsFundaT<bool> : std::true_type {
 
 下面的程序演示了该模板的用法:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/isfundatest.cpp}
+\filename{traits/isfundatest.cpp}
 \begin{lstlisting}[style=styleCXX]
 #include "isfunda.hpp"
 #include <iostream>
@@ -148,19 +144,16 @@ T is not a fundamental type
 
 C++标准库使用了比只检查类型是否是基本类型更细粒度的方法。首先，定义了主要类型类别，其中每个类型精确匹配一个类型类别(参见第的D.2.1节)，然后是复合类型类别，如std::is\_integral或std::is\_fundamental(参见第D.2.2节)。
 
-\subsubsubsection{19.8.2\hspace{0.2cm}复合类型}
+\subsection{复合类型}
 
 由其他类型构造而成的类型。简单复合类型包括指针类型、左值和右值引用类型、成员指针类型和数组类型，由一个或两个基础类型构造而成。类类型和函数类型也是复合类型，但组合可能涉及任意数量的类型(用于参数或成员)。枚举类型在此分类中也可视为非简单复合类型，尽管它们不是多种基础类型的复合类型。可以使用偏特化对简单的复合类型进行分类。
 
-\hspace*{\fill} \\ %插入空行
 \noindent
 \textbf{指针}
 
 可以从简单指针的类型分类开始:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/ispointer.hpp}
+\filename{traits/ispointer.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename T>
 struct IsPointerT : std::false_type { // primary template: by default not a pointer
@@ -176,15 +169,12 @@ struct IsPointerT<T*> : std::true_type { // partial specialization for pointers
 
 C++标准库提供了相应的特征std::is\_pointer<>，但不提供指针所指向类型的成员。在第D.2.1节中有描述。
 
-\hspace*{\fill} \\ %插入空行
 \noindent
 \textbf{引用}
 
 类似地，可以确定左值引用类型:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/islvaluereference.hpp}
+\filename{traits/islvaluereference.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename T>
 struct IsLValueReferenceT : std::false_type { // by default no lvalue reference
@@ -198,9 +188,7 @@ struct IsLValueReferenceT<T&> : std::true_type { // unless T is lvalue reference
 
 和右值引用类型:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/isrvaluereference.hpp}
+\filename{traits/isrvaluereference.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename T>
 struct IsRValueReferenceT : std::false_type { // by default no rvalue reference
@@ -214,9 +202,7 @@ struct IsRValueReferenceT<T&&> : std::true_type { // unless T is rvalue referenc
 
 可以组合成一个IsReferenceT<>特征:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/isreference.hpp}
+\filename{traits/isreference.hpp}
 \begin{lstlisting}[style=styleCXX]
 #include "islvaluereference.hpp"
 #include "isrvaluereference.hpp"
@@ -235,15 +221,12 @@ class IsReferenceT
 
 C++标准库提供了相应的特征std::is\_lvalue\_reference<>和std::is\_rvalue\_reference<>，在第D.2.1节中描述；以及std::is\_reference<>，在第D.2.2节中描述。同样，这些特征不会为引用所引用的类型提供成员。
 
-\hspace*{\fill} \\ %插入空行
 \noindent
 \textbf{数组}
 
 当使用特征来确定数组时，可能会惊讶于偏特化比主模板需要更多的模板参数:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/isarray.hpp}
+\filename{traits/isarray.hpp}
 \begin{lstlisting}[style=styleCXX]
 #include <cstddef>
 
@@ -268,15 +251,12 @@ struct IsArrayT<T[]> : std::true_type { // partial specialization for unbound ar
 
 C++标准库提供了相应的特征std::is\_array<>来检查类型是否为数组，这在第D.2.1节中有描述。此外，诸如std::rank<>和std::extent<>这样的特征可以查询它们的维数和特定维的大小(参见第D.3.1节)。
 
-\hspace*{\fill} \\ %插入空行
 \noindent
 \textbf{指向成员的指针}
 
 成员指针可以使用相同的技术处理:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/ispointertomember.hpp}
+\filename{traits/ispointertomember.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename T>
 struct IsPointerToMemberT : std::false_type { // by default no pointer-to-member
@@ -293,13 +273,11 @@ struct IsPointerToMemberT<T C::*> : std::true_type { // partial specialization
 
 C++标准库提供了更具体的特征，std::is\_member\_object\_pointer<>和std::is\_member\_function\_pointer<>，在第D.2.1节中描述，以及std::is\_member\_pointer<>，在第D.2.2节中描述。
 
-\subsubsubsection{19.8.3\hspace{0.2cm}函数类型}
+\subsection{函数类型}
 
 函数类型很有趣，除了结果类型之外，还有任意数量的参数。因此，匹配函数类型的偏特化中，使用一个参数包来捕获所有的参数类型:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/isfunction.hpp}
+\filename{traits/isfunction.hpp}
 \begin{lstlisting}[style=styleCXX]
 #include "../typelist/typelist.hpp"
 
@@ -384,15 +362,13 @@ struct IsFunctionT<R (Params..., ...) const&> : std::true_type {
 
 C++标准库提供特征std::is\_function<>，将在第D.2.1节中描述。
 
-\subsubsubsection{19.8.4\hspace{0.2cm}类类型}
+\subsection{类类型}
 
 与其他复合类型不同，我们没有专门匹配类类型的偏特化模式。也不可能像基本类型那样枚举所有类类型。不过，需要使用间接方法来标识类类型，方法是提出对所有类类型(而不是其他类型)有效的某种类型或表达式。对于这种类型或表达，可以应用于第19.4节中的SFINAE。
 
 类类型最方便利用的属性是，只有类类型可以用作成员指针类型的基础。在X Y::*形式的类型构造中，Y只能是类类型。IsClassT<>利用了这个属性(将类型X选定为int):
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/isclass.hpp}
+\filename{traits/isclass.hpp}
 \begin{lstlisting}[style=styleCXX]
 #include <type_traits>
 
@@ -421,7 +397,7 @@ C++标准库提供了特征std::is\_class<>和std::is\_union<>，在第D.2.1节�
 \hspace*{0.75cm}大多数编译器支持像\_\_is\_union这样的内在操作符，以帮助标准库实现各种特征模板。甚至对于一些可以使用本章中的技术实现的特性也是如此，这些特性可以提高编译性能。
 \end{tcolorbox}
 
-\subsubsubsection{19.8.5\hspace{0.2cm}枚举类型}
+\subsection{枚举类型}
 
 还没有特征分类的类型是枚举类型。枚举类型的测试可以通过编写基于SFINAE的特征直接执行，该特征检查会转换为整型类型(比如int)，并显式排除基本类型、类类型、引用类型、指针类型和指向成员的指针类型，所有这些类型都可以转换为整型类型，但不是枚举类型。
 
@@ -431,9 +407,7 @@ C++标准库提供了特征std::is\_class<>和std::is\_union<>，在第D.2.1节�
 
 不过，可以通过“不属于其他类别的类型都必须是枚举类型”的方式来实现:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/isenum.hpp}
+\filename{traits/isenum.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename T>
 struct IsEnumT {

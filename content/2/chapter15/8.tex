@@ -4,7 +4,7 @@
 
 但是，开发者在使用模板时可能会遇到一些限制，本节来讨论一下这些限制。
 
-\subsubsubsection{15.8.1\hspace{0.2cm}合法的参数转换}
+\subsection{合法的参数转换}
 
 通常，模板推导试图找到函数模板参数的替换类型，使参数化的类型P与类型A相同。然而，当这不可能时，当P在推导上下文中包含模板参数时，以下差异合理的:
 
@@ -71,7 +71,7 @@ std::string maxWithHello(std::string s)
 
 当两个参数从一个公共基类派生出不同的类类型时，推导并不认为该公共基类是推导出的类型的候选者。参见1.2节对此问题的讨论和可能的解决方案。
 
-\subsubsubsection{15.8.2\hspace{0.2cm}类模板参数}
+\subsection{类模板参数}
 
 C++17前，模板参数推导只适用于函数和成员函数模板。特别地，类模板的参数并没有从参数导出到对其构造函数的调用。例如:
 
@@ -91,7 +91,7 @@ S x(12); // ERROR before C++17: the class template parameter T was not deduced f
 
 这个限制在C++17中取消了，参见第15.12节。
 
-\subsubsubsection{15.8.3\hspace{0.2cm}默认调用参数}
+\subsection{默认调用参数}
 
 默认函数调用参数可以在函数模板中指定，就像普通函数一样:
 
@@ -136,7 +136,7 @@ int main()
 }
 \end{lstlisting}
 
-\subsubsubsection{15.8.4\hspace{0.2cm}异常规范}
+\subsection{异常规范}
 
 与默认调用参数一样，异常规范只在需要时才实例化，不参与模板参数推导。例如:
 

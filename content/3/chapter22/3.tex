@@ -1,8 +1,6 @@
 FunctorBridge类模板负责底层函数对象的所有权和操作，实现为一个抽象基类，是FunctionPtr动态多态性的基础:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{bridge/functorbridge.hpp}
+\filename{bridge/functorbridge.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename R, typename... Args>
 class FunctorBridge
@@ -23,9 +21,7 @@ FunctorBridge提供了通过虚函数操作存储函数对象所需的基本操�
 
 使用这些虚函数，可以实现FunctionPtr的复制构造函数和函数调用操作符:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{bridge/functionptr-cpinv.hpp}
+\filename{bridge/functionptr-cpinv.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename R, typename... Args>
 FunctionPtr<R(Args...)>::FunctionPtr(FunctionPtr const& other)

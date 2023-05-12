@@ -8,9 +8,7 @@ static_assert(sizeof(void*) * CHAR_BIT == 64, "Not a 64-bit platform");
 
 当模板参数不满足模板的约束时，静态断言可用于提供有用的错误消息。使用第19.4节描述的技术，可以创建一个类型特征来确定类型是否可解引用:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{debugging/hasderef.hpp}
+\filename{debugging/hasderef.hpp}
 \begin{lstlisting}[style=styleCXX]
 #include <utility> // for declval()
 #include <type_traits> // for true_type and false_type

@@ -30,9 +30,7 @@ class CuriousTemplate : public CuriousBase<CuriousTemplate<T>> {
 
 CRTP的简单应用包括跟踪创建了多少特定类类型的对象，这很容易通过在每个构造函数中递增一个整型静态数据成员，并在析构函数中递减来实现。但必须在每个类中提供这样的代码就很烦，并且通过单个(非CRTP)基类实现此功能会混淆不同派生类的对象计数。不过，可以这样编写模板:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{inherit/objectcounter.hpp}
+\filename{inherit/objectcounter.hpp}
 \begin{lstlisting}[style=styleCXX]
 #include <cstddef>
 template<typename CountedType>
@@ -87,9 +85,7 @@ std::size_t ObjectCounter<CountedType>::count = 0;
 
 若想计算某个类类型的活(即未销毁)对象的数量，从ObjectCounter模板派生类就足够了。可以这样定义和使用用于计数的字符串类:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{inherit/countertest.cpp}
+\filename{inherit/countertest.cpp}
 \begin{lstlisting}[style=styleCXX]
 #include "objectcounter.hpp"
 #include <iostream>
@@ -110,7 +106,7 @@ int main()
 }
 \end{lstlisting}
 
-\subsubsubsection{21.2.1\hspace{0.2cm}Barton-Nackman技巧(友元工厂)}
+\subsection{Barton-Nackman技巧(友元工厂)}
 
 1994年，John J. Barton和Lee R. Nackman提出了一种模板技术，他们称之为限制模板展开(参见[BartonNackman])。这种技术的部分动机是由于函数模板的重载在当时非常受限
 
@@ -163,9 +159,7 @@ operator== (Array<T> const&, Array<T> const&)
 
 自1994年以来，友元函数的名称查找已经发生了变化，因此Barton-Nackman技巧在标准C++中并不那么有用。在它发明的时候，友元声明在类模板的外围作用域中可见，这个模板是通过一个名为友元名称注入的过程进行实例化。标准C++通过依赖于参数的查找来查找友元函数声明(具体细节请参阅第13.2.2节)，从而函数调用的至少一个参数，必须已含友元函数作为关联类的类。若参数类的类型不相关，可以转换为包含友元的类，则无法找到友元函数。例如:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{inherit/wrapper.cpp}
+\filename{inherit/wrapper.cpp}
 \begin{lstlisting}[style=styleCXX]
 class S {
 };
@@ -200,7 +194,7 @@ int main()
 
 现代C++中，在类模板中定义友元函数比简单地定义普通函数模板的优势是语法:友元函数定义可以访问其外围类的私有和受保护成员，并且不需要重述外围类模板的所有模板参数。但友元函数定义在与CRPT结合使用时可能会更好，如下面一节描述的操作符实现所示。
 
-\subsubsubsection{21.2.2\hspace{0.2cm}实现操作符}
+\subsection{实现操作符}
 
 实现提供重载操作符的类时，通常会为许多不同(但相关)的操作符提供重载。实现相等操作符(==)的类，可能还会实现不等操作符(!=)，而实现小于操作符(<)的类，也可能实现其他关系操作符(>，<=，>=)。这些操作符中只需要定义一个，而其他操作符可以使用这个操作符定义。类X的不等操作符可能定义为相等操作符:
 
@@ -223,9 +217,7 @@ C++标准库中也包含类似的定义，作为<utility>头文件的一部分�
 
 基于CRTP的这些操作符模板的另一种表达方式允许类选择通用操作符定义，提供了增加代码重用的优势，而没有过度通用操作符的副作用:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{inherit/equalitycomparable.cpp}
+\filename{inherit/equalitycomparable.cpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename Derived>
 class EqualityComparable
@@ -255,15 +247,13 @@ int main()
 
 当将行为分解到基类中同时，保留最终派生类的标识时，CRTP可能很有用。除了Barton-Nackman技巧之外，CRTP还可以基于一些规范操作符提供一些操作符的一般定义。这些特性使Barton-Nackman技巧的CRTP，成为C++模板库作者最喜欢的技术之一。
 
-\subsubsubsection{21.2.3\hspace{0.2cm}门面模式}
+\subsection{门面模式}
 
 使用CRTP和Barton-Nackman技巧来定义一些操作符是一种方便的快捷方式。可以进一步采用这种思想，这样CRTP基类就可以用CRTP派生类公开的一个小得多(但更容易实现)的接口来定义类的大部分或所有公共接口。这种模式称为门面模式，可以定义需要满足某些现有接口数字类型、迭代器、容器等要求的新类型。
 
 为了说明门面模式，我们将为迭代器实现一个门面模式，这将简化编写(符合标准库要求的)迭代器的过程。迭代器类型(特别是随机访问迭代器)所需的接口相当大。下面是类模板IteratorFacade的框架，演示了迭代器接口的需求:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{inherit/iteratorfacadeskel.hpp}
+\filename{inherit/iteratorfacadeskel.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename Derived, typename Value, typename Category,
 		typename Reference = Value&, typename Distance = std::ptrdiff_t>
@@ -371,15 +361,12 @@ IteratorFacade const& rhs) {
 }
 \end{lstlisting}
 
-\hspace*{\fill} \\ %插入空行
 \noindent
 \textbf{定义链表迭代器}
 
 通过IteratorFacade的定义，可以将迭代器定义为简单的链表类。假设这样定义链表中的节点:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{inherit/listnode.hpp}
+\filename{inherit/listnode.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename T>
 class ListNode
@@ -393,9 +380,7 @@ class ListNode
 
 使用IteratorFacade，可以以一种简单的方式定义链表迭代器:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{inherit/listnodeiterator0.hpp}
+\filename{inherit/listnodeiterator0.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename T>
 class ListNodeIterator
@@ -419,15 +404,12 @@ std::forward_iterator_tag>
 
 ListNodeIterator提供了充当前向迭代器所需的所有正确操作符和嵌套类型，并且只需要很少的代码来实现。定义更复杂的迭代器(例如，随机访问迭代器)只需要少量的工作。
 
-\hspace*{\fill} \\ %插入空行
 \noindent
 \textbf{隐藏接口}
 
 ListNodeIterator实现的缺点是，需要作为公共接口公开操作dereference()、advance()和equals()。为了消除这个需求，可以重写IteratorFacade，通过单独的访问类IteratorFacadeAccess，在派生的CRTP类上执行所有操作:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{inherit/iteratorfacadeaccessskel.hpp}
+\filename{inherit/iteratorfacadeaccessskel.hpp}
 \begin{lstlisting}[style=styleCXX]
 // ‘friend’ this class to allow IteratorFacade access to core iterator operations:
 class IteratorFacadeAccess
@@ -464,15 +446,12 @@ class IteratorFacadeAccess
 friend class IteratorFacadeAccess;
 \end{lstlisting}
 
-\hspace*{\fill} \\ %插入空行
 \noindent
 \textbf{迭代器适配器}
 
 IteratorFacade可以很容易地构建一个迭代器适配器，可接受一个现有的迭代器，并公开一个新的迭代器，以提供底层序列的转换视图。例如，可能有一个Person值的容器:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{inherit/person.hpp}
+\filename{inherit/person.hpp}
 \begin{lstlisting}[style=styleCXX]
 struct Person {
 	std::string firstName;
@@ -488,9 +467,7 @@ struct Person {
 
 ProjectionIterator是根据基本迭代器(iterator)和将由迭代器(T)公开值类型定义的迭代器:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{inherit/projectioniteratorskel.hpp}
+\filename{inherit/projectioniteratorskel.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename Iterator, typename T>
 class ProjectionIterator
@@ -555,9 +532,7 @@ void decrement() {
 
 就是这样!使用投射迭代器，可以打印出vector中Person对象的名字:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{inherit/projectioniterator.cpp}
+\filename{inherit/projectioniterator.cpp}
 \begin{lstlisting}[style=styleCXX]
 #include <vector>
 #include <algorithm>

@@ -23,9 +23,7 @@ EnableIf特化用于随机访问迭代器时，启用advanceIter()的相应版�
 
 EnableIf有一个相当简单的实现:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{typeoverload/enableif.hpp}
+\filename{typeoverload/enableif.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<bool, typename T = void>
 struct EnableIfT {
@@ -62,7 +60,7 @@ advanceIter(Iterator& x, Distance n)
 }
 \end{lstlisting}
 
-\subsubsubsection{20.3.1\hspace{0.2cm}多个特化版本}
+\subsection{多个特化版本}
 
 前面的模式可以推广到需要两个以上不同实现:为每个实现提供EnableIf构造，其条件对一组具体模板参数互斥。这些条件通常会利用各种特征表达的属性。
 
@@ -87,9 +85,7 @@ advanceIter(Iterator& x, Distance n)
 
 下面一组函数模板实现了这一点:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{typeoverload/advance2.hpp}
+\filename{typeoverload/advance2.hpp}
 \begin{lstlisting}[style=styleCXX]
 #include <iterator>
 
@@ -140,7 +136,7 @@ advanceIter(Iterator& x, Distance n) {
 
 标签调度和EnableIf这两种技术很有用:标签调度支持基于分层标签的简单调度，而EnableIf支持基于由类型特征确定的属性集的高级调度。
 
-\subsubsubsection{20.3.2\hspace{0.2cm}使用EnableIfGo}
+\subsection{使用EnableIfGo}
 
 EnableIf用于函数模板的返回类型。但这种方法不适用于构造函数模板或转换函数模板，因为没有指定的返回类型。
 
@@ -150,9 +146,7 @@ EnableIf用于函数模板的返回类型。但这种方法不适用于构造函
 
 此外，EnableIf的使用会使返回类型很难阅读，所以可以将EnableIf嵌入到默认的模板参数中:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{typeoverload/container1.hpp}
+\filename{typeoverload/container1.hpp}
 \begin{lstlisting}[style=styleCXX]
 #include <iterator>
 #include "enableif.hpp"
@@ -210,13 +204,11 @@ template<typename Iterator,
 Container(Iterator first, Iterator last); // OK now
 \end{lstlisting}
 
-\subsubsubsection{20.3.3\hspace{0.2cm}编译时if}
+\subsection{编译时if}
 
 C++17的constexpr if特性(请参阅第8.5节)可以替代EnableIf。C++17中，可以这样重写advanceIter():
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{typeoverload/advance3.hpp}
+\filename{typeoverload/advance3.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename Iterator, typename Distance>
 void advanceIter(Iterator& x, Distance n) {
@@ -279,15 +271,13 @@ void f(T p) {
 
 不过这样做并不可取，因为其不适用于SFINAE:函数f<T>()没有从候选列表中删除，因此可能会抑制另一个重载解析的结果。替代方案中，使用EnableIf f<T>()将删除EnableIf<…>失败情况的替换。
 
-\subsubsubsection{20.3.4\hspace{0.2cm}概念}
+\subsection{概念}
 
 目前为止所介绍的技术表现的都还好，但是有点笨拙，可能会使用大量的编译器资源，并且在出现错误的情况下，可能会出现不清晰的诊断信息。因此，许多泛型库的作者都期望有一种能够更直接地达到同样效果的语言特性。出于这个原因，概念的特性可能会添加到语言中;请参阅第6.5节、第18.4节和附录E。
 
 例如，期望重载的Container构造函数如下所示:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{typeoverload/container4.hpp}
+\filename{typeoverload/container4.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename T>
 class Container {

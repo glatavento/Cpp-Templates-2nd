@@ -1,8 +1,6 @@
 别名模板(参见第2.8节)在推导方面是“透明的”。只要一个别名模板带有一些模板参数出现，别名定义(等号右边的类型)会替换为参数，产生的结果为推导所用。例如，模板参数推导对下面的三个调用都会成功:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{deduce/aliastemplate.cpp}
+\filename{deduce/aliastemplate.cpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename T, typename Cont>
 class Stack;

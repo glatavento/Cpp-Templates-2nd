@@ -1,9 +1,7 @@
 
 早期的C++，枚举值是在类声明中创建“真正的常量”(称为常量表达式)作为命名成员的唯一机制，可以定义一个Pow3元程序来计算3的幂:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{meta/pow3enum.hpp}
+\filename{meta/pow3enum.hpp}
 \begin{lstlisting}[style=styleCXX]
 // primary template to compute 3 to the Nth
 template<int N>
@@ -20,9 +18,7 @@ struct Pow3<0> {
 
 C++98的标准化引入了类内静态常量初始化器的概念，因此Pow3元程序可以这样写:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{meta/pow3const.hpp}
+\filename{meta/pow3const.hpp}
 \begin{lstlisting}[style=styleCXX]
 // primary template to compute 3 to the Nth
 template<int N>

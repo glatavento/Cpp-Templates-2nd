@@ -75,7 +75,7 @@ void g (BigNumber const& a, BigNumber const& b)
 
 这里的问题是max()模板不知道BigMath名称空间，但是常规查找无法找到适用于BigNumber类型值的小于操作符。如果没有一些特殊的规则，这将大大降低模板在C++名称空间中的适用性。ADL就是对这些“特殊规则”的回答。
 
-\subsubsubsection{13.2.1\hspace{0.2cm}ADL}
+\subsection{ADL}
 
 
 ADL主要适用于非限定名称，这些名称看起来像是在函数调用或操作符调用中命名非成员函数。若在常规查找中，就不会发生ADL了
@@ -125,9 +125,7 @@ ADL主要适用于非限定名称，这些名称看起来像是在函数调用�
 
 然后，ADL在所有关联的命名空间中查找该名称，就好像该名称已经通过这些命名空间进行了限定一样(除非忽略using的指示):
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{details/adl.cpp}
+\filename{details/adl.cpp}
 \begin{lstlisting}[style=styleCXX]
 #include <iostream>
 
@@ -157,7 +155,7 @@ int main()
 
 本例中执行ADL时，命名空间N中的using指令会忽略。因此，X::f()不是main()中函数调用的候选。
 
-\subsubsubsection{13.2.2\hspace{0.2cm}友元声明的ADL}
+\subsection{友元声明的ADL}
 
 友元函数声明可以是指定函数，假定函数是在包含友元声明的类的最近的命名空间作用域(可能是全局作用域)中声明的。但是，这样的友元声明在该作用域中不可见。
 
@@ -189,13 +187,11 @@ void g (C<int>* p)
 
 ADL查找友元声明和定义的能力，有时称为友元名称注入。然而，这个术语有一定的误导性，因为它是C++标准之前的一个特性名称，该特性“注入”了友元声明的名称到外围作用域，使它们对普通的名称查找可见。所以在上面的例子中，两个调用是定义良好的。本章的后记会进一步详细介绍友元注入的历史。
 
-\subsubsubsection{13.2.3\hspace{0.2cm}注入类名}
+\subsection{注入类名}
 
 类名注入到该类本身的作用域中，可以作为该作用域中的非限定名称访问(只是用来表示构造函数的符号，所以不能作为限定名访问):
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{details/adl.cpp}
+\filename{details/adl.cpp}
 \begin{lstlisting}[style=styleCXX]
 #include <iostream>
 
@@ -250,7 +246,7 @@ template<int I, typename... T> class V {
 };
 \end{lstlisting}
 
-\subsubsubsection{13.2.4\hspace{0.2cm}当前实例化类}
+\subsection{当前实例化类}
 
 为类或类模板的注入类名实际上是定义类型的别名。对于非模板类，这个属性很明显，因为类本身是具有该名称，且是在该作用域中的类型。但在类模板或类模板内嵌套的类中，每个模板实例都是不同的类型。这个属性在上下文中特别有趣，因为它注入的类名引用了类模板的相同实例化类，而不是该类模板的其他特化(对于类模板的嵌套类也是如此)。
 

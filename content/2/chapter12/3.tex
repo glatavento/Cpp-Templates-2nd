@@ -15,13 +15,11 @@
 参数类型推导:未显式指定的函数模板参数，可以从调用中的函数调用参数类型推导出来(这在第15章中有详细描述)，其他几种情况下也可以进行推导。若所有模板参数都可以推导，则不需要在函数模板的名称后指定尖括号。C++17还引入了从变量声明或函数表示法，可以从类型转换初始化表达式中推导类模板参数类型;请参阅15.12节。
 \end{itemize}
 
-\subsubsubsection{12.3.1\hspace{0.2cm}函数模板参数}
+\subsection{函数模板参数}
 
 函数模板参数可以显式指定，可以根据模板的使用方式推导出来，也可以作为默认模板参数提供。例如:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{details/max.cpp}
+\filename{details/max.cpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename T>
 T max (T a, T b)
@@ -40,9 +38,7 @@ int main()
 
 因为对应的模板参数没有出现在函数参数类型中，或者出于其他原因(参见第15.2节)，有些模板参数永远无法推导。相应的参数通常放在模板参数列表的开头，以便在推导其他参数的同时显式地指定。例如:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{details/implicit.cpp}
+\filename{details/implicit.cpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename DstT, typename SrcT>
 DstT implicit_cast (SrcT const& x) // SrcT can be deduced, but DstT cannot
@@ -98,7 +94,7 @@ template<typename T> RT2 test(...);
 
 表达式test<int>对于两个函数模板中的第一个没有意义，因为int类型没有成员类型x。然而，第二个模板没有这样的问题。因此，表达式\&test<int>为单个函数的地址。将int替换到第一个模板失败的事实并不意味着表达式无效。SFINAE(替换失败不为过)原则是实现函数模板重载的重要因素，在8.4节和15.7节中进行了讨论。
 
-\subsubsubsection{12.3.2\hspace{0.2cm}类型参数}
+\subsection{类型参数}
 
 模板类型实参为模板类型形参指定的“值”，任何类型(包括void、函数类型、引用类型等)都可以用作模板实参，但对模板形参的替换必须进行有效的构造:
 
@@ -116,7 +112,7 @@ int main()
 }
 \end{lstlisting}
 
-\subsubsubsection{12.3.3\hspace{0.2cm}非类型模板参数}
+\subsection{非类型模板参数}
 
 非类型模板实参是替代非类型形参的值。这样的值必须是以下条件之一:
 
@@ -238,7 +234,7 @@ C<int*, &a[0]>* err3; // ERROR: addresses of array elements aren’t acceptable 
 \end{lstlisting}
 
 
-\subsubsubsection{12.3.4\hspace{0.2cm}双重模板参数}
+\subsection{双重模板参数}
 
 双重模板实参通常必须是类模板或别名模板，其形参必须与它所替换的双重模板参数的形参精确匹配。C++17前，双重模板参数的默认模板实参会忽略(但如果双重模板参数有默认实参，会在模板实例化期间考虑)。C++17放宽了匹配规则，只要求模板形参至少与对应的模板形参一样特化(参见16.2.2节)。
 
@@ -304,7 +300,7 @@ AlmostAnyTmpl<std::array> withArray; // ERROR: a template type parameter pack
 
 C++17前，只有关键字class可以用来声明双重模板参数，这并不意味着只有用关键字class声明的类模板才允许作为替换参数。实际上，struct模板、union模板和alias模板都是双重模板参数的有效参数(C++11引入别名模板后)。这类似于任何类型都可以使用关键字class声明的模板类型参数。
 
-\subsubsubsection{12.3.5\hspace{0.2cm}等价参数}
+\subsection{等价参数}
 
 当参数的值——相同时，两组模板实参是等价的。对于类型参数，类型别名并不重要:要比较的是类型别名声明的最终类型。对于整型非类型实参，比较实参的值;如何表达这个值并不重要:
 

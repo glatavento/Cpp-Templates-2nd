@@ -8,9 +8,7 @@ print(t...); // ERROR: cannot expand a tuple; it isn’t a parameter pack
 
 如示例中所述，因为不是参数包，所以解包元组的尝试不会成功。可以使用索引列表实现相同的方法。下面的函数模板apply()接受一个函数和一个元组，然后用未打包的元组元素调用该函数:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{tuples/apply.hpp}
+\filename{tuples/apply.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename F, typename... Elements, unsigned... Indices>
 auto applyImpl(F f, Tuple<Elements...> const& t,

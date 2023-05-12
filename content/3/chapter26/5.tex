@@ -15,9 +15,7 @@ else {
 
 要一般化输出存储在变量中的值，需要递归实例化函数模板和辅助函数。例如:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{variant/printrec.cpp}
+\filename{variant/printrec.cpp}
 \begin{lstlisting}[style=styleCXX]
 #include "variant.hpp"
 #include <iostream>
@@ -68,9 +66,7 @@ class VariantPrinter {
 
 visit()操作的核心类似于递归打印操作:遍历变量的类型，检查动态值是否具有给定的类型(使用is<T>())，然后在找到合适的类型时进行打印:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{variant/variantvisitimpl.hpp}
+\filename{variant/variantvisitimpl.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename R, typename V, typename Visitor,
 		 typename Head, typename... Tail>
@@ -103,9 +99,7 @@ variantVisitImpl()是一个带有许多模板参数的非成员函数模板。�
 
 除了VisitResult提供的结果类型计算(在下一节中讨论)，visit()的实现也很简单:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{variant/variantvisit.hpp}
+\filename{variant/variantvisit.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename... Types>
 	template<typename R, typename Visitor>
@@ -138,7 +132,7 @@ Variant<Types...>::visit(Visitor&& vis) && {
 
 实现直接委托给variantVisitImpl，传递Variant本身，转发访问器，并提供完整的类型列表。这三种实现之间唯一的区别是，是否将Variant本身作为Variant\&、Variant const\&或Variant\&\&进行传递。
 
-\subsubsubsection{26.5.1\hspace{0.2cm}结果类型}
+\subsection{结果类型}
 
 visit()的结果类型仍然是个谜。给定的访问器可能具有不同的函数操作符重载，以产生不同的结果类型，结果类型依赖于其形参类型的模板函数操作符，或者某种组合。看看下面的泛型Lambda:
 
@@ -173,9 +167,7 @@ class ComputedResultType;
 
 要计算它的结果类型，visit将所有的模板参数传递给VisitResult，这是一个别名模板，提供了对新类型特征VisitResultT的访问:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{variant/variantvisitresult.hpp}
+\filename{variant/variantvisitresult.hpp}
 \begin{lstlisting}[style=styleCXX]
 // an explicitly-provided visitor result type:
 template<typename R, typename Visitor, typename... ElementTypes>
@@ -202,15 +194,13 @@ class VisitResultT<ComputedResultType, Visitor, ElementTypes...>
 
 这种偏特化负责为常见情况计算适当的结果类型，这是下一节的主题。
 
-\subsubsubsection{26.5.2\hspace{0.2cm}常见的结果类型}
+\subsection{常见的结果类型}
 
 当调用为每个变量的元素类型产生不同类型的访问器时，如何将这些类型组合成一个单独的结果类型用于visit()?有一些简单的情况——若访问器为每个元素类型返回相同的类型，应该是visit()的结果类型。
 
 C++已经有了合理结果类型的概念，在第1.3.3节中介绍过:三元表达式b ? x : y的类型是x和y类型之间的公共类型。若x有int类型，y有double类型，公共类型是double，因为int可以提升为double。也可以在类型特征中捕捉到共同类型的概念:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{variant/commontype.hpp}
+\filename{variant/commontype.hpp}
 \begin{lstlisting}[style=styleCXX]
 using std::declval;
 
@@ -227,9 +217,7 @@ using CommonType = typename CommonTypeT<T, U>::Type;
 
 公共类型的概念扩展到一组类型:公共类型是集合中的所有类型，都可以提升到的类型。对于访问器，我们希望计算访问器在使用变量中的每个类型调用时，将产生的结果的通用类型:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{variant/variantvisitresultcommon.hpp}
+\filename{variant/variantvisitresultcommon.hpp}
 \begin{lstlisting}[style=styleCXX]
 #include "accumulate.hpp"
 #include "commontype.hpp"
@@ -256,9 +244,7 @@ VisitResult的计算分两个阶段进行。首先，VisitElementResult计算调
 
 C++11后，标准库提供了一个相应的类型特征，std::common\_type<>，有效地结合了CommonTypeT和Accumulate，使用这种方法生成任意数量传递类型的通用类型(参见D.5节)。通过使用std::common\_type<>，VisitResultT的实现可以更简单:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{variant/variantvisitresultstd.hpp}
+\filename{variant/variantvisitresultstd.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename Visitor, typename... ElementTypes>
 class VisitResultT<ComputedResultType, Visitor, ElementTypes...>
@@ -271,9 +257,7 @@ class VisitResultT<ComputedResultType, Visitor, ElementTypes...>
 
 下面的示例程序输出了通过传入泛型Lambda来生成的类型，该泛型Lambda将其得到的值加1:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{variant/visit.cpp}
+\filename{variant/visit.cpp}
 \begin{lstlisting}[style=styleCXX]
 #include "variant.hpp"
 #include <iostream>

@@ -10,9 +10,7 @@
 
 概念可以理解为静态多态的一种“接口”:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{poly/conceptsreq.hpp}
+\filename{poly/conceptsreq.hpp}
 \begin{lstlisting}[style=styleCXX]
 #include "coord.hpp"
 template<typename T>
@@ -27,9 +25,7 @@ concept GeoObj = requires(T x) {
 
 现在，可以重写一些示例模板，以包含一个require子句，用GeoObj概念约束模板参数:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{poly/conceptspoly.hpp}
+\filename{poly/conceptspoly.hpp}
 \begin{lstlisting}[style=styleCXX]
 #include "conceptsreq.hpp"
 #include <vector>

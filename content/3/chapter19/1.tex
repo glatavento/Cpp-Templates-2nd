@@ -1,7 +1,7 @@
 
 计算一系列值的和是一项相当常见的计算任务。然而，这个简单的问题为我们提供了一个很好的例子，可以引入策略类和特征解决各个层面的问题。
 
-\subsubsubsection{19.1.1\hspace{0.2cm}固化特征}
+\subsection{固化特征}
 
 首先，假设要计算的sum的值存储在一个数组中，并有一个指向要累计的第一个元素的指针和一个指向要累计的最后一个元素的下一位置的指针。因为本书专注于模板，所以希望编写一个适用于多种类型的模板。现在看来，似乎很简单:
 
@@ -9,9 +9,7 @@
 \hspace*{0.75cm}为了简单起见，本节中的大多数示例都使用普通指针。显然，工业化的接口可能更偏向使用C++标准库的迭代器(参见[JosuttisStdLib])。
 \end{tcolorbox}
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/accum1.hpp}
+\filename{traits/accum1.hpp}
 \begin{lstlisting}[style=styleCXX]
 #ifndef ACCUM_HPP
 #define ACCUM_HPP
@@ -34,9 +32,7 @@ T accum (T const* beg, T const* end)
 
 这是我们的第一个特征模板，代码使用了accum():
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/accum1.cpp}
+\filename{traits/accum1.cpp}
 \begin{lstlisting}[style=styleCXX]
 #include "accum1.hpp"
 #include <iostream>
@@ -89,9 +85,7 @@ accum<int>(name,name+5)
 
 使用额外参数的另一种方法是，在调用accum()的每个类型T与应该用于保存累积值的对应类型之间创建关联。这种关联可以认为是T类型的特征，因此计算总和的类型有时称为T的特征。事实证明，关联可以编码为模板的特化形式:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/accumtraits2.hpp}
+\filename{traits/accumtraits2.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename T>
 struct AccumulationTraits;
@@ -130,9 +124,7 @@ AccumulationTraits模板称为特征模板，它保存了一个与其参数类�
 \hspace*{0.75cm}C++11中，必须声明类似AccT类型的返回类型。
 \end{tcolorbox}
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/accum2.hpp}
+\filename{traits/accum2.hpp}
 \begin{lstlisting}[style=styleCXX]
 #ifndef ACCUM_HPP
 #define ACCUM_HPP
@@ -164,7 +156,7 @@ the average value of the characters in "templates" is 108
 
 我们添加了一个非常有用的机制来定制算法，但变化不是很显著。此外，若出现了与accum()一起使用的新类型，只需声明AccumulationTraits模板的显式特化，就可以将适当的AccT与其关联起来。这可以用于任何类型:基本类型、在其他库中声明的类型等。
 
-\subsubsubsection{19.1.2\hspace{0.2cm}值特征}
+\subsection{值特征}
 
 已经了解了特征表示与给定的“主”类型相关的类型信息。本节中，将说明这些信息不需要局限于类型，常量和其他值类也可以与类型关联。
 
@@ -180,9 +172,7 @@ return total;
 
 同样，特征也能起到帮助作用。例子中，可以在AccumulationTraits中添加一个新值特征:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/accumtraits3.hpp}
+\filename{traits/accumtraits3.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename T>
 struct AccumulationTraits;
@@ -209,9 +199,7 @@ struct AccumulationTraits<int> {
 
 本例中，新特征提供了一个0元素作为常量，可以在编译时计算。因此，accum()的表达式如下所示:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/accum3.hpp}
+\filename{traits/accum3.hpp}
 \begin{lstlisting}[style=styleCXX]
 #ifndef ACCUM_HPP
 #define ACCUM_HPP
@@ -304,9 +292,7 @@ C++17前，一种可行的替代方法是对值特征使用内联成员函数，
 
 可以这样重写AccumulationTraits:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/accumtraits4.hpp}
+\filename{traits/accumtraits4.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename T>
 struct AccumulationTraits;
@@ -355,9 +341,7 @@ struct AccumulationTraits<float> {
 
 将这些特征扩展到我们的类型上:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/accumtraits4bigint.hpp}
+\filename{traits/accumtraits4bigint.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<>
 struct AccumulationTraits<BigInt> {
@@ -376,15 +360,13 @@ AccT total = AccumulationTraits<T>::zero(); // init total by trait function
 
 显然，特征不仅仅是类型。可以作为一种机制，提供accum()所需调用元素类型的所有必要信息。这是特征概念的关键:特征为泛型计算提供了配置具体元素(主要是类型)的途径。
 
-\subsubsubsection{19.1.3\hspace{0.2cm}参数化特征}
+\subsection{参数化特征}
 
 前面章节accum()中是对特征的固化使用，当定义了解耦的特征，就不能在算法中替换。在某些情况下，这种重写是可行的。可能知道一组浮点值可以安全地求和为一个相同类型的变量，这样做可能提高效率。
 
 可以通过为特征添加一个模板参数AT来解决这个问题，AT的默认值由特征模板决定:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/accum5.hpp}
+\filename{traits/accum5.hpp}
 \begin{lstlisting}[style=styleCXX]
 #ifndef ACCUM_HPP
 #define ACCUM_HPP

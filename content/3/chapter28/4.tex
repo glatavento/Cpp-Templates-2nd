@@ -8,9 +8,7 @@
 \hspace*{0.75cm}C++17前，必须在翻译单元中在类声明之外初始化静态成员。
 \end{tcolorbox}
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{debugging/tracer.hpp}
+\filename{debugging/tracer.hpp}
 \begin{lstlisting}[style=styleCXX]
 #include <iostream>
 class SortTracer {
@@ -110,9 +108,7 @@ class SortTracer {
 
 这个特殊的跟踪器允许跟踪实体创建和销毁的模式，以及给定模板执行的赋值和比较。下面的测试程序演示了C++标准库的std::sort()算法:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{debugging/tracertest.cpp}
+\filename{debugging/tracertest.cpp}
 \begin{lstlisting}[style=styleCXX]
 #include <iostream>
 #include <algorithm>

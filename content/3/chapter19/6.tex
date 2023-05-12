@@ -1,13 +1,11 @@
 
 基于SFINAE的特征的另一个尝试涉及创建特征(或者更确切地说，一组特征)，可以确定给定的类型T是否具有给定名称X的成员(类型成员还是非类型成员)。
 
-\subsubsubsection{19.6.1\hspace{0.2cm}检查成员类型}
+\subsection{检查成员类型}
 
 首先定义一个特征，可以确定给定类型T是否有成员类型size\_type:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/hassizetype.hpp}
+\filename{traits/hassizetype.hpp}
 \begin{lstlisting}[style=styleCXX]
 #include <type_traits> // defines true_type and false_type
 
@@ -51,7 +49,6 @@ std::cout << HasSizeType<CX>::value; // true
 
 若成员类型size\_type私有，HasSizeTypeT会产生false，因为特征模板没有对参数类型的访问权限，因此typename T::size\_type无效(触发SFINAE)。换句话说，特征会测试是否有可访问的成员类型size\_type。
 
-\hspace*{\fill} \\ %插入空行
 \noindent
 \textbf{处理引用类型}
 
@@ -80,7 +77,6 @@ struct HasSizeTypeT<T, VoidT<RemoveReference<T>::size_type>>
 };
 \end{lstlisting}
 
-\hspace*{\fill} \\ %插入空行
 \noindent
 \textbf{注入类名}
 
@@ -99,7 +95,7 @@ static_assert(HasSizeTypeT<Sizeable>::value,
 
 因为size\_type引入自己的名称作为成员类型，并且继承该名称，所以后一个静态断言成功。若没有成功，这就是编译器的一个缺陷。
 
-\subsubsubsection{19.6.2\hspace{0.2cm}检查成员类型}
+\subsection{检查成员类型}
 
 定义像HasSizeTypeT这样的特征会引发一个问题，即如何将特征参数化，以便能够检查成员类型名。
 
@@ -113,9 +109,7 @@ static_assert(HasSizeTypeT<Sizeable>::value,
 
 宏的例子:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/hastype.hpp}
+\filename{traits/hastype.hpp}
 \begin{lstlisting}[style=styleCXX]
 #include <type_traits> // for true_type, false_type, and void_t
 #define DEFINE_HAS_TYPE(MemType) \
@@ -130,9 +124,7 @@ struct HasTypeT_##MemType<T, std::void_t<typename T::MemType>> \
 
 每次使用DEFINE\_HAS\_TYPE(MemberType)都会定义一个新的HasTypeT\_MemberType特征。可以使用它来检测类型是否有value\_type或char\_type成员类型:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/hastype.cpp}
+\filename{traits/hastype.cpp}
 \begin{lstlisting}[style=styleCXX]
 #include "hastype.hpp"
 #include <iostream>
@@ -154,13 +146,11 @@ int main()
 }
 \end{lstlisting}
 
-\subsubsubsection{19.6.3\hspace{0.2cm}检查非类型成员}
+\subsection{检查非类型成员}
 
 可以修改特征来检查数据成员和(单个)成员函数:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/hasmember.hpp}
+\filename{traits/hasmember.hpp}
 \begin{lstlisting}[style=styleCXX]
 #include <type_traits> // for true_type, false_type, and void_t
 
@@ -191,9 +181,7 @@ struct HasMemberT_##Member<T, std::void_t<decltype(&T::Member)>> \
 
 可以这样使用模板:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/hasmember.cpp}
+\filename{traits/hasmember.cpp}
 \begin{lstlisting}[style=styleCXX]
 #include "hasmember.hpp"
 
@@ -217,7 +205,6 @@ int main()
 
 修改偏特化，以排除\&T::Member不是指向成员类型指针，这并不困难(相当于排除静态数据成员)。类似地，可以排除或要求使用指针成员函数，将特征限制为数据成员或成员函数。
 
-\hspace*{\fill} \\ %插入空行
 \noindent
 \textbf{检查成员函数}
 
@@ -232,9 +219,7 @@ std::cout << HasMemberT_begin<std::vector<int>>::value; // false
 
 检查是否可以以特定的方式调用感兴趣的函数，并且即使函数重载也能成功调用。与第19.5节中的IsConvertibleT特征一样，技巧在于构造表达式来检查是否可以在decltype表达式中调用begin()来获取函数模板参数的默认值:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/hasbegin.hpp}
+\filename{traits/hasbegin.hpp}
 \begin{lstlisting}[style=styleCXX]
 #include <utility> // for declval
 #include <type_traits> // for true_type, false_type, and void_t
@@ -263,15 +248,12 @@ decltype(std::declval<T>().begin())
 \hspace*{0.75cm}除了decltype(调用表达式)不需要一个非引用、非void的返回类型作为完整的返回类型，这与其他表达式不同。而使用decltype(std::declval<T>().begin(), 0)，因为返回的值不再是decltype操作数的结果，所以要求调用的返回类型完整。
 \end{tcolorbox}
 
-\hspace*{\fill} \\ %插入空行
 \noindent
 \textbf{检查其他表达式}
 
 可以将上述技术用于其他类型的表达式，甚至组合多个表达式。可以测试给定类型T1和T2，是否为这些类型的值定义了小于操作符:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/hasless.hpp}
+\filename{traits/hasless.hpp}
 \begin{lstlisting}[style=styleCXX]
 include <utility> // for declval
 #include <type_traits> // for true_type, false_type, and void_t
@@ -327,9 +309,7 @@ class C
 
 由于std::void\_t的性质，可以在一个特征中组合多个约束:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/hasvarious.hpp}
+\filename{traits/hasvarious.hpp}
 \begin{lstlisting}[style=styleCXX]
 #include <utility> // for declval
 #include <type_traits> // for true_type, false_type, and void_t
@@ -352,15 +332,13 @@ struct HasVariousT<T, std::void_t<decltype(std::declval<T>().begin()),
 
 检测特定语法有效性的特性非常强大，允许模板根据特定操作的存在或不存在来定制行为。这些特征将再次作为SFINAE友好特征的一部分(第19.4.4节)和协助基于类型属性的重载(第20章)。
 
-\subsubsubsection{19.6.4\hspace{0.2cm}使用泛型Lambda检查成员}
+\subsection{使用泛型Lambda检查成员}
 
 第19.4.3节中介绍的isValid Lambda提供了一种更紧凑的技术来检查成员的特征，有助于避免使用宏来处理成员名称。
 
 下面的例子说明了如何定义特征，检查数据成员或类型成员(如first或size\_type)是否存在，或者是否为两个不同类型的对象定义了小于操作符:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/isvalid1.cpp}
+\filename{traits/isvalid1.cpp}
 \begin{lstlisting}[style=styleCXX]
 #include "isvalid.hpp"
 #include<iostream>
@@ -410,9 +388,7 @@ int main()
 
 为了能够使用通用泛型语法，将类型作为模板参数，可以再次定义辅助程序:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{traits/isvalid2.cpp}
+\filename{traits/isvalid2.cpp}
 \begin{lstlisting}[style=styleCXX]
 #include "isvalid.hpp"
 #include<iostream>

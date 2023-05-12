@@ -1,8 +1,6 @@
 我们的Variant类型的主要设计是为了管理动态值的存储，也就是当前存储在Variant中的值。不同的类型可能需要考虑不同的大小和对齐方式。此外，该变体还需要存储一个辨别器，来指示哪些可能的类型是动态值的类型。一种简单的(尽管低效)存储机制直接使用元组(参见第25章):
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{variant/variantstorageastuple.hpp}
+\filename{variant/variantstorageastuple.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename... Types>
 class Variant {
@@ -22,9 +20,7 @@ class Variant {
 
 更好的方法是将每个可能类型的存储重叠，可以通过递归地解开Variant的头和尾来实现，但这里使用的是联合，不是类:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{variant/variantstorageasunion.hpp}
+\filename{variant/variantstorageasunion.hpp}
 \begin{lstlisting}[style=styleCXX]
 template<typename... Types>
 union VariantStorage;
@@ -44,9 +40,7 @@ union VariantStorage<> {
 
 不过，我们改变了Variant存储的底层表示:足够大的字符数组，以容纳任何类型，并对任何类型具有适当的对齐方式，我们将其用作存储活动值的缓冲区。VariantStorage类模板实现了这个缓冲区和一个辨别器:
 
-\hspace*{\fill} \\ %插入空行
-\noindent
-\textit{variant/variantstorage.hpp}
+\filename{variant/variantstorage.hpp}
 \begin{lstlisting}[style=styleCXX]
 #include <new> // for std::launder()
 
