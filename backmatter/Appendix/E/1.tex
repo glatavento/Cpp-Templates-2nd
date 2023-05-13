@@ -37,7 +37,7 @@ class Person
 	requires std::is_convertible_v<STR,std::string>
 	explicit Person(STR&& n)
 	: name(std::forward<STR>(n)) {
-		std::cout << "TMPL-CONSTR for ’" << name << "’\n";
+		std::cout << "TMPL-CONSTR for '" << name << "'\n";
 	}
 	...
 };

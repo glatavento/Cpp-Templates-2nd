@@ -166,7 +166,7 @@ void clear(char* buf)
 {
 	// mismatch in array bound:
 	for (int k = 0; k<Danger<void>::max; ++k) {
-		buf[k] = ’\0’;
+		buf[k] = '\0';
 	}
 }
 \end{cpp}
@@ -284,7 +284,7 @@ template<> constexpr std::size_t SZ<void> = 0;
 template<typename T> typename T::iterator null_iterator;
 
 template<> BitIterator null_iterator<std::bitset<100>>;
-// BitIterator doesn’t match T::iterator, and that is fine
+// BitIterator doesn't match T::iterator, and that is fine
 \end{cpp}
 
 \subsection{成员模板全特化}

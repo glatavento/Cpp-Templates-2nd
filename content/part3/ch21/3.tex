@@ -142,7 +142,7 @@ class Base : public Mixins... {
 	// the virtuality of foo() depends on its declaration
 	// (if any) in the base classes Mixins...
 	void foo() {
-		std::cout << "Base::foo()" << ’\n’;
+		std::cout << "Base::foo()" << '\n';
 	}
 };
 
@@ -150,7 +150,7 @@ template<typename... Mixins>
 class Derived : public Base<Mixins...> {
 	public:
 	void foo() {
-		std::cout << "Derived::foo()" << ’\n’;
+		std::cout << "Derived::foo()" << '\n';
 	}
 };
 

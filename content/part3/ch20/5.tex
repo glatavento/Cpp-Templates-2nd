@@ -128,12 +128,12 @@ int main()
 编译时虽然对X3、X4、X6和X7的4个不同min()调用存在错误，但这些错误并不来自min()的主体。相反，而是抱怨没有合适的min()函数，因为SFINAE已经取消了匹配的选项。Clang会输出以下诊断信息:
 
 \begin{shell}
-min.cpp:41:3: error: no matching function for call to ’min’
+min.cpp:41:3: error: no matching function for call to 'min'
 min(X3(), X3()); // ERROR: X3 cannot be passed to min
 ^~~
 ./min.hpp:8:1: note: candidate template ignored: substitution failure
-[with T = X3]: no type named ’Type’ in
-’LessResultT<const X3 &, const X3 &>’
+[with T = X3]: no type named 'Type' in
+'LessResultT<const X3 &, const X3 &>'
 min(T const& x, T const& y)
 \end{shell}
 

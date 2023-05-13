@@ -15,7 +15,7 @@ auto& operator[](CTValue<T, Index>) {
 可以这样使用这个类:
 
 \begin{cpp}
-auto t = makeTuple(0, ’1’, 2.2f, std::string{"hello"});
+auto t = makeTuple(0, '1', 2.2f, std::string{"hello"});
 auto a = t[CTValue<unsigned, 2>{}];
 auto b = t[CTValue<unsigned, 3>{}];
 \end{cpp}
@@ -32,15 +32,15 @@ a和b将由Tuple t中的第三和第四个值的类型和值初始化。
 // convert single char to corresponding int value at compile time:
 constexpr int toInt(char c) {
 	// hexadecimal letters:
-	if (c >= ’A’ && c <= ’F’) {
-		return static_cast<int>(c) - static_cast<int>(’A’) + 10;
+	if (c >= 'A' && c <= 'F') {
+		return static_cast<int>(c) - static_cast<int>('A') + 10;
 	}
-	if (c >= ’a’ && c <= ’f’) {
-		return static_cast<int>(c) - static_cast<int>(’a’) + 10;
+	if (c >= 'a' && c <= 'f') {
+		return static_cast<int>(c) - static_cast<int>('a') + 10;
 	}
-	// other (disable ’.’ for floating-point literals):
-	assert(c >= ’0’ && c <= ’9’);
-	return static_cast<int>(c) - static_cast<int>(’0’);
+	// other (disable '.' for floating-point literals):
+	assert(c >= '0' && c <= '9');
+	return static_cast<int>(c) - static_cast<int>('0');
 }
 
 // parse array of chars to corresponding int value at compile time:
@@ -48,15 +48,15 @@ template<std::size_t N>
 constexpr int parseInt(char const (&arr)[N]) {
 	int base = 10; // to handle base (default: decimal)
 	int offset = 0; // to skip prefixes like 0x
-	if (N > 2 && arr[0] == ’0’) {
+	if (N > 2 && arr[0] == '0') {
 		switch (arr[1]) {
-			case ’x’: // prefix 0x or 0X, so hexadecimal
-			case ’X’:
+			case 'x': // prefix 0x or 0X, so hexadecimal
+			case 'X':
 				base = 16;
 				offset = 2;
 				break;
-			case ’b’: // prefix 0b or 0B (since C++14), so binary
-			case ’B’:
+			case 'b': // prefix 0b or 0B (since C++14), so binary
+			case 'B':
 				base = 2;
 				offset = 2;
 				break;
@@ -70,7 +70,7 @@ constexpr int parseInt(char const (&arr)[N]) {
 	int value = 0;
 	int multiplier = 1;
 	for (std::size_t i = 0; i < N - offset; ++i) {
-		if (arr[N-1-i] != ’\’’) { // ignore separating single quotes (e.g. in 1’000)
+		if (arr[N-1-i] != '\'') { // ignore separating single quotes (e.g. in 1'000)
 			value += toInt(arr[N-1-i]) * multiplier;
 			multiplier *= base;
 		}
@@ -107,7 +107,7 @@ C++14开始，就支持二进制字面值的前缀0b和分隔数字的单引号�
 现在，就可以这样使用元组了:
 
 \begin{cpp}
-auto t = makeTuple(0, ’1’, 2.2f, std::string{"hello"});
+auto t = makeTuple(0, '1', 2.2f, std::string{"hello"});
 auto c = t[2_c];
 auto d = t[3_c];
 \end{cpp}

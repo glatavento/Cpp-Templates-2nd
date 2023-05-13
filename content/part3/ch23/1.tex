@@ -50,7 +50,7 @@ static_assert(sqrt(40) == 6, ""); // OK (evaluated at compile time)
 
 std::array<int, sqrt(40)+1> arr; // declares array of 7 elements (compile time)
 long long l = 53478;
-std::cout << sqrt(l) << ’\n’; // prints 231 (evaluated at run time)
+std::cout << sqrt(l) << '\n'; // prints 231 (evaluated at run time)
 \end{cpp}
 
 这个函数的实现在运行时可能不是最高效的(运行时利用机器的特性通常会有很好的性能回报)，但因为执行的是编译时计算，所以绝对效率不如可移植性重要。在这个平方根示例中没有高级的“魔术模板”，只有函数模板的常见模板参数推导。这里的代码是“普通的C++”，读起来并不困难。
@@ -238,10 +238,10 @@ using RatioAdd = typename RatioAddImpl<R1, R2>::Type;
 using R1 = Ratio<1,1000>;
 using R2 = Ratio<2,3>;
 using RS = RatioAdd<R1,R2>; // RS has type Ratio<2003,2000>
-std::cout << RS::num << ’/’ << RS::den << ’\n’; // prints 2003/3000
+std::cout << RS::num << '/' << RS::den << '\n'; // prints 2003/3000
 
 using RA = RatioAdd<Ratio<2,3>,Ratio<5,7>>; // RA has type Ratio<29,21>
-std::cout << RA::num << ’/’ << RA::den << ’\n’; // prints 29/21
+std::cout << RA::num << '/' << RA::den << '\n'; // prints 29/21
 \end{cpp}
 
 现在可以为duration定义一个类模板，参数化为任意值类型和一个单位类型，该单位类型是Ratio<>的实例:

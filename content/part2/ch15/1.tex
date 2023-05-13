@@ -54,7 +54,7 @@ g(arr); // reference parameter: T is double[20]
 f(seven); // nonreference parameter: T is int
 g(seven); // reference parameter: T is int const
 f(7); // nonreference parameter: T is int
-g(7); // reference parameter: T is int => ERROR: can’t pass 7 to int&
+g(7); // reference parameter: T is int => ERROR: can't pass 7 to int&
 \end{cpp} 
 
 对于调用f(arr)，arr的数组类型衰变为double*类型，这是T的类型。f(7)中去掉了const限定，因此T推导为int。相反，调用g(x)可以将T推导为double[20]类型(没有发生衰变)。类似地，g(7)的左值参数类型为int const，在匹配引用参数时不删除const和volatile限定符，因此T推导为int const。但注意g(7)会推导T为int(非类右值表达式没有const或volatile限定类型)，并且调用会失败，因为7不能传递给int\&类型的参数。

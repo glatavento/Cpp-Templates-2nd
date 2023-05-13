@@ -28,7 +28,7 @@ printT(std::cref(s)); // pass s “as if by reference”
 
 void printString(std::string const& s)
 {
-	std::cout << s << ’\n’;
+	std::cout << s << '\n';
 }
 
 template<typename T>
@@ -52,7 +52,7 @@ int main()
 \begin{cpp}
 template<typename T>
 void printV (T arg) {
-	std::cout << arg << ’\n’;
+	std::cout << arg << '\n';
 }
 ...
 std::string s = "hello";

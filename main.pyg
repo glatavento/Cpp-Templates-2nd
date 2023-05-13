@@ -1,5 +1,0 @@
-template<typename T>
-bool isless(T arg1, T arg2)
-{
-^^Ireturn arg1 < arg2;
-}

@@ -12,7 +12,7 @@ template<typename T> void report(T p) {
 		for (std::meta::info : std::meta::data_members(infoT)) {
 			-> {
 				std::cout << (: std::meta::name(info) :)
-				<< ": " << p.(.info.) << ’\n’;
+				<< ": " << p.(.info.) << '\n';
 			}
 		}
 	}
@@ -37,8 +37,8 @@ struct X {
 
 \begin{cpp}
 template<> void report(X const& p) {
-	std::cout << "x" << ": " << "p.x" << ’\n’;
-	std::cout << "s" << ": " << "p.s" << ’\n’;
+	std::cout << "x" << ": " << "p.x" << '\n';
+	std::cout << "s" << ": " << "p.s" << '\n';
 }
 \end{cpp}
 

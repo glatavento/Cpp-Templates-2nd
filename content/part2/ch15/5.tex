@@ -87,9 +87,9 @@ int operator"" _B7()
 {
 	std::array<char,sizeof...(cs)> chars{cs...}; // initialize array of passed chars
 	for (char c : chars) { // and use it (print it here)
-		std::cout << "’" << c << "’ ";
+		std::cout << "'" << c << "' ";
 	}
-	std::cout << ’\n’;
+	std::cout << '\n';
 	return ...;
 }
 \end{cpp}
@@ -99,8 +99,8 @@ int operator"" _B7()
 这种技术只支持那些没有后缀也有效的数字字面值。例如:
 
 \begin{cpp}
-auto b = 01.3_B7; // OK: deduces <’0’, ’1’, ’.’, ’3’>
-auto c = 0xFF00_B7; // OK: deduces <’0’, ’x’, ’F’, ’F’, ’0’, ’0’>
+auto b = 01.3_B7; // OK: deduces <'0', '1', '.', '3'>
+auto c = 0xFF00_B7; // OK: deduces <'0', 'x', 'F', 'F', '0', '0'>
 auto d = 0815_B7; // ERROR: 8 is no valid octal literal
 auto e = hello_B7; // ERROR: identifier hello_B7 is not defined
 auto f = "hello"_B7; // ERROR: literal operator _B7 does not match

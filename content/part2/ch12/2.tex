@@ -276,7 +276,7 @@ template<typename... Ts, Ts... vals> struct StaticValues {};
 template<typename... Ts> struct ArgList {
 	template<Ts... vals> struct Vals {};
 };
-ArgList<int, char, char>::Vals<3, ’x’, ’y’> tada;
+ArgList<int, char, char>::Vals<3, 'x', 'y'> tada;
 \end{cpp}
 
 因为能接受可变数量的模板参数，所以包含模板参数包的模板称为可变参数模板。第4章和第12.4节在描述了可变参数模板的使用。
@@ -304,7 +304,7 @@ class Quintuple; // OK: T4 and T5 already have defaults
 template<typename T1 = char, typename T2, typename T3,
 typename T4, typename T5>
 class Quintuple; // ERROR: T1 cannot have a default argument
-// because T2 doesn’t have a default
+// because T2 doesn't have a default
 \end{cpp}
 
 函数模板的参数，默认模板参数不需要后续模板参数有默认值:

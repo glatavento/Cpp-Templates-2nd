@@ -97,7 +97,7 @@ int main()
 	double val = 1.2;
 	strange(val, val); // OK: with T deduced to double&
 	strange(val, 3.4); // ERROR: conflicting deductions
-	bizarre(val, val); // ERROR: lvalue val doesn’t match double&&
+	bizarre(val, val); // ERROR: lvalue val doesn't match double&&
 }
 \end{cpp}
 
@@ -136,7 +136,7 @@ class BadString {
 int main()
 {
 	BadString str("correkt");
-	str[5] = ’c’; // possibly an overload resolution ambiguity!
+	str[5] = 'c'; // possibly an overload resolution ambiguity!
 }
 \end{cpp}
 

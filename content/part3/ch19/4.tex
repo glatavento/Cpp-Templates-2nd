@@ -212,7 +212,7 @@ struct IsDefaultConstructibleT : std::false_type
 {
 };
 
-// partial specialization (may be SFINAE’d away):
+// partial specialization (may be SFINAE'd away):
 template<typename T>
 struct IsDefaultConstructibleT<T, VoidT<decltype(T())>> : std::true_type
 {
@@ -272,7 +272,7 @@ template<typename F, typename... Args,
 		typename = decltype(std::declval<F>()(std::declval<Args&&>()...))>
 std::true_type isValidImpl(void*);
 
-// fallback if helper SFINAE’d out:
+// fallback if helper SFINAE'd out:
 template<typename F, typename... Args>
 std::false_type isValidImpl(...);
 
@@ -466,7 +466,7 @@ struct HasPlusT : std::false_type
 {
 };
 
-// partial specialization (may be SFINAE’d away):
+// partial specialization (may be SFINAE'd away):
 template<typename T1, typename T2>
 struct HasPlusT<T1, T2, std::void_t<decltype(std::declval<T1>()
 						+ std::declval<T2>())>>

@@ -19,7 +19,7 @@ struct HasSizeTypeT : std::false_type
 {
 };
 
-// partial specialization (may be SFINAE’d away):
+// partial specialization (may be SFINAE'd away):
 template<typename T>
 struct HasSizeTypeT<T, VoidT<typename T::size_type>> : std::true_type
 {
@@ -135,13 +135,13 @@ DEFINE_HAS_TYPE(char_type);
 int main()
 {
 	std::cout << "int::value_type: "
-	<< HasTypeT_value_type<int>::value << ’\n’;
+	<< HasTypeT_value_type<int>::value << '\n';
 	std::cout << "std::vector<int>::value_type: "
-	<< HasTypeT_value_type<std::vector<int>>::value << ’\n’;
+	<< HasTypeT_value_type<std::vector<int>>::value << '\n';
 	std::cout << "std::iostream::value_type: "
-	<< HasTypeT_value_type<std::iostream>::value << ’\n’;
+	<< HasTypeT_value_type<std::iostream>::value << '\n';
 	std::cout << "std::iostream::char_type: "
-	<< HasTypeT_char_type<std::iostream>::value << ’\n’;
+	<< HasTypeT_char_type<std::iostream>::value << '\n';
 }
 \end{cpp}
 
@@ -194,11 +194,11 @@ DEFINE_HAS_MEMBER(first);
 int main()
 {
 	std::cout << "int::size: "
-				<< HasMemberT_size<int>::value << ’\n’;
+				<< HasMemberT_size<int>::value << '\n';
 	std::cout << "std::vector<int>::size: "
-				<< HasMemberT_size<std::vector<int>>::value << ’\n’;
+				<< HasMemberT_size<std::vector<int>>::value << '\n';
 	std::cout << "std::pair<int,int>::first: "
-				<< HasMemberT_first<std::pair<int,int>>::value << ’\n’;
+				<< HasMemberT_first<std::pair<int,int>>::value << '\n';
 }
 \end{cpp}
 
@@ -227,7 +227,7 @@ template<typename, typename = std::void_t<>>
 struct HasBeginT : std::false_type {
 };
 
-// partial specialization (may be SFINAE’d away):
+// partial specialization (may be SFINAE'd away):
 template<typename T>
 struct HasBeginT<T, std::void_t<decltype(std::declval<T>().begin())>>
 : std::true_type {
@@ -261,7 +261,7 @@ struct HasLessT : std::false_type
 {
 };
 
-// partial specialization (may be SFINAE’d away):
+// partial specialization (may be SFINAE'd away):
 template<typename T1, typename T2>
 struct HasLessT<T1, T2, std::void_t<decltype(std::declval<T1>()
 					< std::declval<T2>())>>
@@ -317,7 +317,7 @@ struct HasVariousT : std::false_type
 {
 };
 
-// partial specialization (may be SFINAE’d away):
+// partial specialization (may be SFINAE'd away):
 template<typename T>
 struct HasVariousT<T, std::void_t<decltype(std::declval<T>().begin()),
 					typename T::difference_type,
@@ -352,7 +352,7 @@ int main()
 		= isValid([](auto x) -> decltype((void)valueT(x).first) {
 				});
 
-	cout << "hasFirst: " << hasFirst(type<pair<int,int>>) << ’\n’; // true
+	cout << "hasFirst: " << hasFirst(type<pair<int,int>>) << '\n'; // true
 	
 	// define to check for member type size_type:
 	constexpr auto hasSizeType
@@ -362,7 +362,7 @@ int main()
 	struct CX {
 		using size_type = std::size_t;
 	};
-	cout << "hasSizeType: " << hasSizeType(type<CX>) << ’\n’; // true
+	cout << "hasSizeType: " << hasSizeType(type<CX>) << '\n'; // true
 	
 	if constexpr(!hasSizeType(type<int>)) {
 		cout << "int has no size_type\n";
@@ -374,10 +374,10 @@ int main()
 		= isValid([](auto x, auto y) -> decltype(valueT(x) < valueT(y)) {
 				});
 			
-	cout << hasLess(42, type<char>) << ’\n’; // yields true
-	cout << hasLess(type<string>, type<string>) << ’\n’; // yields true
-	cout << hasLess(type<string>, type<int>) << ’\n’; // yields false
-	cout << hasLess(type<string>, "hello") << ’\n’; // yields true
+	cout << hasLess(42, type<char>) << '\n'; // yields true
+	cout << hasLess(type<string>, type<string>) << '\n'; // yields true
+	cout << hasLess(type<string>, type<int>) << '\n'; // yields false
+	cout << hasLess(type<string>, "hello") << '\n'; // yields true
 }
 \end{cpp}
 
@@ -416,19 +416,19 @@ int main()
 {
 	using namespace std;
 	
-	cout << "first: " << HasFirstT<pair<int,int>>::value << ’\n’; // true
+	cout << "first: " << HasFirstT<pair<int,int>>::value << '\n'; // true
 	
 	struct CX {
 		using size_type = std::size_t;
 	};
 
-	cout << "size_type: " << HasSizeTypeT<CX>::value << ’\n’; // true
-	cout << "size_type: " << HasSizeTypeT<int>::value << ’\n’; // false
+	cout << "size_type: " << HasSizeTypeT<CX>::value << '\n'; // true
+	cout << "size_type: " << HasSizeTypeT<int>::value << '\n'; // false
 	
-	cout << HasLessT<int, char>::value << ’\n’; // true
-	cout << HasLessT<string, string>::value << ’\n’; // true
-	cout << HasLessT<string, int>::value << ’\n’; // false
-	cout << HasLessT<string, char*>::value << ’\n’; // true
+	cout << HasLessT<int, char>::value << '\n'; // true
+	cout << HasLessT<string, string>::value << '\n'; // true
+	cout << HasLessT<string, int>::value << '\n'; // false
+	cout << HasLessT<string, char*>::value << '\n'; // true
 }
 \end{cpp}
 

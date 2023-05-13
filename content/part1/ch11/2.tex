@@ -80,7 +80,7 @@ add_rvalue_reference_t<int const&> // int const& (lvalue-ref remains lvalue-ref)
 
 \begin{cpp}
 is_copy_assignable_v<int> // yields true (generally, you can assign an int to an int)
-is_assignable_v<int,int> // yields false (can’t call 42 = 42)
+is_assignable_v<int,int> // yields false (can't call 42 = 42)
 \end{cpp}
 
 is\_copy\_assignable只是检查是否可以给另一个int赋值(检查lvalues的操作)，is\_assignable将值类别(参见附录B)考虑进去(这里检查是否可以给prvalue赋值)。也就是说，第一个表达式等价于

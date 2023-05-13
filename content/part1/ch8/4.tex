@@ -69,7 +69,7 @@ std::cout << len(p); // ERROR: no matching len() function found
 
 \begin{cpp}
 std::allocator<int> x;
-std::cout << len(x); // ERROR: len() function found, but can’t size()
+std::cout << len(x); // ERROR: len() function found, but can't size()
 \end{cpp}
 
 当传递这种类型的对象时，编译器会找到第二个函数模板作为匹配的函数模板。因此，这将导致编译错误，即对std::allocator<int>的调用size()无效，而不是没有找到匹配的len()函数。这一次，没有忽略第二个函数模板。
@@ -122,7 +122,7 @@ std::cout << len(p); // OK: only fallback len() matches
 
 std::allocator<int> x;
 std::cout << len(x); // ERROR: 2nd len() function matches best,
-					 // but can’t call size() for x
+					 // but can't call size() for x
 \end{cpp}
 
 关于SFINAE的更多细节，请参见15.7节和SFINAE应用的章节19.4。
@@ -190,7 +190,7 @@ typename T::size_type len (T const& t)
 }
 
 std::allocator<int> x;
-std::cout << len(x) << ’\n’; // ERROR: len() selected, but x has no size()
+std::cout << len(x) << '\n'; // ERROR: len() selected, but x has no size()
 \end{cpp}
 
 有一种常见的模式或习语可以用来处理这种情况:

@@ -113,7 +113,7 @@ template<typename T> A(T) -> A<T>; // deduction guide
 A<int> a1{42}; // OK
 A<int> a2(42); // ERROR: not aggregate initialization
 A<int> a3 = {42}; // OK
-A a4 = 42; // ERROR: can’t deduce type
+A a4 = 42; // ERROR: can't deduce type
 \end{cpp}
 
 但根据上面的指引，可以这样写:

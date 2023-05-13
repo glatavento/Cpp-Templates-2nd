@@ -31,7 +31,7 @@ class Tree {
 template<typename T>
 class Tree {
 	friend class Factory; // OK even if first declaration of Factory
-	friend class Node<T>; // error if Node isn’t visible
+	friend class Node<T>; // error if Node isn't visible
 };
 \end{cpp}
 
@@ -81,7 +81,7 @@ class Mixer {
 	friend void combine<char>(char, int);
 	// OK: T1 = char T2 = int
 	friend void combine<char>(char&, int);
-	// ERROR: doesn’t match combine() template
+	// ERROR: doesn't match combine() template
 	friend void combine<>(long, long) { ... }
 	// ERROR: definition not allowed!
 };

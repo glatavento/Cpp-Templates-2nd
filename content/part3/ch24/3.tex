@@ -157,7 +157,7 @@ template<auto... Values>
 class Valuelist { };
 
 int x;
-using MyValueList = Valuelist<1, ’a’, true, &x>;
+using MyValueList = Valuelist<1, 'a', true, &x>;
 \end{cpp}
 
 虽然这样的异构值列表可能有用，但与前面要求所有元素都具有相同类型的值列表不同。虽然可以要求所有元素都具有相同的类型(在15.10.1节中也讨论了这一点)，但空的Valuelist<>肯定没有已知的元素类型。

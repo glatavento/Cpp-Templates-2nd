@@ -7,7 +7,7 @@ template<typename T>
 T max(T a, T b)
 {
 	return b < a ? a : b; // ERROR: “no match for operator <
-	// (operator types are ’X’ and ’X’)”
+	// (operator types are 'X' and 'X')”
 }
 
 struct X {
@@ -18,7 +18,7 @@ int main()
 {
 	X a, b;
 	X m = max(a, b); // NOTE: “in instantiation of function template specialization
-					// ’max<X>’ requested here”
+					// 'max<X>' requested here”
 }
 \end{cpp}
 

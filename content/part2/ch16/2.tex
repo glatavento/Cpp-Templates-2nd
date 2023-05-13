@@ -109,7 +109,7 @@ void f1(T2, T1)
 // fine so far
 int main()
 {
-	f1<char, char>(’a’, ’b’); // ERROR: ambiguous
+	f1<char, char>('a', 'b'); // ERROR: ambiguous
 }
 \end{cpp}
 
@@ -139,7 +139,7 @@ void f1(T1, T2)
 
 void g()
 {
-	f1<char, char>(’a’, ’b’);
+	f1<char, char>('a', 'b');
 }
 
 // translation unit 2:
@@ -155,7 +155,7 @@ extern void g(); // defined in translation unit 1
 
 int main()
 {
-	f1<char, char>(’a’, ’b’);
+	f1<char, char>('a', 'b');
 	g();
 }
 \end{cpp}
@@ -288,7 +288,7 @@ std::string f(int&)
 int main()
 {
 	int x = 7;
-	std::cout << f(x) << ’\n’; // prints: Nontemplate
+	std::cout << f(x) << '\n'; // prints: Nontemplate
 }
 \end{cpp}
 
@@ -319,9 +319,9 @@ std::string f(int const&)
 int main()
 {
 	int x = 7;
-	std::cout << f(x) << ’\n’; // prints: Template
+	std::cout << f(x) << '\n'; // prints: Template
 	int const c = 7;
-	std::cout << f(c) << ’\n’; // prints: Nontemplate
+	std::cout << f(c) << '\n'; // prints: Nontemplate
 }
 \end{cpp}
 

@@ -162,7 +162,7 @@ struct Values {
 };
 
 int i;
-Values<char, int, int*>::Holder<’a’, 17, &i> valueHolder;
+Values<char, int, int*>::Holder<'a', 17, &i> valueHolder;
 \end{cpp}
 
 当Values<…>已指定，则Values<…>::Holder非类型参数列表长度也就固定了;因此参数包Vs不是一个变长参数包。
@@ -200,7 +200,7 @@ void print(Types... values);
 int main()
 {
 	std::string welcome("Welcome to ");
-	print(welcome, "C++ ", 2011, ’\n’); // calls print<std::string, char const*,
+	print(welcome, "C++ ", 2011, '\n'); // calls print<std::string, char const*,
 } // int, char>
 \end{cpp}
 

@@ -141,7 +141,7 @@ foo(vp); // OK: deduces void foo(void*)
 若为不支持使用操作的类型实例化模板，将导致编译时错误。例如:
 
 \begin{cpp}
-std::complex<float> c1, c2; // doesn’t provide operator <
+std::complex<float> c1, c2; // doesn't provide operator <
 ...
 ::max(c1,c2); // ERROR at compile time
 \end{cpp}

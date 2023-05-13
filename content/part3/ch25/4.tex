@@ -3,8 +3,8 @@
 
 \begin{cpp}
 Tuple<std::string, char const*, int, char> t("Pi", "is roughly",
-3, ’\n’);
-print(t...); // ERROR: cannot expand a tuple; it isn’t a parameter pack
+3, '\n');
+print(t...); // ERROR: cannot expand a tuple; it isn't a parameter pack
 \end{cpp}
 
 如示例中所述，因为不是参数包，所以解包元组的尝试不会成功。可以使用索引列表实现相同的方法。下面的函数模板apply()接受一个函数和一个元组，然后用未打包的元组元素调用该函数:
@@ -32,7 +32,7 @@ applyImpl()函数模板接受给定的索引列表，并将元组中的元素展
 
 \begin{cpp}
 Tuple<std::string, char const*, int, char> t("Pi", "is roughly",
-												3, ’\n’);
+												3, '\n');
 apply(print, t); // OK: prints Pi is roughly 3
 \end{cpp}
 

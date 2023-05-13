@@ -226,9 +226,9 @@ int main()
 		v = nc;
 	}
 		catch (CopiedNonCopyable) {
-		std::cout << "Copy assignment of NonCopyable failed." << ’\n’;
+		std::cout << "Copy assignment of NonCopyable failed." << '\n';
 		if (!v.is<int>() && !v.is<NonCopyable>()) {
-			std::cout << "Variant has no value." << ’\n’;
+			std::cout << "Variant has no value." << '\n';
 		}
 	}
 }

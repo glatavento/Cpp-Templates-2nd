@@ -118,7 +118,7 @@ popFront(Tuple<Types...> const& tuple)
 \begin{cpp}
 Tuple<int, double, std::string> t1(17, 3.14, "Hello, World!");
 auto t2 = popFront(pushBack(t1, true));
-std::cout << std::boolalpha << t2 << ’\n’;
+std::cout << std::boolalpha << t2 << '\n';
 \end{cpp}
 
 输出为
@@ -337,7 +337,7 @@ auto select(Tuple<Elements...> const& t,
 \begin{cpp}
 Tuple<int, double, std::string> t1(42, 7.7, "hello"};
 auto a = splat<1, 4>(t);
-std::cout << a << ’\n’;
+std::cout << a << '\n';
 \end{cpp}
 
 会生成一个Tuple<double, double, double, double>，其中每个值都是get<1>(t)的副本，所以会输出
@@ -394,10 +394,10 @@ class SmallerThanT
 
 void testTupleSort()
 {
-	auto t1 = makeTuple(17LL, std::complex<double>(42,77), ’c’, 42, 7.7);
-	std::cout << t1 << ’\n’;
+	auto t1 = makeTuple(17LL, std::complex<double>(42,77), 'c', 42, 7.7);
+	std::cout << t1 << '\n';
 	auto t2 = sort<SmallerThanT>(t1); // t2 is Tuple<int, long, std::string>
-	std::cout << "sorted by size: " << t2 << ’\n’;
+	std::cout << "sorted by size: " << t2 << '\n';
 }
 \end{cpp}
 

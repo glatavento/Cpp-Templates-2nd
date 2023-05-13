@@ -235,7 +235,7 @@ OldCounterHandle<int S::*, &S::i>
 template<auto... VS> struct Values {
 };
 Values<1, 2, 3> beginning;
-Values<1, ’x’, nullptr> triplet;
+Values<1, 'x', nullptr> triplet;
 \end{cpp}
 
 三元操作符的示例表明，包中的每个非类型参数元素都可以推导出不同的类型。与多变量声明符的情况不同(见15.10.4节)，不要求所有推导都等价。
@@ -910,7 +910,7 @@ template<typename F, typename... Ts> void invoke (F f, Ts... ps)
 int main()
 {
 	invoke([](auto x, auto y) {
-		std::cout << x+y << ’\n’
+		std::cout << x+y << '\n'
 	},
 	21, 21);
 }

@@ -27,7 +27,7 @@ struct Y; // incomplete type
 // undefined behavior:
 static_assert(std::is_constructible<X,int>{}
 				|| std::is_constructible<Y,int>{},
-			"can’t init X or Y from int");
+			"can't init X or Y from int");
 \end{cpp}
 
 因为is\_constructible<X，int>已经产生了true，以下语句保证可以编译:
@@ -36,7 +36,7 @@ static_assert(std::is_constructible<X,int>{}
 // OK:
 static_assert(std::disjunction<std::is_constructible<X, int>,
 								std::is_constructible<Y, int>>{},
-			"can’t init X or Y from int");
+			"can't init X or Y from int");
 \end{cpp}
 
 另一个是通过逻辑组合现有类型特征，来定义新类型特征的一种简单方法，可以定义一个特性来检查一个类型是否“不是指针”(既不是指针，也不是成员指针，也不是空指针):
@@ -53,10 +53,10 @@ struct isNoPtrT : std::negation<std::disjunction<std::is_null_pointer<T>,
 因为结合了相应的特征类，所以这里不能使用逻辑操作符。根据这个定义，以下方式可用:
 
 \begin{cpp}
-std::cout << isNoPtrT<void*>::value << ’\n’; // false
-std::cout << isNoPtrT<std::string>::value << ’\n’; // true
+std::cout << isNoPtrT<void*>::value << '\n'; // false
+std::cout << isNoPtrT<std::string>::value << '\n'; // true
 auto np = nullptr;
-std::cout << isNoPtrT<decltype(np)>::value << ’\n’; // false
+std::cout << isNoPtrT<decltype(np)>::value << '\n'; // false
 \end{cpp}
 
 并配以相应的变量模板:
@@ -69,8 +69,8 @@ constexpr bool isNoPtr = isNoPtrT<T>::value;
 可以这样写:
 
 \begin{cpp}
-std::cout << isNoPtr<void*> << ’\n’; // false
-std::cout << isNoPtr<int> << ’\n’; // true
+std::cout << isNoPtr<void*> << '\n'; // false
+std::cout << isNoPtr<int> << '\n'; // true
 \end{cpp}
 
 最后一个例子，下面的函数模板只有在所有模板参数既不是类，也不是联合时才启用:

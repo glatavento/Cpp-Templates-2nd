@@ -17,7 +17,7 @@ template<typename T> constexpr std::size_t SZ<T&> = sizeof(void*);
 template<typename T> typename T::iterator null_iterator;
 
 template<typename T, std::size_t N> T* null_iterator<T[N]> = null_ptr;
-// T* doesn’t match T::iterator, and that is fine
+// T* doesn't match T::iterator, and that is fine
 \end{cpp}
 
 关于为变量模板偏特化指定的模板参数类型的规则与为类模板特化指定的规则相同。类似地，为给定的具体模板参数列表选择特化的规则也相同。

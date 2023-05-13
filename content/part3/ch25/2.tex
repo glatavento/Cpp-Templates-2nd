@@ -35,7 +35,7 @@ bool operator==(Tuple<> const&, Tuple<> const&)
 
 void printTuple(std::ostream& strm, Tuple<> const&, bool isFirst = true)
 {
-	strm << ( isFirst ? ’(’ : ’)’ );
+	strm << ( isFirst ? '(' : ')' );
 }
 
 template<typename Head, typename... Tail>
@@ -58,7 +58,7 @@ std::ostream& operator<<(std::ostream& strm, Tuple<Types...> const& t)
 现在，创建和显示元组就很容易：
 
 \begin{cpp}
-std::cout << makeTuple(1, 2.5, std::string("hello")) << ’\n’;
+std::cout << makeTuple(1, 2.5, std::string("hello")) << '\n';
 \end{cpp}
 
 输出为

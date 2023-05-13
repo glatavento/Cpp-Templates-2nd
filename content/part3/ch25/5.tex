@@ -142,20 +142,20 @@ class Tuple<> {
 
 struct A {
 	A() {
-		std::cout << "A()" << ’\n’;
+		std::cout << "A()" << '\n';
 	}
 };
 
 struct B {
 	B() {
-		std::cout << "B()" << ’\n’;
+		std::cout << "B()" << '\n';
 	}
 };
 
 int main()
 {
 	Tuple<A, char, A, char, B> t1;
-	std::cout << sizeof(t1) << " bytes" << ’\n’;
+	std::cout << sizeof(t1) << " bytes" << '\n';
 }
 \end{cpp}
 

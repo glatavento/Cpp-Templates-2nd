@@ -109,7 +109,7 @@ void clear (T p)
 int main()
 {
 	int a;
-	clear(a); // ERROR: int doesn’t support the unary *
+	clear(a); // ERROR: int doesn't support the unary *
 }
 \end{cpp}
 
@@ -228,10 +228,10 @@ struct Derived : public Base {
 
 C<Base*, &derived>* err1; // ERROR: derived-to-base conversions are not considered
 
-C<int&, base.i>* err2; // ERROR: fields of variables aren’t considered to be variables
+C<int&, base.i>* err2; // ERROR: fields of variables aren't considered to be variables
 
 int a[10];
-C<int*, &a[0]>* err3; // ERROR: addresses of array elements aren’t acceptable either
+C<int*, &a[0]>* err3; // ERROR: addresses of array elements aren't acceptable either
 \end{cpp}
 
 
@@ -296,7 +296,7 @@ class AlmostAnyTmpl {
 AlmostAnyTmpl<std::vector> withVector; // two type parameters
 AlmostAnyTmpl<std::map> withMap; // four type parameters
 AlmostAnyTmpl<std::array> withArray; // ERROR: a template type parameter pack
-									// doesn’t match a nontype template parameter
+									// doesn't match a nontype template parameter
 \end{cpp}
 
 C++17前，只有关键字class可以用来声明双重模板参数，这并不意味着只有用关键字class声明的类模板才允许作为替换参数。实际上，struct模板、union模板和alias模板都是双重模板参数的有效参数(C++11引入别名模板后)。这类似于任何类型都可以使用关键字class声明的模板类型参数。

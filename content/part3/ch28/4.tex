@@ -122,9 +122,9 @@ int main()
 	
 	// print initial values:
 	for (int i=0; i<10; ++i) {
-		std::cerr << input[i].val() << ’ ’;
+		std::cerr << input[i].val() << ' ';
 	}
-	std::cerr << ’\n’;
+	std::cerr << '\n';
 	
 	// remember initial conditions:
 	long created_at_start = SortTracer::creations();
@@ -139,12 +139,12 @@ int main()
 	
 	// verify result:
 	for (int i=0; i<10; ++i) {
-		std::cerr << input[i].val() << ’ ’;
+		std::cerr << input[i].val() << ' ';
 	}
 	std::cerr << "\n\n";
 	
 	// final report:
-	std::cerr << "std::sort() of 10 SortTracer’s"
+	std::cerr << "std::sort() of 10 SortTracer's"
 			<< " was performed by:\n "
 			<< SortTracer::creations() - created_at_start
 			<< " temporary tracers\n "
@@ -162,7 +162,7 @@ int main()
 运行这个程序会产生相当多的输出，但是可以从最终输出中得出很多结论。对于std::sort()函数的实现，有如下输出:
 
 \begin{shell}
-std::sort() of 10 SortTracer’s was performed by:
+std::sort() of 10 SortTracer's was performed by:
  9 temporary tracers
  up to 11 tracers at the same time (10 before)
  33 assignments

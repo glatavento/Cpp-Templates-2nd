@@ -12,7 +12,7 @@ void f(int); // #2
 
 int main()
 {
-	return f(7); // ERROR: selects #2 , which doesn’t return a value
+	return f(7); // ERROR: selects #2 , which doesn't return a value
 }
 \end{cpp}
 
@@ -196,8 +196,8 @@ void ovl(std::initializer_list<int>) { // #2
 
 int main()
 {
-	ovl({’h’, ’e’, ’l’, ’l’, ’o’, ’\0’}); // prints #1
-	ovl({’h’, ’e’, ’l’, ’l’, ’o’, 0}); // prints #2
+	ovl({'h', 'e', 'l', 'l', 'o', '\0'}); // prints #1
+	ovl({'h', 'e', 'l', 'l', 'o', 0}); // prints #2
 }
 \end{cpp}
 

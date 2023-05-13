@@ -29,12 +29,12 @@ int main()
 	Variant<int, double> v;
 	if (v.is<int>()) {
 		std::cout << "Default-constructed v stores the int "
-		<< v.get<int>() << ’\n’;
+		<< v.get<int>() << '\n';
 	}
 	Variant<double, int> v2;
 	if (v2.is<double>()) {
 		std::cout << "Default-constructed v2 stores the double "
-				<< v2.get<double>() << ’\n’;
+				<< v2.get<double>() << '\n';
 	}
 }
 \end{cpp}
@@ -109,15 +109,15 @@ int main()
 	
 	Variant<int, std::string, double> v2(v1);
 	
-	std::cout << "v2 contains the integer " << v2.get<int>() << ’\n’;
+	std::cout << "v2 contains the integer " << v2.get<int>() << '\n';
 	
 	v1 = 3.14f;
 	Variant<double, int, std::string> v3(std::move(v1));
-	std::cout << "v3 contains the double " << v3.get<double>() << ’\n’;
+	std::cout << "v3 contains the double " << v3.get<double>() << '\n';
 	
 	v1 = "hello";
 	Variant<double, int, std::string> v4(std::move(v1));
-	std::cout << "v4 contains the string " << v4.get<std::string>() << ’\n’;
+	std::cout << "v4 contains the string " << v4.get<std::string>() << '\n';
 }
 \end{cpp}
 

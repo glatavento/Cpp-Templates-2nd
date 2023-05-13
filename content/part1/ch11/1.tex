@@ -49,14 +49,14 @@ void foreach (Iter current, Iter end, Callable op)
 // a function to call:
 void func(int i)
 {
-	std::cout << "func() called for: " << i << ’\n’;
+	std::cout << "func() called for: " << i << '\n';
 }
 
 // a function object type (for objects that can be used as functions):
 class FuncObj {
 	public:
 	void operator() (int i) const { // Note: const member function
-		std::cout << "FuncObj::op() called for: " << i << ’\n’;
+		std::cout << "FuncObj::op() called for: " << i << '\n';
 	}
 };
 
@@ -74,7 +74,7 @@ int main()
 
 	foreach(primes.begin(), primes.end(), // range
 			[] (int i) { // lambda as callable
-				std::cout << "lambda called for: " << i << ’\n’;
+				std::cout << "lambda called for: " << i << '\n';
 			});
 }
 \end{cpp}
@@ -178,7 +178,7 @@ std::invoke()允许将指向数据成员的指针作为回调类型。它不调�
 class MyClass {
 	public:
 	void memfunc(int i) const {
-		std::cout << "MyClass::memfunc() called for: " << i << ’\n’;
+		std::cout << "MyClass::memfunc() called for: " << i << '\n';
 	}
 };
 
@@ -188,7 +188,7 @@ int main()
 	// pass lambda as callable and an additional argument:
 	foreach(primes.begin(), primes.end(), // elements for 2nd arg of lambda
 			[](std::string const& prefix, int i) { // lambda to call
-				std::cout << prefix << i << ’\n’;
+				std::cout << prefix << i << '\n';
 			},
 			"- value: "); // 1st arg of lambda
 

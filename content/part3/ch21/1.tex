@@ -13,7 +13,7 @@ class EmptyClass {
 
 int main()
 {
-	std::cout << "sizeof(EmptyClass): " << sizeof(EmptyClass) << ’\n’;
+	std::cout << "sizeof(EmptyClass): " << sizeof(EmptyClass) << '\n';
 }
 \end{cpp}
 
@@ -38,7 +38,7 @@ ZeroSizedT z[10];
 #include <iostream>
 
 class Empty {
-	using Int = int; // type alias members don’t make a class nonempty
+	using Int = int; // type alias members don't make a class nonempty
 };
 
 class EmptyToo : public Empty {
@@ -49,9 +49,9 @@ class EmptyThree : public EmptyToo {
 
 int main()
 {
-	std::cout << "sizeof(Empty): " << sizeof(Empty) << ’\n’;
-	std::cout << "sizeof(EmptyToo): " << sizeof(EmptyToo) << ’\n’;
-	std::cout << "sizeof(EmptyThree): " << sizeof(EmptyThree) << ’\n’;
+	std::cout << "sizeof(Empty): " << sizeof(Empty) << '\n';
+	std::cout << "sizeof(EmptyToo): " << sizeof(EmptyToo) << '\n';
+	std::cout << "sizeof(EmptyThree): " << sizeof(EmptyThree) << '\n';
 }
 \end{cpp}
 
@@ -74,7 +74,7 @@ int main()
 #include <iostream>
 
 class Empty {
-	using Int = int; // type alias members don’t make a class nonempty
+	using Int = int; // type alias members don't make a class nonempty
 };
 
 class EmptyToo : public Empty {
@@ -85,9 +85,9 @@ class NonEmpty : public Empty, public EmptyToo {
 
 int main()
 {
-	std::cout << "sizeof(Empty): " << sizeof(Empty) << ’\n’;
-	std::cout << "sizeof(EmptyToo): " << sizeof(EmptyToo) << ’\n’;
-	std::cout << "sizeof(NonEmpty): " << sizeof(NonEmpty) << ’\n’;
+	std::cout << "sizeof(Empty): " << sizeof(Empty) << '\n';
+	std::cout << "sizeof(EmptyToo): " << sizeof(EmptyToo) << '\n';
+	std::cout << "sizeof(NonEmpty): " << sizeof(NonEmpty) << '\n';
 }
 \end{cpp}
 

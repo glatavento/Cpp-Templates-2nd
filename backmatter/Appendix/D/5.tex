@@ -120,11 +120,11 @@ alignof(type)
 \begin{cpp}
 using POD_T = std::aligned_union_t<0, char,
 								std::pair<std::string,std::string>>;
-std::cout << sizeof(POD_T) << ’\n’;
+std::cout << sizeof(POD_T) << '\n';
 std::cout << std::aligned_union<0, char,
 								std::pair<std::string,std::string>
 								>::alignment_value;
-		<< ’\n’;
+		<< '\n';
 \end{cpp}
 
 使用aligned\_union来获取对齐值，而不是使用aligned\_union\_t获取类型。

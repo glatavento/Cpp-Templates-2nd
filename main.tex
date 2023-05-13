@@ -1,81 +1,65 @@
 
 \documentclass[11pt, onecolumn, oneside]{ctexbook}
 
+\usepackage{xpatch}
+\usepackage{subfiles,graphicx,enumitem}
+\usepackage{tabularx,booktabs}
+\usepackage{hyperref,url}
+\usepackage{minted}
+
+\usepackage[a5paper, scale=0.8]{geometry}
+\usepackage[most]{tcolorbox}
 
 \title{C++ Templates 2nd Edition} 
 \author{David Vandevoorde \and Nicolai M. Josuttis \and Douglas Gregor \and 陈晓伟}
 \date{\today}
 
-\setCJKmainfont{HYXuanSong}[BoldFont=HYXuanSong 75S, ItalicFont=FZNewKai-Z03]
-\setmainfont{Libertinus Serif}
-\setsansfont{Libertinus Sans}
-\setmonofont{Iosevka Slab}
-
-\usepackage{tabularx,booktabs,graphicx,subfigure,hyperref,url,subfiles,enumitem,minted}
-
-\usepackage[a5paper, scale=0.8]{geometry}
-\usepackage[most]{tcolorbox}
-
-\hypersetup{breaklinks=true}
-
-\setenumerate{nosep}
-\setitemize{nosep}
-\setdescription{nosep}
-
-\definecolor{mygreen}{rgb}{0,0.6,0}
-\definecolor{mygray}{rgb}{0.5,0.5,0.5}
-\definecolor{mymauve}{rgb}{0.58,0,0.82}
-\definecolor{keywordcolor}{rgb}{0.8,0.1,0.5}
-\definecolor{webgreen}{rgb}{0,.5,0}
-\definecolor{bgcolor}{rgb}{0.92,0.92,0.92}
-
-% URL 正确换行
-% https://liam.page/2017/05/17/help-the-url-command-from-hyperref-to-break-at-line-wrapping-point/
-\makeatletter
-\def\UrlAlphabet{%
-	\do\a\do\b\do\c\do\d\do\e\do\f\do\g\do\h\do\i\do\j%
-	\do\k\do\l\do\m\do\n\do\o\do\p\do\q\do\r\do\s\do\t%
-	\do\u\do\v\do\w\do\x\do\y\do\z\do\A\do\B\do\C\do\D%
-	\do\E\do\F\do\G\do\H\do\I\do\J\do\K\do\L\do\M\do\N%
-	\do\O\do\P\do\Q\do\R\do\S\do\T\do\U\do\V\do\W\do\X%
-	\do\Y\do\Z}
-\def\UrlDigits{\do\1\do\2\do\3\do\4\do\5\do\6\do\7\do\8\do\9\do\0}
-\g@addto@macro{\UrlBreaks}{\UrlOrds}
-\g@addto@macro{\UrlBreaks}{\UrlAlphabet}
-\g@addto@macro{\UrlBreaks}{\UrlDigits}
-\makeatother
-
 \ExplSyntaxOn
-\NewDocumentCommand { \filename } { m }
-{ \noindent \textit { #1 } \nopagebreak[4] }
 
+% Remove newpage after \part
+\xpatchcmd { \@endpart } {\vfil\newpage} {} {} {}
+\xpatchcmd { \@endpart } {\newpage     } {} {} {}
+
+% Setup fonts
+\setCJKmainfont { HYXuanSong } [ BoldFont=HYXuanSong~75S, ItalicFont=FZNewKai-Z03 ]
+\setmainfont { Libertinus~Serif }
+\setsansfont { Libertinus~Sans  }
+\setmonofont { Iosevka~Slab     }
+
+% Setup hyperlinks
+\hypersetup { breaklinks=true } 
+
+% Setup enumerate, itemize and description
+\setenumerate  { nosep }
+\setitemize    { nosep }
+\setdescription{ nosep }
+
+% Setup minted
 \setminted { obeytabs, tabsize=2, breaklines=true, fontsize=\footnotesize, frame=single }
 
+% Def \filename
+\NewDocumentCommand { \filename } { m } 
+{ \noindent \textit { #1 } \nopagebreak[4] }
+
+% Def cpp environment
 \NewDocumentEnvironment { cpp } { }
-{ 
-  \VerbatimEnvironment
-  \begin { minted } [ linenos=true ] { cpp } 
-} 
+{ \VerbatimEnvironment
+  \begin { minted } [ linenos=true ] { cpp } } 
 { \end   { minted } }
 
+% Def shell environment
 \NewDocumentEnvironment { shell } { }
-{ 
-  \VerbatimEnvironment
-  \begin { minted } { text } 
-} 
+{ \VerbatimEnvironment
+  \begin { minted } { text } } 
 { \end   { minted } }
 
 \NewDocumentEnvironment { notice } { }
-{ 
-  \begin { tcolorbox } [ colback = webgreen!5!white, colframe=webgreen!75!black ]
-} 
+{ \begin { tcolorbox } [ colback = green!5!white, colframe=green!75!black ] } 
 { \end   { tcolorbox } }
 
 \ExplSyntaxOff
 
 \begin{document}
-	
-	%前言
     \frontmatter
     \setcounter{secnumdepth}{0}
 
@@ -85,6 +69,7 @@
 	\subfile{frontmatter/Acknowledgments-for-the-First.tex}
 	\subfile{frontmatter/About-This-Book.tex}
 	
+	\phantomsection
 	\addcontentsline{toc}{chapter}{目录}
 	\tableofcontents
 
