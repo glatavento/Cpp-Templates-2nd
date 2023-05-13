@@ -2,8 +2,6 @@
 
 *Second Edition*
 
-`<a><img src="cover.jpg" height="256px" align="right">``</a>`
-
 * 作者：David Vandevoorde，Nicolai M. Josuttis，Douglas Gregor
 * 译者：陈晓伟
 * 首次发布时间：2017年9月8日（[来源](https://www.amazon.com/C-Templates-Complete-Guide-2nd/dp/0321714121)）
@@ -12,7 +10,7 @@
 >
 > <p align="right"> — 云风，程序员修炼之道第2版译者</p>
 
-PDF可在本库的[Release页面](https://github.com/xiaoweiChen/Cpp-Templates-2nd/releases)获取。
+PDF可在本库的[Release页面](https://github.com/glatavento/Cpp-Templates-2nd/releases)获取。
 
 ## 本书概述
 
