@@ -1,12 +1,12 @@
-
 \documentclass[11pt, onecolumn, oneside]{ctexbook}
 
-\usepackage{xpatch}
+\usepackage{xpatch,mathtools}
 \usepackage[a5paper, scale=0.8]{geometry}
-\usepackage{subfiles,graphicx,enumitem,titlesec,pdfpages,tcolorbox}
-\usepackage{tabularx,booktabs}
+\usepackage{subfiles,graphicx,enumitem,titlesec,pdfpages}
+\usepackage{tabularx,booktabs,multirow}
+\usepackage[most]{tcolorbox}
 \usepackage[pdfusetitle]{hyperref}
-\usepackage{bookmark,url}
+\usepackage{bookmark,xurl}
 \usepackage{minted}
 
 \title{C++ Templates 2nd Edition} 
@@ -32,7 +32,6 @@
 \xpatchcmd { \@endpart } { \newpage      } {} {} {}
 
 % Setup fonts
-\setCJKmainfont { Noto~Serif~CJK~SC } [ ItalicFont=FandolKai ]
 \setmainfont { Libertinus~Serif }
 \setsansfont { Libertinus~Sans  }
 \setmonofont { Iosevka~Slab     }
