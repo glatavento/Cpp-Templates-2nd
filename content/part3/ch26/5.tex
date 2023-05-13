@@ -141,7 +141,7 @@ visit()的结果类型仍然是个谜。给定的访问器可能具有不同的�
 }
 \end{cpp}
 
-这个Lambda的结果类型取决于输入类型：给定int型，则将产生int型值；给定double型，将产生double型值。若这个泛型Lambda传递给了Variant<int, double>的visit()操作，结果类型应该是什么?
+这个Lambda的结果类型取决于输入类型：给定int型，则将产生int型值；给定double型，将产生double型值。若这个泛型Lambda传递给了Variant<int, double>的visit()操作，结果类型应该是什么？
 
 这里没有正确的答案，因此visit()操作允许提供结果类型。在另一个Variant<int, double>中捕获结果，可以将结果类型指定为visit()作为第一个模板参数：
 

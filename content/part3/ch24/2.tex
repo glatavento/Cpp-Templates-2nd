@@ -88,7 +88,7 @@ using LargestType = typename LargestTypeT<List>::Type;
 LargestType算法将返回类型列表中第一个最大的类型，给定类型列表Typelist<bool, int, long, short>，该算法将返回与long大小相同的第一个类型，可能是int或long，这取决于执行代码的平台。
 
 \begin{notice}
-某些平台上，bool甚至与long大小相同!
+某些平台上，bool甚至与long大小相同！
 \end{notice}
 
 LargestTypeT的主要模板作为算法的递归用例会使用多次，从而采用了常见的第一/其他的惯用法，其有三个步骤。第一步中，只基于第一个元素（本例中是列表的前端元素）计算部分结果，并将其放在First中。接下来，递归计算列表中其余元素的结果，并将结果放在Rest中。在递归的第一步中，对于Typelist<bool, int, long, short>，First是bool，而Rest是将算法应用到Typelist<int, long, short>的结果。最后，第三步结合First和Rest得到结果。IfThenElse选择列表中第一个元素中较大的(First)或目前为止最好的候选元素(Rest)，并返回最大的那个。

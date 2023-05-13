@@ -336,7 +336,7 @@ passing 'const main()::MyCustomerHash*' as 'this' argument discards qualifiers
 \end{shell}
 }
 
-能看出问题出在哪里吗?
+能看出问题出在哪里吗？
 
 这个std::unordered\_set类模板的实现要求哈希对象的函数调用操作符是const成员函数（参见第11.1.1节）；否则，算法内部就会出现错误。
 

@@ -419,7 +419,7 @@ template<typename T> void valueDependent2(T x) {
 
 sizeof操作会产生std::size\_t类型的值，不管输入是什么。因此sizeof表达式不依赖于类型（即使子表达式依赖于类型）。但产生的常量值会因实例化的不同而不同，因此sizeof(x)是一个值依赖型的表达式。
 
-如果对值依赖型表达式应用sizeof会怎样呢?
+如果对值依赖型表达式应用sizeof会怎样呢？
 
 \begin{cpp}
 template<typename T> void maybeDependent(T const& x) {
@@ -446,7 +446,7 @@ C++标准中使用了类型和值依赖型的表达式来描述模板的语义�
 
 \subsection{编译错误}
 
-当所有模板实例都会产生错误时，C++编译器允许（但不是必需的!）在解析模板时诊断错误。让我们扩展上一节中的f(x)例子来进一步探讨这个问题：
+当所有模板实例都会产生错误时，C++编译器允许（但不是必需的！）在解析模板时诊断错误。让我们扩展上一节中的f(x)例子来进一步探讨这个问题：
 
 \begin{cpp}
 void f() { }

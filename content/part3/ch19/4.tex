@@ -313,7 +313,7 @@ constexpr auto isDefaultConstructible
 类型辅助变量模板允许将类型表示为值。通过这种方式获得的值x可以通过decltype(valueT(x))返回原始类型，
 
 \begin{notice}
-这对简单的辅助模板是一种基本技术，其位于Boost.Hana中!
+这对简单的辅助模板是一种基本技术，其位于Boost.Hana中！
 \end{notice}
 
 这正是在上面传递给isValid的Lambda函数中所做的。若提取的类型不能默认构造，那么decltype(valueT(x))()就无效，要么会得到一个编译错误，再要么相关的声明会进行SFINAE（由于isValid定义的细节，我们将实现后一种效果）。
@@ -348,7 +348,7 @@ constexpr auto isDefaultConstructible
 decltype(std::declval<F>()(std::declval<Args&&>()...))>
 \end{cpp}
 
-试图调用第一个模板参数类型的值，该参数是isDefaultConstructible定义中Lambda的闭包类型，并将参数类型的值(decltype(args)\&\&...)传递给isDefaultConstructible。由于Lambda中只有一个参数x，args的扩展只能有一个参数；上面的static\_assert示例中，该参数的类型为TypeT<int>或TypeT<int\&>。在TypeT<int\&>情况下，decltype(valueT(x))是int\&这使得decltype(valueT(x))()无效，因此在isValidImpl()的第一个声明中对默认模板参数的替换失败，并通过SFINAE去除。所以只剩下第二个声明（否则将是一个较小的匹配），其产生一个false\_type值。也就是，isDefaultConstructible在传递type<int\&>时产生false\_type。若传递了type<int>，替换不会失败，并且选择isValidImpl()的第一个声明，产生一个true\_type类型的值。要使SFINAE工作，替换必须在要替换模板的上下文中产生。要替换的模板是sValidImpl的第一个声明和传递给isValid的泛型Lambda的调用操作符。因此，要测试的构造必须出现在Lambda的返回类型中，而不是其主体中!
+试图调用第一个模板参数类型的值，该参数是isDefaultConstructible定义中Lambda的闭包类型，并将参数类型的值(decltype(args)\&\&...)传递给isDefaultConstructible。由于Lambda中只有一个参数x，args的扩展只能有一个参数；上面的static\_assert示例中，该参数的类型为TypeT<int>或TypeT<int\&>。在TypeT<int\&>情况下，decltype(valueT(x))是int\&这使得decltype(valueT(x))()无效，因此在isValidImpl()的第一个声明中对默认模板参数的替换失败，并通过SFINAE去除。所以只剩下第二个声明（否则将是一个较小的匹配），其产生一个false\_type值。也就是，isDefaultConstructible在传递type<int\&>时产生false\_type。若传递了type<int>，替换不会失败，并且选择isValidImpl()的第一个声明，产生一个true\_type类型的值。要使SFINAE工作，替换必须在要替换模板的上下文中产生。要替换的模板是sValidImpl的第一个声明和传递给isValid的泛型Lambda的调用操作符。因此，要测试的构造必须出现在Lambda的返回类型中，而不是其主体中！
 
 isDefaultConstructible特征与以前的特征实现有一点不同，其需要函数式调用，而不是指定模板参数。可以说是一种可读性更强的表示法，使用之前的方式可以得到：
 
