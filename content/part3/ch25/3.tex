@@ -306,7 +306,7 @@ reverse()算法本身仅形成相应的索引集，并将其提供给reverseImpl
 上一节中用于形成反向元组的reverseImpl()函数模板，实际上不包含与reverse()操作相关的代码。相反，它只是从现有元组中选择一组特定的索引，并使用它们来组成一个新的元组。Reverse()提供了一组反向索引，但许多算法可以建立在这个核心元组的select()算法基础上：
 
 \begin{notice}
-C++11中，返回类型必须声明为\texttt{->}decltype(makeTuple(get<indices>(t)...))。
+C++11中，返回类型必须声明为 \inlcpp{->}decltype(makeTuple(get<indices>(t)...))。
 \end{notice}
 
 \filename{typelist/select.hpp}
@@ -335,7 +335,7 @@ std::cout << a << '\n';
 给定元程序来生成“复制”索引集，该索引集由值I的N个副本组成，splat()是select()的直接应用：
 
 \begin{notice}
-C++11中，splat()的返回类型必须声明为\texttt{->}decltype(return-expression)。
+C++11中，splat()的返回类型必须声明为 \inlcpp{->}decltype(return-expression)。
 \end{notice}
 
 \filename{typelist/splat.hpp}
@@ -397,7 +397,7 @@ sorted by size: (c, 42, 7.7, 17, (42,77))
 sort()实现包括使用InsertionSort和元组select():
 
 \begin{notice}
-C++11中，sort()的返回类型必须声明为\texttt{->}decltype(return-expression)。
+C++11中，sort()的返回类型必须声明为 \inlcpp{->}decltype(return-expression)。
 \end{notice}
 
 \filename{tuples/tuplesort.hpp}

@@ -79,7 +79,7 @@ bool VariantChoice<T, Types...>::destroy() {
 }
 \end{cpp}
 
-当辨别器匹配时，通过使用\texttt{->}~T()调用适当的析构函数，可以显式地销毁缓冲区中的内容。 
+当辨别器匹配时，通过使用 \inlcpp{->}~T()调用适当的析构函数，可以显式地销毁缓冲区中的内容。 
 VariantChoice::destroy()操作只有在辨别器匹配时才有用。但我们通常希望销毁存储在Variant中的值，而不考虑当前的类型。因此，Variant::destroy()在基类中调用VariantChoice::destroy()的操作：
 
 \filename{variant/variantdestroy.hpp}

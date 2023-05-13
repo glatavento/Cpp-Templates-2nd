@@ -4,7 +4,7 @@
 
 \subsection{使用值，还是引用传递参数?}
 
-为什么通常声明函数按值传递参数，而不是使用引用。一般来说，除了简单类型（比如基本类型或\texttt{std::string\_view}），因为不会创建副本，所以推荐使用引用传递。
+为什么通常声明函数按值传递参数，而不是使用引用。一般来说，除了简单类型（比如基本类型或 \inlcpp{std::string\_view}），因为不会创建副本，所以推荐使用引用传递。
 
 然而，按值传递在下面的情况下会更好：
 
@@ -29,7 +29,7 @@
 模板可能同时用于简单类型和复杂类型，因此为复杂类型选择这种方法时，可能会对简单类型产生反效果。
 
 \item 
-作为调用者，可以通过引用来传递参数，可以使用\texttt{std::ref()}和\texttt{std::cref()}（参见7.3节）。
+作为调用者，可以通过引用来传递参数，可以使用 \inlcpp{std::ref()} 和 \inlcpp{std::cref()}（参见7.3节）。
 
 \item
 虽然传递字符串字面值或原始数组可能会产生问题，但通过引用传递通常会有更多的问题。
@@ -65,7 +65,7 @@ constexpr auto max (T1 a, T2 b) {
 int a[::max(sizeof(char),1000u)];
 \end{cpp}
 
-或者定义\texttt{std::array<>}的大小：
+或者定义 \inlcpp{std::array<>} 的大小：
 
 \begin{cpp}
 std::array<std::string, ::max(sizeof(char),1000u)> arr;

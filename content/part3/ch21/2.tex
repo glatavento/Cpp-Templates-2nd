@@ -291,7 +291,7 @@ class IteratorFacade {
 对于所有迭代器：
 \begin{itemize}
 \item [-]
-dereference():访问迭代器指向的值（通常通过操作符*和\texttt{->}使用）。
+dereference():访问迭代器指向的值（通常通过操作符*和 \inlcpp{->} 使用）。
 
 \item [-]
 increment():移动迭代器指向序列中的下一项。
@@ -330,7 +330,7 @@ Derived const& asDerived() const {
 根据该定义，门面的大部分实现都很简单。
 
 \begin{notice}
-为了简化表示，忽略代理迭代器的存在，因为代理迭代器的解引用操作不会返回真正的引用。迭代器外观的完整实现（如[BoostIterator]中的实现）将调整操作符的结果类型\texttt{—>}和操作符[]以考虑代理。
+为了简化表示，忽略代理迭代器的存在，因为代理迭代器的解引用操作不会返回真正的引用。迭代器外观的完整实现（如[BoostIterator]中的实现）将调整操作符的结果类型 \inlcpp{—>} 和操作符[]以考虑代理。
 \end{notice}
 
 这里，只举例说明输入迭代器的一些要求的定义，其他迭代器的情况也相同。

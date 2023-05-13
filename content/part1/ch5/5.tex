@@ -278,7 +278,7 @@ void printBitset (std::bitset<N> const& bs) {
 
 对于bitset bs，使用to\_string()的成员函数模板，同时显式指定字符串类型的信息。如果没有使用.template，编译器就不知道后面的小于标记(<)是模板参数列表的开头。注意，只有在句点之前的构造依赖于模板参数时才会出现问题。在例子中，参数bs依赖于模板参数N。
 
-.template表示法（以及类似的表示法，如\texttt{->}template和::template）应该只在模板内部使用，只有当它们遵循依赖于模板的某些参数时才会使用。详细信息请参见13.3.3。
+.template表示法（以及类似的表示法，如 \inlcpp{->}template和::template）应该只在模板内部使用，只有当它们遵循依赖于模板的某些参数时才会使用。详细信息请参见13.3.3。
 
 \subsection{泛型Lambda和成员模板}
 

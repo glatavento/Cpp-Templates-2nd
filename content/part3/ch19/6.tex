@@ -113,7 +113,6 @@ struct HasTypeT_##MemType \
 template<typename T> \
 struct HasTypeT_##MemType<T, std::void_t<typename T::MemType>> \
 : std::true_type { } // ; intentionally skipped
-✝ 
 \end{cpp}
 
 每次使用DEFINE\_HAS\_TYPE(MemberType)都会定义一个新的HasTypeT\_MemberType特征。可以使用它来检测类型是否有value\_type或char\_type成员类型：

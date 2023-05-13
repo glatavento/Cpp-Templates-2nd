@@ -18,7 +18,7 @@ T max (T a, T b) {
 这个模板定义指定了一个函数组，返回两个值的最大值，a和b作为函数的参数。
 
 \begin{notice}
-根据[StepanovNotes]，max()模板有意地返回b < a ? a: b，而不是a < b ? b: a，是为了确保函数行为的正确性。
+根据[StepanovNotes]，max()模板有意地返回 \inlcpp{b < a ? a : b}，而不是 \inlcpp{a < b ? b : a}，是为了确保函数行为的正确性。
 \end{notice}
 
 参数类型为模板参数T，模板参数必须使用以下形式的进行声明：

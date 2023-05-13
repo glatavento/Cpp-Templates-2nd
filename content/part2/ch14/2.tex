@@ -123,7 +123,7 @@ int main() {
 }
 \end{cpp}
 
-最后，注意operator\texttt{->}:
+最后，注意operator\inlcpp{->}:
 
 \begin{cpp}
 template<typename T>
@@ -133,13 +133,13 @@ class C {
 };
 \end{cpp}
 
-通常，operator\texttt{->}必须返回指针类型或其他类类型。这样，因为声明了operator\texttt{->}的返回类型为int，C<int>的补全会触发一个错误。但某些类模板定义触发了这些类型（返回类型为T或者T*）的定义，所以语言规则更灵活。
+通常，operator\inlcpp{->} 必须返回指针类型或其他类类型。这样，因为声明了operator\inlcpp{->} 的返回类型为int，C<int>的补全会触发一个错误。但某些类模板定义触发了这些类型（返回类型为T或者T*）的定义，所以语言规则更灵活。
 
 \begin{notice}
 典型的例子是智能指针模板（例如，std::unique\_ptr<T>）
 \end{notice}
 
-只有在重载解析规则确实选择了用户自定义的operator\texttt{->}时，才要求自定义operator\texttt{->}只能返回应用其他（内置）operator\texttt{->}的类型。这甚至对模板之外的代码也同样有效（这种松弛法则(relaxed behavior)在上下文中用处不大）。因此，尽管int会替代该返回类型，但这里的声明不会触发错误。
+只有在重载解析规则确实选择了用户自定义的operator\inlcpp{->} 时，才要求自定义operator\inlcpp{->} 只能返回应用其他（内置）operator\inlcpp{->} 的类型。这甚至对模板之外的代码也同样有效（这种松弛法则(relaxed behavior)在上下文中用处不大）。因此，尽管int会替代该返回类型，但这里的声明不会触发错误。
 
 
 
