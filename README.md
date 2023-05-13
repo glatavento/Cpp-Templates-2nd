@@ -2,11 +2,11 @@
 
 *Second Edition*
 
-<a><img src="cover.jpg" height="256px" align="right"></a>
+`<a><img src="cover.jpg" height="256px" align="right">``</a>`
 
 * 作者：David Vandevoorde，Nicolai M. Josuttis，Douglas Gregor
 * 译者：陈晓伟
-* 首次发布时间：2017年9月8日([来源](https://www.amazon.com/C-Templates-Complete-Guide-2nd/dp/0321714121))
+* 首次发布时间：2017年9月8日（[来源](https://www.amazon.com/C-Templates-Complete-Guide-2nd/dp/0321714121)）
 
 > 翻译是译者用自己的思想，换一种语言，对原作者想法的重新阐释。鉴于我的学识所限，误解和错译在所难免。如果你能买到本书的原版，且有能力阅读英文，请直接去读原文。因为与之相较，我的译文可能根本不值得一读。
 >
@@ -25,18 +25,11 @@ PDF可在本库的[Release页面](https://github.com/xiaoweiChen/Cpp-Templates-2
 #### 关键特性
 
 - 准确理解模板的行为，避免陷阱
-
 - 使用模板编写有效、灵活、可维护的软件
-
 - 掌握有效的习语和技巧
-
 - 保持性能或安全的情况下重用源码
-
 - C++标准库中的泛型编程
-
 - 预览即将发布的“概念"特性
-
-  
 
 ## 适读人群
 
@@ -46,7 +39,7 @@ PDF可在本库的[Release页面](https://github.com/xiaoweiChen/Cpp-Templates-2
 
 附录包含了许多在正文中经常提到的信息，我们也试图让其变得更有趣。
 
-根据经验，学习新东西的最好方法是看例子。因此，可以在本书中找到大量的例子。有些只是用几行代码解释一个抽象概念，而另一些是具体应用的完整源码。后一种示例将通过注释来说明需要包含程序代码的文件。可以在这本书的网站<http://www.tmplbook.com>上找到这些文件。
+根据经验，学习新东西的最好方法是看例子。因此，可以在本书中找到大量的例子。有些只是用几行代码解释一个抽象概念，而另一些是具体应用的完整源码。后一种示例将通过注释来说明需要包含程序代码的文件。可以在这本书的网站[http://www.tmplbook.com](http://www.tmplbook.com)上找到这些文件。
 
 ## 作者简介
 
@@ -56,17 +49,14 @@ PDF可在本库的[Release页面](https://github.com/xiaoweiChen/Cpp-Templates-2
 
 **Douglas Gregor**是苹果公司的高级Swift/C++/Objective-C编译工程师，拥有伦斯勒理工学院的计算机科学博士学位，并在印第安纳大学从事博士后工作。
 
-
-
 ## 本书相关
 
-* github地址：<https://github.com/xiaoweiChen/Cpp-Templates-2nd>
-* 译文的LaTeX 环境配置：<https://www.cnblogs.com/1625--H/p/11524968.html>
-* vscode中配置latex：<https://blog.csdn.net/Ruins_LEE/article/details/123555016>
-* 开源示例：<https://github.com/downdemo/Cpp-Templates-2ed>
+* github地址：[https://github.com/xiaoweiChen/Cpp-Templates-2nd](https://github.com/xiaoweiChen/Cpp-Templates-2nd)
+* 译文的LaTeX 环境配置：[https://www.cnblogs.com/1625--H/p/11524968.html](https://www.cnblogs.com/1625--H/p/11524968.html)
+* vscode中配置latex：[https://blog.csdn.net/Ruins_LEE/article/details/123555016](https://blog.csdn.net/Ruins_LEE/article/details/123555016)
+* 开源示例：[https://github.com/downdemo/Cpp-Templates-2ed](https://github.com/downdemo/Cpp-Templates-2ed)
 * 开源翻译：
 
-  * <https://github.com/Walton1128/CPP-Templates-2nd-->
-  * <https://github.com/r00tk1ts/cpp-templates-2nd>
-  * <https://www.zhihu.com/column/c_1397602018500890624>
-
+  * [https://github.com/Walton1128/CPP-Templates-2nd--](https://github.com/Walton1128/CPP-Templates-2nd--)
+  * [https://github.com/r00tk1ts/cpp-templates-2nd](https://github.com/r00tk1ts/cpp-templates-2nd)
+  * [https://www.zhihu.com/column/c_1397602018500890624](https://www.zhihu.com/column/c_1397602018500890624)
