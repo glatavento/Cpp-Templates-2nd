@@ -41,7 +41,7 @@ void foo() {
 若表达式结果为false，则没有定义成员类型。由于名为SFINAE的模板特性（替换失败不为过）（请参阅8.4节），这将忽略使用enable\_if表达式的函数模板。
 \end{itemize}
 
-对于自C++14产生类型的类型特征，有一个对应的别名模板std::enable\_if\_t<>，允许跳过typename和：:type（请参阅第2.8节了解详细信息）。因此，从C++14起就使用
+对于自C++14产生类型的类型特征，有一个对应的别名模板std::enable\_if\_t<>，允许跳过typename和::type（请参阅第2.8节了解详细信息）。因此，从C++14起就使用
 
 \begin{cpp}
 template<typename T>

@@ -160,7 +160,7 @@ if (!std::is_same<decltype(size1), decltype(size2)>::value) {
 size types differ
 \end{shell}
 
-C++17后，对于返回值可以使用后缀\_v并省略：:value（详见5.6节）:
+C++17后，对于返回值可以使用后缀\_v并省略::value（详见5.6节）:
 
 \begin{cpp}
 if (!std::is_same_v<decltype(size1), decltype(size2)>) {

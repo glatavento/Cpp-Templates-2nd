@@ -113,7 +113,7 @@ struct UnsignedT {
 };
 \end{cpp}
 
-必须在以后为MakeUnsignedT<T>添加：:Type，还需要IdentityT助手在else分支中为T添加：:Type。
+必须在以后为MakeUnsignedT<T>添加::Type，还需要IdentityT助手在else分支中为T添加::Type。
 
 所以，不能这样使用
 
@@ -228,7 +228,7 @@ C++标准库提供了相应的类型特征std::is\_move\_constructible<>，在�
 
 \subsection{特征的便利性}
 
-对于类型特征的常见抱怨是它们非常冗长，因为类型特征的每次使用通常需要尾随：:type，并在上下文中需要前置typename关键字，两者都是样板。当组合多个类型特征时，这可能会导致一些尴尬的格式化，比如在运行的数组加法操作符的例子中，若正确地实现它，确保没有返回常量或引用类型：
+对于类型特征的常见抱怨是它们非常冗长，因为类型特征的每次使用通常需要尾随::type，并在上下文中需要前置typename关键字，两者都是样板。当组合多个类型特征时，这可能会导致一些尴尬的格式化，比如在运行的数组加法操作符的例子中，若正确地实现它，确保没有返回常量或引用类型：
 
 \begin{cpp}
 template<typename T1, typename T2>
@@ -290,7 +290,7 @@ operator+ (Array<T1> const&, Array<T2> const&);
 
 \subsubsection{可变参模板和特征}
 
-返回值的特征需要添加：:value（或类似的成员选择）来产生特征的结果。constexpr变量模板（在第5.6节中介绍）提供了一种减少这种冗长的方法。
+返回值的特征需要添加::value（或类似的成员选择）来产生特征的结果。constexpr变量模板（在第5.6节中介绍）提供了一种减少这种冗长的方法。
 
 下面的变量模板包装了第19.3.3节定义的IsSameT特征和第19.5节定义的IsConvertibleT特征：
 

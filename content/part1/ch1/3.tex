@@ -185,13 +185,13 @@ std::common\_type在<type\_traits>头文件中定义，其生成一个具有返�
 typename std::common_type<T1,T2>::type // since C++11
 \end{cpp}
 
-C++14起，可以通过在特性名称后面添加\_t跳过typename和：:type来简化trait的使用（详见第2.8节），这样返回类型定义就变成了：
+C++14起，可以通过在特性名称后面添加\_t跳过typename和::type来简化trait的使用（详见第2.8节），这样返回类型定义就变成了：
 
 \begin{cpp}
 std::common_type_t<T1,T2> // C++14起可用
 \end{cpp}
 
-std::common\_type<>使用了一些模板编程技巧，会在第26.5.2节中讨论。内部根据特定类型的三元操作符或特化的语言规则选择结果类型。因此，::max(4,7.2)和：:max(7.2, 4)都返回了相同的double类型值7.2。注意std::common\_type<>也会衰变，详见D.5节。
+std::common\_type<>使用了一些模板编程技巧，会在第26.5.2节中讨论。内部根据特定类型的三元操作符或特化的语言规则选择结果类型。因此，::max(4,7.2)和::max(7.2, 4)都返回了相同的double类型值7.2。注意std::common\_type<>也会衰变，详见D.5节。
 
 
 
