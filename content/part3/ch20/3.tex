@@ -39,7 +39,7 @@ template<bool Cond, typename T = void>
 using EnableIf = typename EnableIfT<Cond, T>::Type;
 \end{cpp}
 
-EnableIf展开为一个类型，因此实现为一个别名模板。我们希望对其实现使用偏特化（参见第16章），但是别名模板不能偏特化。这里，可以引入辅助类模板EnableIfT，其可以完成相应的实际工作，并使用别名模板EnableIf从辅助模板中简单地选择结果类型。当条件为true时，EnableIfT<…>::Type只计算第二个模板参数T。当条件为false时，EnableIf不会产生一个有效的类型，因为EnableIfT的主类模板没有Type成员。这将是一个错误，但在SFINAE（替换失败不是过，在第15.7节中描述）上下文中——函数模板的返回类型——会导致模板参数推导失败，从而忽略函数模板。
+EnableIf展开为一个类型，因此实现为一个别名模板。我们希望对其实现使用偏特化（参见第16章），但是别名模板不能偏特化。这里，可以引入辅助类模板EnableIfT，其可以完成相应的实际工作，并使用别名模板EnableIf从辅助模板中简单地选择结果类型。当条件为true时，EnableIfT<...>::Type只计算第二个模板参数T。当条件为false时，EnableIf不会产生一个有效的类型，因为EnableIfT的主类模板没有Type成员。这将是一个错误，但在SFINAE（替换失败不是过，在第15.7节中描述）上下文中——函数模板的返回类型——会导致模板参数推导失败，从而忽略函数模板。
 
 \begin{notice}
 EnableIf也可以放在默认的模板参数中，这比放在结果类型中更有优势。参见第20.3.2节关于EnableIf位置的讨论。
@@ -270,7 +270,7 @@ void f(T p) {
 }
 \end{cpp}
 
-不过这样做并不可取，因为其不适用于SFINAE:函数f<T>()没有从候选列表中删除，因此可能会抑制另一个重载解析的结果。替代方案中，使用EnableIf f<T>()将删除EnableIf<…>失败情况的替换。
+不过这样做并不可取，因为其不适用于SFINAE:函数f<T>()没有从候选列表中删除，因此可能会抑制另一个重载解析的结果。替代方案中，使用EnableIf f<T>()将删除EnableIf<...>失败情况的替换。
 
 \subsection{概念}
 

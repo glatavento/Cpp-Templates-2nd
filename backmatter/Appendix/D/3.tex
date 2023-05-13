@@ -101,11 +101,11 @@ is_const<int const[]>::value // true
 	\centering
 	\begin{tabular}{|l|l|}
 		\hline
-		is\_invocable\textless{}T,Args... \textgreater{}                & 用作可调用的Args…(C++ 17)                                                                          \\ \hline
-		is\_nothrow\_invocable\textless{}T,Args... \textgreater{}       & \begin{tabular}[c]{@{}l@{}}用作可调用的Args…不抛出异常(C++17)\end{tabular}               \\ \hline
-		is\_invocable\_r\textless{}RT,T,Args... \textgreater{}          & \begin{tabular}[c]{@{}l@{}}用作可调用的Args…返回RT(C++17)\end{tabular}                   \\ \hline
-		is\_nothrow\_invocable\_r\textless{}RT,T,Args... \textgreater{} & \begin{tabular}[c]{@{}l@{}}用作可调用的Args…返回RT而不抛出异常(C++17)\end{tabular} \\ \hline
-		invoke\_result\textless{}T,Args... \textgreater{}               & \begin{tabular}[c]{@{}l@{}}结果类型用作可调用的Args…(C++17)\end{tabular}                        \\ \hline
+		is\_invocable\textless{}T,Args... \textgreater{}                & 用作可调用的Args...(C++ 17)                                                                          \\ \hline
+		is\_nothrow\_invocable\textless{}T,Args... \textgreater{}       & \begin{tabular}[c]{@{}l@{}}用作可调用的Args...不抛出异常(C++17)\end{tabular}               \\ \hline
+		is\_invocable\_r\textless{}RT,T,Args... \textgreater{}          & \begin{tabular}[c]{@{}l@{}}用作可调用的Args...返回RT(C++17)\end{tabular}                   \\ \hline
+		is\_nothrow\_invocable\_r\textless{}RT,T,Args... \textgreater{} & \begin{tabular}[c]{@{}l@{}}用作可调用的Args...返回RT而不抛出异常(C++17)\end{tabular} \\ \hline
+		invoke\_result\textless{}T,Args... \textgreater{}               & \begin{tabular}[c]{@{}l@{}}结果类型用作可调用的Args...(C++17)\end{tabular}                        \\ \hline
 		result\_of\textless{}F,ArgTypes \textgreater{}                  & \begin{tabular}[c]{@{}l@{}}使用参数类型ArgTypes调用F的结果类型（C++17起弃用）\end{tabular}   \\ \hline
 	\end{tabular}
 \end{table}
@@ -438,7 +438,7 @@ C++17后可用。
 等价于： alignof(T)
 
 \item 
-这个特性是在C++11中alignof(…)之前引入。因为特征可以作为类类型传递，对元编程很有用。
+这个特性是在C++11中alignof(...)之前引入。因为特征可以作为类类型传递，对元编程很有用。
 
 \item 
 要求alignof(T)是一个有效的表达式。
@@ -511,7 +511,7 @@ extent_v<decltype(p1)>; // yields 0
 
 \begin{itemize}
 \item 
-若T可用作Args…的可调用对象，则生成true（保证不抛出异常）。
+若T可用作Args...的可调用对象，则生成true（保证不抛出异常）。
 
 \item 
 可以使用这些特征来测试是否可以调用或std::invoke()给定Args....的可调用T（关于可调用对象和std::invoke()的详细信息请参见第11.1节。）
@@ -547,10 +547,10 @@ C++17标准化过程的后期，is\_invocable改名为is\_callable。
 
 \begin{itemize}
 \item 
-若可以使用T作为Args…的可调用对象，结果为true（保证不抛出异常），返回一个可转换为RET\_T类型的值。
+若可以使用T作为Args...的可调用对象，结果为true（保证不抛出异常），返回一个可转换为RET\_T类型的值。
 
 \item 
-可以使用这些特征来测试是否可以调用或std::invoke()传递给Args…的可调用T，并使用返回值RET\_T（关于可调用对象和std::invoke()的详细信息请参见第11.1节）。
+可以使用这些特征来测试是否可以调用或std::invoke()传递给Args...的可调用T，并使用返回值RET\_T（关于可调用对象和std::invoke()的详细信息请参见第11.1节）。
 
 \item 
 要求传入的所有类型都完整（见第10.3.1节）或（cv限定的）void或未知边界的数组。
@@ -676,7 +676,7 @@ using T2 = typename std::invoke_result<ABC, int>::type; // OK since C++17
 表D.4. 检查特定操作的特征
 \end{center}
 
-表D.4列出了允许检查某些特定操作的类型特征。is\_trivially\_…，检查对象、成员或基类调用的所有（子）操作是否简单（既不是用户定义的，也不是虚的）。is\_nothrow\_…，检查调用的操作是否保证不抛出异常，所有is\_…\_constructible检查对应的is\_…\_destructible。例如：
+表D.4列出了允许检查某些特定操作的类型特征。is\_trivially\_...，检查对象、成员或基类调用的所有（子）操作是否简单（既不是用户定义的，也不是虚的）。is\_nothrow\_...，检查调用的操作是否保证不抛出异常，所有is\_...\_constructible检查对应的is\_...\_destructible。例如：
 
 \filename{utils/isconstructible.cpp}
 \begin{cpp}

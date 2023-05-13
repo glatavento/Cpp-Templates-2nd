@@ -379,7 +379,7 @@ using Transform = typename TransformT<List, MetaFun>::Type;
 函数式语言社区中，这种操作通常称为归约，使用术语“累加”是为了更好地与C++标准库的算法名称保持一致。
 \end{notice}
 
-Accumulate算法使用一个类型列表T，其中包含元素T1、T2、…、TN（初始类型I）和元函数F（接受两种类型并返回一种类型）。它返回F(F(F(:::F(I;T1);T2);:::;TN−1);TN)，其中在累加的第i步F应用到前面i−1步的结果和Ti。
+Accumulate算法使用一个类型列表T，其中包含元素T1、T2、...、TN（初始类型I）和元函数F（接受两种类型并返回一种类型）。它返回F(F(F(:::F(I;T1);T2);:::;TN−1);TN)，其中在累加的第i步F应用到前面i−1步的结果和Ti。
 
 根据类型列表、F的选择和初始类型的不同，可以使用Accumulate生成许多不同的结果，F选择两种类型中最大的，那么Accumulate的行为将类似于LargestType算法。另一方面，若F接受一个列表和一个类型，并将类型推到类型列表的后面，Accumulate的行为将类似于Reverse算法。
 

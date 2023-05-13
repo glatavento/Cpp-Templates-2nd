@@ -182,7 +182,7 @@ struct IsNothrowMoveConstructibleT
 这里使用了操作符版本的noexcept，用于确定表达式不抛出异常。因为结果是一个布尔值，可以直接传递它来定义基类std::bool\_constant<>，可用于定义std::true\_type和std::false\_type（参见19.3.3节）。
 
 \begin{notice}
-C++11和C++14中，必须将基类指定为std::integral\_constant<bool,…>，而非std::bool\_constant<…>。
+C++11和C++14中，必须将基类指定为std::integral\_constant<bool,...>，而非std::bool\_constant<...>。
 \end{notice}
 
 因为不是SFINAE友好的（参见19.4.4节），所以这个实现应该改进：若特征实例化的类型没有可用的移动或复制构造函数——使得表达式T(std::declval<T\&\&>())无效——整个程序呈现病态：
@@ -220,7 +220,7 @@ struct IsNothrowMoveConstructibleT
 };
 \end{cpp}
 
-若替换偏特化中的std::void\_t<…>有效，特化版本匹配，基类说明符中的noexcept(…)表达式可以安全地求值。否则，非实例化偏特化就会丢弃，而会实例化主模板（产生std::false\_type结果）。
+若替换偏特化中的std::void\_t<...>有效，特化版本匹配，基类说明符中的noexcept(...)表达式可以安全地求值。否则，非实例化偏特化就会丢弃，而会实例化主模板（产生std::false\_type结果）。
 
 若不能直接调用移动构造函数，就无法检查是否会抛出异常。移动构造函数是public，且不删除（不够的），还要求对应的类型不是抽象类（对抽象类的引用或指针都可以）。所以，类型特征命名为IsNothrowMoveConstructible，而不是HasNothrowMoveConstructor。对于其他情况，需要编译器的支持。 
 

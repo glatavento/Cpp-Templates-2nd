@@ -13,7 +13,7 @@
 		common\_type\textless{}T1,... \textgreater{}         & 所有传递类型的通用类型                                   \\ \hline
 		aligned\_storage\textless{}Len \textgreater{}        & 默认Len字节对齐的类型                          \\ \hline
 		aligned\_storage\textless{}Len,Align \textgreater{}  & 根据size\_t Align的除数，对齐Len字节的类型 \\ \hline
-		aligned\_union\textless{}Len,Types... \textgreater{} & Len字节对齐的Types…联合类型                 \\ \hline
+		aligned\_union\textless{}Len,Types... \textgreater{} & Len字节对齐的Types...联合类型                 \\ \hline
 	\end{tabular}
 	\end{center}
 \end{table}
@@ -99,7 +99,7 @@ struct common_type<T1,T2> {
 
 \begin{itemize}
 \item
-生成一个普通的旧数据类型(POD)可用作未初始化存储，大小至少为MIN\_SZ，适合保存给定的类型T1，T2，…Tn。
+生成一个普通的旧数据类型(POD)可用作未初始化存储，大小至少为MIN\_SZ，适合保存给定的类型T1，T2，...Tn。
 
 \item
 此外，还可以生成一个静态成员alignment\_value，其值表示所有给定类型中需要严格对齐于该值，对于结果类型来说等价于

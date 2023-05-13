@@ -5,7 +5,7 @@
 template<typename T> concept LessThanComparable = ... ;
 \end{cpp}
 
-这里的“…”可以用一个表达式来代替，该表达式使用各种特征来确定，类型T是否确实可以使用小于操作符进行比较。但是概念提供了一个工具可简化这个任务：requires表达式（与上面描述的requires子句不同）。以下是这个概念的完整定义：
+这里的“...”可以用一个表达式来代替，该表达式使用各种特征来确定，类型T是否确实可以使用小于操作符进行比较。但是概念提供了一个工具可简化这个任务：requires表达式（与上面描述的requires子句不同）。以下是这个概念的完整定义：
 
 \begin{cpp}
 template<typename T>
@@ -20,7 +20,7 @@ concept LessThanComparable = requires(T x, T y) {
 { x < y } -> bool;
 \end{cpp}
 
-这种语法意味着(a)表达式x < y必须在SFINAE意义上有效，(b)表达式的结果必须可转换为bool类型。这种形式的短语中，关键字noexcept可以插入到\texttt{->}标记之前，以表示大括号中的表达式不会抛出异常（即，应用于该表达式的noexcept(…)为true）。若不需要这样的约束，短语的隐式转换部分（即\texttt{->}类型）可以省略，若只需要检查表达式的有效性，则可以删除大括号，这样短语就可以简化为表达式。
+这种语法意味着(a)表达式x < y必须在SFINAE意义上有效，(b)表达式的结果必须可转换为bool类型。这种形式的短语中，关键字noexcept可以插入到\texttt{->}标记之前，以表示大括号中的表达式不会抛出异常（即，应用于该表达式的noexcept(...)为true）。若不需要这样的约束，短语的隐式转换部分（即\texttt{->}类型）可以省略，若只需要检查表达式的有效性，则可以删除大括号，这样短语就可以简化为表达式。
 
 \begin{cpp}
 template<typename T>

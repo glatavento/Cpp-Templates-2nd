@@ -29,7 +29,7 @@ RT max (T1 a, T2 b)
 注意std::decay\_t<>的用法以确保返回的不是引用类型。
 
 \begin{notice}
-C++11中，必须使用typename std::decay<…>::type，而非std::decay\_t<…>（见第2.8节）。
+C++11中，必须使用typename std::decay<...>::type，而非std::decay\_t<...>（见第2.8节）。
 \end{notice}
 
 此实现要求能够为传递的类型调用默认构造函数。还有另一种解决方案，使用std::declval，但是这会使声明更加复杂。参见第11.2.3节中的示例。
