@@ -4,7 +4,7 @@
 
 \subsection{比较}
 
-元组是包含其他值的结构类型。要比较两个元组，比较元素就足够了，可以实现operator==的定义来比较两个定义的元素:
+元组是包含其他值的结构类型。要比较两个元组，比较元素就足够了，可以实现operator==的定义来比较两个定义的元素：
 
 \filename{typelist/tupleeq.hpp}
 \begin{cpp}
@@ -27,7 +27,7 @@ bool operator==(Tuple<> const&, Tuple<> const&)
 
 \subsection{输出}
 
-本章将创建新的元组类型，因此能够在执行程序中看到这些元组是很有用的。以下操作符<{}<可以打印任何可打印的元组元素类型:
+本章将创建新的元组类型，因此能够在执行程序中看到这些元组是很有用的。以下操作符<{}<可以打印任何可打印的元组元素类型：
 
 \filename{typelist/tupleio.hpp}
 \begin{cpp}

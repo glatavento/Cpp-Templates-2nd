@@ -1,6 +1,6 @@
 \section{模板参数中的编码表达式}
 
-解决这个问题的关键是，在整个表达式之前(示例中，调用赋值操作符之前)不要尝试计算表达式。在求值之前，必须记录哪些操作应用于哪些对象。操作在编译时确定，因此可以对模板参数进行编码。
+解决这个问题的关键是，在整个表达式之前（示例中，调用赋值操作符之前）不要尝试计算表达式。在求值之前，必须记录哪些操作应用于哪些对象。操作在编译时确定，因此可以对模板参数进行编码。
 
 我们的示例表达式，
 
@@ -16,14 +16,14 @@
 1.2*x + x*y;
 \end{cpp}
 
-转换成以下类型的对象:
+转换成以下类型的对象：
 
 \begin{cpp}
 A_Add<A_Mult<A_Scalar<double>,Array<double>>,
 	  A_Mult<Array<double>,Array<double>>>
 \end{cpp}
 
-我们将新的基本数组类模板与类模板A\_Scalar、A\_Add和A\_Mult组合在一起。表达式对应的语法树中，可以找到一个前缀表示(参见图27.1)。这个嵌套的模板标识表示所涉及的操作，以及操作应该应用到的对象的类型。A\_Scalar稍后会出现，但其只是数组表达式中标量的占位符。
+我们将新的基本数组类模板与类模板A\_Scalar、A\_Add和A\_Mult组合在一起。表达式对应的语法树中，可以找到一个前缀表示（参见图27.1）。这个嵌套的模板标识表示所涉及的操作，以及操作应该应用到的对象的类型。A\_Scalar稍后会出现，但其只是数组表达式中标量的占位符。
 
 \begin{center}
 \includegraphics[width=0.6\textwidth]{part3/ch27/images/1.png} \\
@@ -32,7 +32,7 @@ A_Add<A_Mult<A_Scalar<double>,Array<double>>,
 
 \subsection{表达式模板的操作数}
 
-为了完成表达式的表示，必须在每个A\_Add和A\_Mult对象中存储对参数的引用，并记录A\_Scalar对象的值(或对其的引用)。以下是相应操作数的定义:
+为了完成表达式的表示，必须在每个A\_Add和A\_Mult对象中存储对参数的引用，并记录A\_Scalar对象的值（或对其的引用）。以下是相应操作数的定义：
 
 \filename{exprtmpl/exprops1.hpp}
 \begin{cpp}
@@ -98,7 +98,7 @@ class A_Mult {
 
 这里添加了下标和大小查询操作，这些操作可以计算数组元素的大小和值，这些操作由在根部给定对象上的节点子树表示。
 
-对于只涉及数组的操作，结果的大小是两个操作数的大小。对于同时涉及数组和标量的操作，结果的大小是数组操作数的大小。为了区分数组操作数和标量操作数，定义标量的大小为0。因此，A\_Scalar模板的定义如下:
+对于只涉及数组的操作，结果的大小是两个操作数的大小。对于同时涉及数组和标量的操作，结果的大小是数组操作数的大小。为了区分数组操作数和标量操作数，定义标量的大小为0。因此，A\_Scalar模板的定义如下：
 
 \filename{exprtmpl/exprscalar.cpp}
 \begin{cpp}
@@ -126,11 +126,11 @@ class A_Scalar {
 };
 \end{cpp}
 
-(我们已经声明了构造函数和成员函数constexpr，因此这个类可以在编译时使用。然而，对于我们的目的来说，这不是必需的。)
+（我们已经声明了构造函数和成员函数constexpr，因此这个类可以在编译时使用。然而，对于我们的目的来说，这不是必需的。）
 
 注意，标量还提供索引操作符。表达式内部，其表示一个数组，每个索引都具有相同的标量值。
 
-操作符类可以使用辅助类A\_Traits来定义操作数的成员:
+操作符类可以使用辅助类A\_Traits来定义操作数的成员：
 
 \begin{cpp}
 typename A_Traits<OP1>::ExprRef op1; // first operand
@@ -143,21 +143,21 @@ typename A_Traits<OP2>::ExprRef op2; // second op
 
 \begin{itemize}
 \item 
-一般的常量引用:
+一般的常量引用：
 \begin{cpp}
 OP1 const& op1; // refer to first operand by reference
 OP2 const& op2; // refer to second operand by reference
 \end{cpp}
 
 \item 
-作为标量是普通值:
+作为标量是普通值：
 \begin{cpp}
 OP1 op1; // refer to first operand by value
 OP2 op2; // refer to second operand by value
 \end{cpp}
 \end{itemize}
 
-这是特性类的完美应用。特性类定义了一个类型，通常是常量引用，但对于标量是普通值:
+这是特性类的完美应用。特性类定义了一个类型，通常是常量引用，但对于标量是普通值：
 
 \filename{exprtmpl/exprops1a.hpp}
 \begin{cpp}
@@ -186,7 +186,7 @@ class A_Traits<A_Scalar<T>> {
 
 \subsection{数组类型}
 
-有了使用轻量级表达式模板表达式的能力，现在必须创建一个Array类型，控制实际的存储，并且了解表达式模板。对于工程目的来说，保持具有存储功能的真实数组的接口，与产生数组的表达式的表示的接口最好尽可能相似。可以声明Array模板:
+有了使用轻量级表达式模板表达式的能力，现在必须创建一个Array类型，控制实际的存储，并且了解表达式模板。对于工程目的来说，保持具有存储功能的真实数组的接口，与产生数组的表达式的表示的接口最好尽可能相似。可以声明Array模板：
 
 \begin{cpp}
 template<typename T, typename Rep = SArray<T>>
@@ -201,7 +201,7 @@ class Array;
 
 或者可以是嵌套的模板标识，如A\_Add或A\_Mult，其构建一个表达式。无论哪种方式，这里都在处理Array实例化，这简化了后面的处理操作。即使是Array模板的定义，尽管有些成员不能使用A\_Mult代替Rep这样的类型实例化，但也不需要特化来区分这两种情况。
 
-这是定义。该功能主要局限于SArray模板所提供的功能，在理解了代码意图后，添加该功能并不难:
+这是定义。该功能主要局限于SArray模板所提供的功能，在理解了代码意图后，添加该功能并不难：
 
 \filename{exprtmpl/exprarray.hpp}
 \begin{cpp}
@@ -271,13 +271,13 @@ class Array {
 
 许多操作可以转发至底层的Rep对象。在复制另一个数组时，必须考虑到另一个数组实际上是在表达式模板上构建的可能。因此，可以根据底层表示参数化的复制操作。
 
-下标操作符需要更多的讨论，该操作符的const版本使用的是推导的返回类型，而不是传统的T const\&。若Rep代表是A\_Mult或A\_Add，其下标操作符需要返回一个临时值(即prvalue)，不能通过引用返回(decltype(auto)将为prvalue情况推导出非引用类型)。另一方面，若Rep是SArray<T>，则底层下标操作符产生一个const左值，并且推导出的返回类型将是匹配的const引用。
+下标操作符需要更多的讨论，该操作符的const版本使用的是推导的返回类型，而不是传统的T const\&。若Rep代表是A\_Mult或A\_Add，其下标操作符需要返回一个临时值（即prvalue），不能通过引用返回（decltype(auto)将为prvalue情况推导出非引用类型）。另一方面，若Rep是SArray<T>，则底层下标操作符产生一个const左值，并且推导出的返回类型将是匹配的const引用。
 
 \subsection{运算符}
 
 除了运算符本身之外，我们已经具备了为数值数组模板创建高效数值运算符的大部分机制。这些操作符只组装表达式模板对象——并不实际计算结果数组。
 
-对于每个普通的二元运算符，必须实现三个版本:数组-数组、数组-标量和标量-数组。为了能够计算初始值，我们需要以下操作符:
+对于每个普通的二元运算符，必须实现三个版本：数组-数组、数组-标量和标量-数组。为了能够计算初始值，我们需要以下操作符：
 
 \filename{exprtmpl/exprops2.hpp}
 \begin{cpp}
@@ -310,13 +310,13 @@ operator* (T const& s, Array<T,R2> const& b) {
 ...
 \end{cpp}
 
-这些操作符的声明有些繁琐(从这些示例可以看出)，但这些函数实际上没有做太多工作。两个数组的plus操作符首先创建一个A\_Add<>对象，该对象表示操作符和操作数
+这些操作符的声明有些繁琐（从这些示例可以看出），但这些函数实际上没有做太多工作。两个数组的plus操作符首先创建一个A\_Add<>对象，该对象表示操作符和操作数
 
 \begin{cpp}
 A_Add<T,R1,R2>(a.rep(),b.rep())
 \end{cpp}
 
-并将该对象包装在Array对象中，以便可以将结果用作其他表示数组数据的对象:
+并将该对象包装在Array对象中，以便可以将结果用作其他表示数组数据的对象：
 
 \begin{cpp}
 return Array<T,A_Add<T,R1,R2>> (...);
@@ -328,17 +328,17 @@ return Array<T,A_Add<T,R1,R2>> (...);
 A_Mult<T,A_Scalar<T>,R2>(A_Scalar<T>(s), b.rep())
 \end{cpp}
 
-然后再次包装:
+然后再次包装：
 
 \begin{cpp}
 return Array<T,A_Mult<T,A_Scalar<T>,R2>> (...);
 \end{cpp}
 
-其他非成员二元操作符非常类似，可以使用宏来实现大多数操作符。另一个(较小的)宏可用于非成员一元操作符。
+其他非成员二元操作符非常类似，可以使用宏来实现大多数操作符。另一个（较小的）宏可用于非成员一元操作符。
 
 \subsection{审查}
 
-第一次发现表达式模板思想时，各种声明和定义之间的交互可能会令人生畏。因此，对示例代码所发生的事情进行自上而下的审查，有助于理解。这里将要分析的代码如下所示(可以在meta/exprmain.cpp中找到):
+第一次发现表达式模板思想时，各种声明和定义之间的交互可能会令人生畏。因此，对示例代码所发生的事情进行自上而下的审查，有助于理解。这里将要分析的代码如下所示（可以在meta/exprmain.cpp中找到）:
 
 \begin{cpp}
 int main()
@@ -357,7 +357,7 @@ int main()
 1.2*x + x*y
 \end{cpp}
 
-编译器首先应用最左边的*操作，这是一个标量数组操作符。因此，重载解析选择了操作符*的标量数组形式:
+编译器首先应用最左边的*操作，这是一个标量数组操作符。因此，重载解析选择了操作符*的标量数组形式：
 
 \begin{cpp}
 template<typename T, typename R2>
@@ -376,7 +376,7 @@ Array<double, A_Mult<double, A_Scalar<double>, SArray<double>>>
 
 结果值构造为A\_Scalar<double>对象的引用，该对象由double值1.2和对象x的SArray<double>表示构成。
 
-接下来，计算第二个乘法:它是一个数组-数组操作x*y。这次使用了另一个操作符*:
+接下来，计算第二个乘法：它是一个数组-数组操作x*y。这次使用了另一个操作符*:
 
 \begin{cpp}
 template<typename T, typename R1, typename R2>
@@ -393,9 +393,9 @@ operator* (Array<T,R1> const& a, Array<T,R2> const& b) {
 Array<double, A_Mult<double, SArray<double>, SArray<double>>>
 \end{cpp}
 
-这次包装的A\_Mult对象引用了两个SArray<double>表示:一个是x，一个是y。
+这次包装的A\_Mult对象引用了两个SArray<double>表示：一个是x，一个是y。
 
-最后，计算加法操作。这又是一个数组-数组操作，操作数类型是刚才推导的结果类型，使用数组加法操作符:
+最后，计算加法操作。这又是一个数组-数组操作，操作数类型是刚才推导的结果类型，使用数组加法操作符：
 
 \begin{cpp}
 template<typename T, typename R1, typename R2>
@@ -427,7 +427,7 @@ Array<double,
 		A_Mult<double, SArray<double>, SArray<double>>>>
 \end{cpp}
 
-该类型匹配数组模板的赋值操作符模板:
+该类型匹配数组模板的赋值操作符模板：
 
 \begin{cpp}
 template<typename T, typename Rep = SArray<T>>
@@ -447,7 +447,7 @@ class Array {
 };
 \end{cpp}
 
-赋值操作符通过将下标操作符应用于右侧的表示(其类型为)，来计算目标x的每个元素
+赋值操作符通过将下标操作符应用于右侧的表示（其类型为），来计算目标x的每个元素
 
 \begin{cpp}
 A_Add<double,
@@ -465,7 +465,7 @@ A_Add<double,
 
 \subsection{表达式模板赋值}
 
-我们示例的A\_Mult和A\_Add表达式模板上，不可能构建一个Rep参数数组的实例化写操作。(事实上，a+b=c毫无意义)但完全可以编写其他表达式模板，对其结果赋值，对整数值数组进行索引将对应于子集选择。换句话说，表达式
+我们示例的A\_Mult和A\_Add表达式模板上，不可能构建一个Rep参数数组的实例化写操作。（事实上，a+b=c毫无意义）但完全可以编写其他表达式模板，对其结果赋值，对整数值数组进行索引将对应于子集选择。换句话说，表达式
 
 \begin{cpp}
 x[y] = 2*x[y];
@@ -479,7 +479,7 @@ for (std::size_t idx = 0; idx<y.size(); ++idx) {
 }
 \end{cpp}
 
-启用此功能意味着构建在表达式模板上，数组的行为类似于左值(可写)。这类操作的表达式模板组件与A\_Mult没有本质上的区别，只是提供了下标操作符的const版本和非const版本，可以返回左值(引用):
+启用此功能意味着构建在表达式模板上，数组的行为类似于左值（可写）。这类操作的表达式模板组件与A\_Mult没有本质上的区别，只是提供了下标操作符的const版本和非const版本，可以返回左值（引用）:
 
 \filename{exprtmpl/exprops3.hpp}
 \begin{cpp}
@@ -511,7 +511,7 @@ class A_Subscript {
 
 同样，decltype(auto)在处理数组下标时很有用，无论底层表示产生的是值，还是左值。
 
-前面建议的具有子集语义的扩展下标操作符，需要向Array模板添加额外的下标操作符。其中一个操作符可以这样定义(可能还需要对应的const版本):
+前面建议的具有子集语义的扩展下标操作符，需要向Array模板添加额外的下标操作符。其中一个操作符可以这样定义（可能还需要对应的const版本）:
 
 \filename{exprtmpl/exprops4.hpp}
 \begin{cpp}

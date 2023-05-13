@@ -1,10 +1,10 @@
 \section{组合类型特性}
 
-大多数上下文中，可以使用逻辑操作符组合多个类型特征谓词。模板元编程的上下文中，这并不够:
+大多数上下文中，可以使用逻辑操作符组合多个类型特征谓词。模板元编程的上下文中，这并不够：
 
 \begin{itemize}
 \item 
-必须处理可能失败的特征(不完整的类型)。
+必须处理可能失败的特征（不完整的类型）。
 
 \item 
 组合类型特征定义。
@@ -12,7 +12,7 @@
 
 为此提供了类型特征std::conjunction<>，std::disjunction<>和std::negation<>。
 
-这些辅助函数会短路布尔值的计算(分别在\&\&和||的第一个false后中止计算，或第一个true后中止计算)。例如，若使用不完整类型:
+这些辅助函数会短路布尔值的计算（分别在\&\&和||的第一个false后中止计算，或第一个true后中止计算）。例如，若使用不完整类型：
 
 \begin{cpp}
 struct X {
@@ -21,7 +21,7 @@ struct X {
 struct Y; // incomplete type
 \end{cpp}
 
-因为is\_constructible会导致(不完整类型的)未定义行为(尽管有些编译器接受这段代码)，所以以下代码可能无法编译:
+因为is\_constructible会导致（不完整类型的）未定义行为（尽管有些编译器接受这段代码），所以以下代码可能无法编译：
 
 \begin{cpp}
 // undefined behavior:
@@ -30,7 +30,7 @@ static_assert(std::is_constructible<X,int>{}
 			"can't init X or Y from int");
 \end{cpp}
 
-因为is\_constructible<X，int>已经产生了true，以下语句保证可以编译:
+因为is\_constructible<X，int>已经产生了true，以下语句保证可以编译：
 
 \begin{cpp}
 // OK:
@@ -39,7 +39,7 @@ static_assert(std::disjunction<std::is_constructible<X, int>,
 			"can't init X or Y from int");
 \end{cpp}
 
-另一个是通过逻辑组合现有类型特征，来定义新类型特征的一种简单方法，可以定义一个特性来检查一个类型是否“不是指针”(既不是指针，也不是成员指针，也不是空指针):
+另一个是通过逻辑组合现有类型特征，来定义新类型特征的一种简单方法，可以定义一个特性来检查一个类型是否“不是指针”（既不是指针，也不是成员指针，也不是空指针）:
 
 \begin{cpp}
 template<typename T>
@@ -50,7 +50,7 @@ struct isNoPtrT : std::negation<std::disjunction<std::is_null_pointer<T>,
 };
 \end{cpp}
 
-因为结合了相应的特征类，所以这里不能使用逻辑操作符。根据这个定义，以下方式可用:
+因为结合了相应的特征类，所以这里不能使用逻辑操作符。根据这个定义，以下方式可用：
 
 \begin{cpp}
 std::cout << isNoPtrT<void*>::value << '\n'; // false
@@ -59,21 +59,21 @@ auto np = nullptr;
 std::cout << isNoPtrT<decltype(np)>::value << '\n'; // false
 \end{cpp}
 
-并配以相应的变量模板:
+并配以相应的变量模板：
 
 \begin{cpp}
 template<typename T>
 constexpr bool isNoPtr = isNoPtrT<T>::value;
 \end{cpp}
 
-可以这样写:
+可以这样写：
 
 \begin{cpp}
 std::cout << isNoPtr<void*> << '\n'; // false
 std::cout << isNoPtr<int> << '\n'; // true
 \end{cpp}
 
-最后一个例子，下面的函数模板只有在所有模板参数既不是类，也不是联合时才启用:
+最后一个例子，下面的函数模板只有在所有模板参数既不是类，也不是联合时才启用：
 
 \begin{cpp}
 template<typename... Ts>
@@ -116,7 +116,7 @@ print(Ts...)
 逻辑上分别对传入的特征使用操作符\&\&或||。
 
 \item 
-这两个特性都会短路(第一个false或true之后中止计算)。
+这两个特性都会短路（第一个false或true之后中止计算）。
 
 \item 
 C++17后可用

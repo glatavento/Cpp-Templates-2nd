@@ -1,7 +1,7 @@
 \section{特殊成员函数模板}
 成员函数模板也可以用作特殊的成员函数，包括用作构造函数，但这可能会导致意想不到的结果。
 
-看看下面的例子:
+看看下面的例子：
 
 \filename{basics/specialmemtmpl1.cpp}
 \begin{cpp}
@@ -40,11 +40,11 @@ int main()
 }
 \end{cpp}
 
-这里，有一个具有string成员名的类Person，我们为其提供了初始化构造函数。为了支持移动语义，重载了接受std::string参数的构造函数:
+这里，有一个具有string成员名的类Person，我们为其提供了初始化构造函数。为了支持移动语义，重载了接受std::string参数的构造函数：
 
 \begin{itemize}
 \item 
-提供了string的构造函数，其名称由传递参数的副本进行初始化:
+提供了string的构造函数，其名称由传递参数的副本进行初始化：
 
 \begin{cpp}
 Person(std::string const& n) : name(n) {
@@ -53,7 +53,7 @@ Person(std::string const& n) : name(n) {
 \end{cpp}
 
 \item 
-提供了一个可移动string对象的构造函数，使用std::move()来“窃取”下面的值:
+提供了一个可移动string对象的构造函数，使用std::move()来“窃取”下面的值：
 
 \begin{cpp}
 Person(std::string&& n) : name(std::move(n)) {
@@ -62,7 +62,7 @@ Person(std::string&& n) : name(std::move(n)) {
 \end{cpp}
 \end{itemize}
 
-正如预期的那样，对于传入的字符串对象(lvalues)调用第一种方法，而对于可移动的对象(rvalues)调用后者:
+正如预期的那样，对于传入的字符串对象(lvalues)调用第一种方法，而对于可移动的对象(rvalues)调用后者：
 
 \begin{cpp}
 std::string s = "sname";
@@ -70,7 +70,7 @@ Person p1(s); // init with string object => calls copying string-CONSTR
 Person p2("tmp"); // init with string literal => calls moving string-CONSTR
 \end{cpp}
 
-除了这些构造函数之外，示例还对复制和移动构造函数有特定的实现，以确定Person作为一个整体何时复制/移动:
+除了这些构造函数之外，示例还对复制和移动构造函数有特定的实现，以确定Person作为一个整体何时复制/移动：
 
 \begin{cpp}
 Person p3(p1); // copy Person => calls COPY-CONSTR
@@ -106,7 +106,7 @@ public:
 };
 \end{cpp}
 
-传递string的构造函数工作正常:
+传递string的构造函数工作正常：
 
 \begin{cpp}
 std::string s = "sname";
@@ -114,35 +114,35 @@ Person p1(s); // init with string object => calls TMPL-CONSTR
 Person p2("tmp"); // init with string literal => calls TMPL-CONSTR
 \end{cpp}
 
-在这种情况下p2的构造并没有创建临时字符串，参数STR推导为char const[4]。将std::forward<STR>应用于构造函数的指针参数没有太大的效果，因此name成员是由一个以null结尾的字符串(进行构造)。
+在这种情况下p2的构造并没有创建临时字符串，参数STR推导为char const[4]。将std::forward<STR>应用于构造函数的指针参数没有太大的效果，因此name成员是由一个以null结尾的字符串（进行构造）。
 
-但当我们试图调用复制构造函数时，会得到一个错误:
+但当我们试图调用复制构造函数时，会得到一个错误：
 
 \begin{cpp}
 Person p3(p1); // ERROR
 \end{cpp}
 
-当用一个可移动对象初始化一个新的Person时，仍然可以正常工作:
+当用一个可移动对象初始化一个新的Person时，仍然可以正常工作：
 
 \begin{cpp}
 Person p4(std::move(p1)); // OK: move Person => calls MOVE-CONST
 \end{cpp}
 
-复制一个常量Person也可以正常工作:
+复制一个常量Person也可以正常工作：
 
 \begin{cpp}
 Person const p2c("ctmp"); // init constant object with string literal
 Person p3c(p2c); // OK: copy constant Person => calls COPY-CONSTR
 \end{cpp}
 
-问题是，根据C++的重载解析规则(参见16.2.4节)，对于一个非常量左值Person p，成员模板
+问题是，根据C++的重载解析规则（参见16.2.4节），对于一个非常量左值Person p，成员模板
 
 \begin{cpp}
 template<typename STR>
 Person(STR&& n)
 \end{cpp}
 
-要比(通常是预定义的)复制构造函数匹配的更好:
+要比（通常是预定义的）复制构造函数匹配的更好：
 
 \begin{cpp}
 Person (Person const& p)
@@ -150,7 +150,7 @@ Person (Person const& p)
 
 STR只是替换为Person\&，而对于复制构造函数，需要转换为const。
 
-可以考虑通过提供一个非常量复制构造函数来解决这个问题:
+可以考虑通过提供一个非常量复制构造函数来解决这个问题：
 
 \begin{cpp}
 Person (Person& p)

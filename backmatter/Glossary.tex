@@ -207,7 +207,7 @@ std::complex<float> z1 = 1.0, z2(0.0, 1.0);
 
 \subsubsection{实例(instance)}
 
-实例一词在C++编程中有两层含义。源自面向对象术语的含义是类的实例:是类的实现的对象，C++中std::cout是std::ostream类的一个实例。另一种含义是模板实例:通过用特定值替换所有模板参数获得的类、函数或成员函数。所以，实例也称为特化，尽管后一个术语经常误认为是显式特化。
+实例一词在C++编程中有两层含义。源自面向对象术语的含义是类的实例：是类的实现的对象，C++中std::cout是std::ostream类的一个实例。另一种含义是模板实例：通过用特定值替换所有模板参数获得的类、函数或成员函数。所以，实例也称为特化，尽管后一个术语经常误认为是显式特化。
 
 \subsubsection{实例化(instantiation)}
 
@@ -223,7 +223,7 @@ std::complex<float> z1 = 1.0, z2(0.0, 1.0);
 
 \subsubsection{可链接的对象(linkable entity)}
 
-以下任何一种:函数或成员函数、全局变量或静态数据成员，包括从模板生成的，并对链接器可见。
+以下任何一种：函数或成员函数、全局变量或静态数据成员，包括从模板生成的，并对链接器可见。
 
 \subsubsection{连接器(linker)}
 
@@ -323,7 +323,7 @@ std::complex<float> z1 = 1.0, z2(0.0, 1.0);
 
 \subsubsection{右值(rvalue)}
 
-不是左值的一类表达式。右值可以是prvalue（例如临时值）或xvalue(例如，用std::move()标记的左值)。C++11之前的右值，C++11中为纯右值。参见674页的值类别和B.2节。
+不是左值的一类表达式。右值可以是prvalue（例如临时值）或xvalue（例如，用std::move()标记的左值）。C++11之前的右值，C++11中为纯右值。参见674页的值类别和B.2节。
 
 \subsubsection{替换失败不为过(SFINAE)}
 
@@ -407,7 +407,7 @@ T\&\&右值引用的两个术语之一，其中T是一个可推导的模板参�
 
 \subsubsection{值类别(value category)}
 
-表达式的分类。传统的值类别左值和右值是从C继承而来的。C++11引入了替代类别:glvalue（广义左值），其求值标识存储的对象，以及prvalue（纯右值），其求值初始化对象。其他类别将glvalue细分为lvalue（可本地化值）和xvalue（过期值）。在C++11中，右值作为xvalue和prvalue的一般类别（C++11之前，右值就是C++11中的prvalue）。详见附录B。
+表达式的分类。传统的值类别左值和右值是从C继承而来的。C++11引入了替代类别：glvalue（广义左值），其求值标识存储的对象，以及prvalue（纯右值），其求值初始化对象。其他类别将glvalue细分为lvalue（可本地化值）和xvalue（过期值）。在C++11中，右值作为xvalue和prvalue的一般类别（C++11之前，右值就是C++11中的prvalue）。详见附录B。
 
 \subsubsection{变量模板(variable template)}
 

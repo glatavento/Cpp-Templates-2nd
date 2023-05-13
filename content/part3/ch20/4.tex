@@ -1,6 +1,6 @@
 \section{类的特化}
 
-类模板偏特化可用于为特定模板参数提供类模板的特化实现，就像我们为函数模板使用重载一样。与重载函数模板一样，可以根据模板参数的属性区分偏特化。考虑使用键值类型作为模板参数的泛型Dictionary类模板。只要键类型只提供相等操作符，就可以实现一个简单(但效率低)的Dictionary:
+类模板偏特化可用于为特定模板参数提供类模板的特化实现，就像我们为函数模板使用重载一样。与重载函数模板一样，可以根据模板参数的属性区分偏特化。考虑使用键值类型作为模板参数的泛型Dictionary类模板。只要键类型只提供相等操作符，就可以实现一个简单（但效率低）的Dictionary:
 
 \begin{cpp}
 template<typename Key, typename Value>
@@ -30,7 +30,7 @@ class Dictionary
 
 \subsection{启用/禁用类模板}
 
-启用/禁用类模板的不同实现的方法是使用启用/禁用类模板的偏特化。要在类模板偏特化中使用EnableIf，首先向Dictionary引入一个未命名的默认模板参数:
+启用/禁用类模板的不同实现的方法是使用启用/禁用类模板的偏特化。要在类模板偏特化中使用EnableIf，首先向Dictionary引入一个未命名的默认模板参数：
 
 \begin{cpp}
 template<typename Key, typename Value, typename = void>
@@ -40,7 +40,7 @@ class Dictionary
 };
 \end{cpp}
 
-新的模板参数作为EnableIf的锚，可以嵌入到Dictionary的map版本的偏特化模板参数列表中:
+新的模板参数作为EnableIf的锚，可以嵌入到Dictionary的map版本的偏特化模板参数列表中：
 
 \begin{cpp}
 template<typename Key, typename Value>
@@ -57,7 +57,7 @@ class Dictionary<Key, Value,
 };
 \end{cpp}
 
-与重载函数模板不同，这里不需要在主模板上禁用条件，因为偏特化优先于主模板。当使用哈希操作添加另一个键实现时，需要确保偏特化条件互斥:
+与重载函数模板不同，这里不需要在主模板上禁用条件，因为偏特化优先于主模板。当使用哈希操作添加另一个键实现时，需要确保偏特化条件互斥：
 
 \begin{cpp}
 template<typename Key, typename Value, typename = void>
@@ -89,7 +89,7 @@ EnableIf<HasHash<Key>>>
 
 \subsection{类模板的标签调度}
 
-标签调度也可以用于在类模板偏特化之间进行选择。我们定义了一个函数对象类型Advance<Iterator>，类似于前面章节中使用的advanceIter()算法，将迭代器向前推进若干步。我们提供了通用实现(用于输入迭代器)，以及双向和随机访问迭代器的特化实现，依赖于一个辅助特征BestMatchInSet(如下所述)来为迭代器的类别标签选择最佳匹配:
+标签调度也可以用于在类模板偏特化之间进行选择。我们定义了一个函数对象类型Advance<Iterator>，类似于前面章节中使用的advanceIter()算法，将迭代器向前推进若干步。我们提供了通用实现（用于输入迭代器），以及双向和随机访问迭代器的特化实现，依赖于一个辅助特征BestMatchInSet（如下所述）来为迭代器的类别标签选择最佳匹配：
 
 \begin{cpp}
 // primary template (intentionally undefined):
@@ -158,7 +158,7 @@ class Advance<Iterator, std::random_access_iterator_tag>
 }
 \end{cpp}
 
-表达式与函数模板的标签调度非常相似，问题在于编写特征BestMatchInSet，该特征要确定给定迭代器的(输入、双向和随机访问迭代器标签)最匹配的标签。这个特征说明，给定迭代器的category标签的值，将选择下列哪个重载，并报告其参数类型:
+表达式与函数模板的标签调度非常相似，问题在于编写特征BestMatchInSet，该特征要确定给定迭代器的（输入、双向和随机访问迭代器标签）最匹配的标签。这个特征说明，给定迭代器的category标签的值，将选择下列哪个重载，并报告其参数类型：
 
 \begin{cpp}
 void f(std::input_iterator_tag);
@@ -166,7 +166,7 @@ void f(std::bidirectional_iterator_tag);
 void f(std::random_access_iterator_tag);
 \end{cpp}
 
-模拟重载解析最简单的方法是使用重载解析:
+模拟重载解析最简单的方法是使用重载解析：
 
 \begin{cpp}
 // construct a set of match() overloads for the types in Types...:
@@ -196,16 +196,16 @@ template<typename T, typename... Types>
 using BestMatchInSet = typename BestMatchInSetT<T, Types...>::Type;
 \end{cpp}
 
-MatchOverloads模板使用递归继承来为Types输入集中的每个类型声明一个match()函数。递归match重载偏特化的每次实例化，都会为列表中的下一个类型引入一个新的match()函数。然后，使用using声明引入在其基类中定义的match()函数，该函数处理列表中的其余类型。当处理递归时，结果是一组对应于给定类型的match()重载，每个重载返回其参数类型。BestMatchInSetT模板然后将一个T对象传递给这组重载match()函数，并生成所选(最佳)match()函数的返回类型。
+MatchOverloads模板使用递归继承来为Types输入集中的每个类型声明一个match()函数。递归match重载偏特化的每次实例化，都会为列表中的下一个类型引入一个新的match()函数。然后，使用using声明引入在其基类中定义的match()函数，该函数处理列表中的其余类型。当处理递归时，结果是一组对应于给定类型的match()重载，每个重载返回其参数类型。BestMatchInSetT模板然后将一个T对象传递给这组重载match()函数，并生成所选（最佳）match()函数的返回类型。
 
 \begin{notice}
-C++17中，可以在基类列表和using声明中使用包扩展来消除递归(第4.4.5节)。将在第26.4节演示这种技术。
+C++17中，可以在基类列表和using声明中使用包扩展来消除递归（第4.4.5节）。将在第26.4节演示这种技术。
 \end{notice}
 
-如果两个函数都不匹配，则返回void(使用省略号来捕获参数)表示失败。
+如果两个函数都不匹配，则返回void（使用省略号来捕获参数）表示失败。
 
 \begin{notice}
-失败的情况下，不提供结果会更好一些，使其成为SFINAE友好特征(参见第19.4.4节)。此外，健壮的实现将返回类型包装在类似Identity的东西中，因为有些类型(如数组和函数类型)可以是参数类型，但不能是返回类型。为了简洁和可读性，省略了这些改进。
+失败的情况下，不提供结果会更好一些，使其成为SFINAE友好特征（参见第19.4.4节）。此外，健壮的实现将返回类型包装在类似Identity的东西中，因为有些类型（如数组和函数类型）可以是参数类型，但不能是返回类型。为了简洁和可读性，省略了这些改进。
 \end{notice}
 
 总而言之，BestMatchInSetT将函数重载结果转换为特征，并使标签调度在类模板偏特化间的选择，变得相对容易。

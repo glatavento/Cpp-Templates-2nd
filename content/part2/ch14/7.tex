@@ -1,5 +1,5 @@
 \section{标准库中的显式实例化}
-C++标准库包含许多模板，这些模板通常只用于基本类型。例如，std::basic\_string类模板最常与char(std::string是std::basic\_string<char>的类型别名)或wchar\_t一起使用，可以用其他类似字符的类型实例化。因此，标准库实现通常会为这些常见情况引入显式的实例化声明。例如:
+C++标准库包含许多模板，这些模板通常只用于基本类型。例如，std::basic\_string类模板最常与char（std::string是std::basic\_string<char>的类型别名）或wchar\_t一起使用，可以用其他类似字符的类型实例化。因此，标准库实现通常会为这些常见情况引入显式的实例化声明。例如：
 
 \begin{cpp}
 namespace std {

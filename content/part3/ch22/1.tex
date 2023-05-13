@@ -40,7 +40,7 @@ int main()
 
 forUpTo()函数模板可以与函数对象一起使用，包括Lambda、函数指针、函数操作符或转换为函数指针/引用的类，每次使用forUpTo()都可能产生不同的实例化。示例函数模板非常小，但若模板很大，这些实例化可能会增加代码量。
 
-限制代码量增加的方法，是将函数模板转换为不需要实例化的非模板。可以尝试使用函数指针:
+限制代码量增加的方法，是将函数模板转换为不需要实例化的非模板。可以尝试使用函数指针：
 
 \filename{bridge/forupto2.hpp}
 \begin{cpp}
@@ -53,7 +53,7 @@ void forUpTo(int n, void (*f)(int))
 }
 \end{cpp}
 
-虽然这个实现在传递printInt()时正常工作，但在传递Lambda时将产生错误:
+虽然这个实现在传递printInt()时正常工作，但在传递Lambda时将产生错误：
 
 \begin{cpp}
 forUpTo(5,
@@ -65,7 +65,7 @@ forUpTo(5,
 		});
 \end{cpp}
 
-标准库的类模板std::function<>允许使用forUpTo()的替代表达式:
+标准库的类模板std::function<>允许使用forUpTo()的替代表达式：
 
 \filename{bridge/forupto3.hpp}
 \begin{cpp}

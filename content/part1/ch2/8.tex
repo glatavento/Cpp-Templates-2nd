@@ -4,7 +4,7 @@
 
 \subsubsection{类型定义和别名声明}
 
-有两种方法类型定义新名称:
+有两种方法类型定义新名称：
 
 \begin{enumerate}
 \item
@@ -19,11 +19,11 @@ IntStack istack[10]; // istack is array of 10 stacks of ints
 typedef产生的名称称为typedef-name。
 
 \begin{notice}
-这里使用了typedef，而不是“类型定义”。其实，关键字typedef最初是用来建议“类型定义”的。在C++中，“类型定义”实际上意味着其他类型(例如，类或枚举类型的定义)。相反，应该将typedef视为现有类型的替代名称(“别名”)，从而使用typedef。
+这里使用了typedef，而不是“类型定义”。其实，关键字typedef最初是用来建议“类型定义”的。在C++中，“类型定义”实际上意味着其他类型（例如，类或枚举类型的定义）。相反，应该将typedef视为现有类型的替代名称（“别名”），从而使用typedef。
 \end{notice}
 
 \item
-通过使用关键字using(C++11起):
+通过使用关键字using（C++11起）:
 
 \begin{cpp}
 using IntStack = Stack<int>; // alias declaration
@@ -58,7 +58,7 @@ IntStack和Stack<int>是同一类型的两种名称。
 与typedef不同，别名声明可以模板化。自C++11起，这种方式就称为别名模板。
 
 \begin{notice}
-别名模板有时(不正确地)会称为typedef模板，若将其制成模板，将与typedef的行为相同。
+别名模板有时（不正确地）会称为typedef模板，若将其制成模板，将与typedef的行为相同。
 \end{notice}
 
 别名模板DequeStack，对元素类型T进行参数化，展开为一个栈，将其元素实例存储在std::deque:
@@ -105,7 +105,7 @@ using MyTypeIterator = typename MyType<T>::iterator;
 MyTypeIterator<T> pos;
 \end{cpp}
 
-而不像下面这样:
+而不像下面这样：
 
 \begin{cpp}
 typename MyType<T>::iterator pos;
@@ -117,7 +117,7 @@ typename MyType<T>::iterator pos;
 
 \subsubsection{类型特征后缀\_t}
 
-C++14后，标准库使用这种方式为库中的所有类型定义了快捷方式。比如:
+C++14后，标准库使用这种方式为库中的所有类型定义了快捷方式。比如：
 
 \begin{cpp}
 std::add_const_t<T> // since C++14
@@ -129,7 +129,7 @@ std::add_const_t<T> // since C++14
 typename std::add_const<T>::type // since C++11
 \end{cpp}
 
-标准库定义:
+标准库定义：
 
 \begin{cpp}
 namespace std {

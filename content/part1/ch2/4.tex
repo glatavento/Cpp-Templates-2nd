@@ -23,7 +23,7 @@ class Stack {
 其是一个模板实体，参见12.1节。
 \end{notice}
 
-但当试图声明友元函数并实现时，事情会变得更加复杂。这里有两种选择:
+但当试图声明友元函数并实现时，事情会变得更加复杂。这里有两种选择：
 
 \begin{enumerate}
 \item 
@@ -38,7 +38,7 @@ class Stack {
 };
 \end{cpp}
 
-再次使用T或跳过模板参数都不起作用(要么内部的T隐藏外部的T，要么在命名空间作用域中声明一个非模板函数)。
+再次使用T或跳过模板参数都不起作用（要么内部的T隐藏外部的T，要么在命名空间作用域中声明一个非模板函数）。
 
 \item 
 可以将Stack<T>的输出操作符转发声明为模板，这样就需要转发声明Stack<T>:
@@ -50,7 +50,7 @@ template<typename T>
 std::ostream& operator<< (std::ostream&, Stack<T> const&);
 \end{cpp}
 
-然后，将该函数声明为友元:
+然后，将该函数声明为友元：
 
 \begin{cpp}
 template<typename T>
@@ -64,7 +64,7 @@ class Stack {
 注意“函数名”操作符<{}<后面的<T>。因此，需要将非成员函数模板的特化声明为友元。若没有<T>，需要声明新的非模板函数。详细信息请参见12.5.2。
 \end{enumerate}
 
-其他情况下，可以对没有定义<{}<操作符的元素使用这个类。只有对这个堆栈调用操作符<{}<时才会出现错误:
+其他情况下，可以对没有定义<{}<操作符的元素使用这个类。只有对这个堆栈调用操作符<{}<时才会出现错误：
 
 \begin{cpp}
 Stack<std::pair<int,int>> ps; // std::pair<> has no operator<< defined

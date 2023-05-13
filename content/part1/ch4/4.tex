@@ -22,7 +22,7 @@ void printDoubled (T const&... args)
 printDoubled(7.5, std::string("hello"), std::complex<float>(4,2));
 \end{cpp}
 
-该函数具有以下效果(除了构造函数的副作用):
+该函数具有以下效果（除了构造函数的副作用）:
 
 \begin{cpp}
 print(7.5 + 7.5,
@@ -30,7 +30,7 @@ print(7.5 + 7.5,
 	std::complex<float>(4,2) + std::complex<float>(4,2));
 \end{cpp}
 
-如果想给每个参数加1，请注意省略号中的点不能直接跟在数字后面:
+如果想给每个参数加1，请注意省略号中的点不能直接跟在数字后面：
 
 \begin{cpp}
 template<typename... T>
@@ -42,7 +42,7 @@ void addOne (T const&... args)
 }
 \end{cpp}
 
-编译时表达式可以以同样的方式包含模板参数包。例如，下面的函数模板返回所有参数的类型是否相同:
+编译时表达式可以以同样的方式包含模板参数包。例如，下面的函数模板返回所有参数的类型是否相同：
 
 \begin{cpp}
 template<typename T1, typename... TN>
@@ -52,7 +52,7 @@ constexpr bool isHomogeneous (T1, TN...)
 }
 \end{cpp}
 
-这是折叠表达式的一种应用(参见第4.2节)
+这是折叠表达式的一种应用（参见第4.2节）
 
 \begin{cpp}
 isHomogeneous(43, -1, "hello")
@@ -70,11 +70,11 @@ std::is_same<int,int>::value && std::is_same<int,char const*>::value
 isHomogeneous("hello", " ", "world", "!")
 \end{cpp}
 
-会产生true，因为传递的参数都推导为char const*(因为调用参数按值传递，所以参数类型衰变)。
+会产生true，因为传递的参数都推导为char const*（因为调用参数按值传递，所以参数类型衰变）。
 
 \subsection{索引}
 
-下面的函数使用可变索引列表来访问传递给第一个参数的对应元素:
+下面的函数使用可变索引列表来访问传递给第一个参数的对应元素：
 
 \begin{cpp}
 template<typename C, typename... Idx>
@@ -97,7 +97,7 @@ printElems(coll,2,0,3);
 print (coll[2], coll[0], coll[3]);
 \end{shell}
 
-还可以将非类型模板参数声明为参数包。例如:
+还可以将非类型模板参数声明为参数包。例如：
 
 \begin{cpp}
 template<std::size_t... Idx, typename C>
@@ -118,7 +118,7 @@ printIdx<2,0,3>(coll);
 
 \subsection{类模板}
 
-可变参数模板也可以是类模板，其中任意数量的模板参数指定了相应成员的类型:
+可变参数模板也可以是类模板，其中任意数量的模板参数指定了相应成员的类型：
 
 \begin{cpp}
 emplate<typename... Elements>
@@ -129,7 +129,7 @@ Tuple<int, std::string, char> t; // t can hold integer, string, and character
 
 这将在第25章中讨论。
 
-另一个例子是能够指定对象可能的类型:
+另一个例子是能够指定对象可能的类型：
 
 \begin{cpp}
 template<typename... Types>
@@ -140,7 +140,7 @@ Variant<int, std::string, char> v; // v can hold integer, string, or character
 
 这将在第26章中讨论。
 
-也可以定义类，作为类型来表示一组索引:
+也可以定义类，作为类型来表示一组索引：
 
 \begin{cpp}
 // type for arbitrary number of indices:
@@ -159,14 +159,14 @@ void printByIdx(T t, Indices<Idx...>)
 }
 \end{cpp}
 
-该模板的使用方法如下:
+该模板的使用方法如下：
 
 \begin{cpp}
 std::array<std::string, 5> arr = {"Hello", "my", "new", "!", "World"};
 printByIdx(arr, Indices<0, 4, 3>());
 \end{cpp}
 
-或者这样:
+或者这样：
 
 \begin{cpp}
 auto t = std::make_tuple(12, "monkeys", 2.0);
@@ -177,7 +177,7 @@ printByIdx(t, Indices<0, 1, 2>());
 
 \subsection{推导策略}
 
-推导策略(参见第2.9节)也可以应用于可变参数。例如，C++标准库定义了以下std::arrays的推导策略:
+推导策略（参见第2.9节）也可以应用于可变参数。例如，C++标准库定义了以下std::arrays的推导策略：
 
 \begin{cpp}
 namespace std {
@@ -199,17 +199,17 @@ std::array a{42,45,77};
 std::array<int, 3> a{42,45,77};
 \end{cpp}
 
-第一个数组参数的std::enable\_if<>表达式是一个折叠表达式(4.4.1节中引入的isHomogeneous())展开为:
+第一个数组参数的std::enable\_if<>表达式是一个折叠表达式4.4.1节中引入的（isHomogeneous()）展开为：
 
 \begin{cpp}
 is_same_v<T, U1> && is_same_v<T, U2> && is_same_v<T, U3> ...
 \end{cpp}
 
-若结果不为true(即并非所有元素类型都相同)，则丢弃推导策略，从而整体推导失败。标准库需要所有元素具有相同的类型时，推导策略才能成功执行。
+若结果不为true（即并非所有元素类型都相同），则丢弃推导策略，从而整体推导失败。标准库需要所有元素具有相同的类型时，推导策略才能成功执行。
 
 \subsection{基类和using}
 
-看看下面的例子:
+看看下面的例子：
 
 \filename{basics/varusing.cpp}
 \begin{cpp}

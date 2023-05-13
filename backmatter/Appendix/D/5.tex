@@ -66,10 +66,10 @@
 生成给定T1, T2, ..., Tn类型的“共同类型”。
 
 \item
-普通类型的计算比本附录中讨论的要复杂一些。粗略地说，当第二个和第三个操作数是U和V类型时(引用类型仅用于确定两个操作数的值类别)，U和V两种类型是条件三元操作符产生的类型;若该类型无效，则没有共同类型。decay\_t应用于此结果。这个计算可以通过特化重写为std::common\_type<U, V>(C++标准库中，偏特化存在于持续时间和时间点)。
+普通类型的计算比本附录中讨论的要复杂一些。粗略地说，当第二个和第三个操作数是U和V类型时（引用类型仅用于确定两个操作数的值类别），U和V两种类型是条件三元操作符产生的类型；若该类型无效，则没有共同类型。decay\_t应用于此结果。这个计算可以通过特化重写为std::common\_type<U, V>（C++标准库中，偏特化存在于持续时间和时间点）。
 
 \item
-若没有给出类型或没有公共类型存在，则没有定义类型成员，因此会出错(可能会导致SFINAE输出使用它的函数模板)。
+若没有给出类型或没有公共类型存在，则没有定义类型成员，因此会出错（可能会导致SFINAE输出使用它的函数模板）。
 
 \item
 若给出单类型，结果是对该类型为decay\_t。
@@ -78,13 +78,13 @@
 对于两个以上的类型，common\_type递归地用公共类型替换前两个类型T1和T2。若该进程失败，则没有通用类型。
 
 \item
-处理普通类型时，传递的类型是衰变类型，因此特性总是产生衰变类型(参见D.4节)。
+处理普通类型时，传递的类型是衰变类型，因此特性总是产生衰变类型（参见D.4节）。
 
 \item
 参见第1.3.3节对该特性应用的讨论和示例。
 
 \item
-这个特性的主模板通常是通过以下方式实现的(这里只使用两个参数):
+这个特性的主模板通常是通过以下方式实现的（这里只使用两个参数）:
 
 \begin{cpp}
 template<typename T1, typename T2>
@@ -106,7 +106,7 @@ struct common_type<T1,T2> {
 
 \begin{itemize}
 \item[-]
-std::alignment\_of\_v<type>::value (详见D.3.)
+std::alignment\_of\_v<type>::value （详见D.3.）
 
 \item[-]
 alignof(type)
@@ -116,7 +116,7 @@ alignof(type)
 要求至少提供一种类型。
 
 \item
-例如:
+例如：
 \begin{cpp}
 using POD_T = std::aligned_union_t<0, char,
 								std::pair<std::string,std::string>>;
@@ -142,7 +142,7 @@ std::cout << std::aligned_union<0, char,
 要求MAX\_TYPE\_SZ大于0，平台至少要有一种对齐值为DEF\_ALIGN的类型。
 
 \item
-例如:
+例如：
 \begin{cpp}
 using POD_T = std::aligned_storage_t<5>;
 \end{cpp}

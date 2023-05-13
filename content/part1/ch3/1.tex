@@ -1,7 +1,7 @@
 \section{类模板参数}
 与前几章的栈实现不同，这里可以通过使用固定大小的元素数组来实现栈。这种方法的优点是避免了内存管理开销，但这为堆栈确定最佳容量带来了困难。指定的容量越小，堆栈越有可能快速填满。指定的容量越大，有可能会浪费内存。好的解决方案是让堆栈的用户指定数组的大小，作为堆栈的最大容量。
 
-为此，可以将size定义为模板参数:
+为此，可以将size定义为模板参数：
 
 \filename{basics/stacknontype.hpp}
 \begin{cpp}
@@ -56,7 +56,7 @@ T const& Stack<T,Maxsize>::top () const
 }
 \end{cpp}
 
-第二个模板形参Maxsize是std::size\_t类型，指定了堆栈元素内部数组的容量:
+第二个模板形参Maxsize是std::size\_t类型，指定了堆栈元素内部数组的容量：
 
 \begin{cpp}
 template<typename T, std::size_t Maxsize>
@@ -67,7 +67,7 @@ private:
 };
 \end{cpp}
 
-另外，在push()中，可以使用它来检查堆栈是否已满:
+另外，在push()中，可以使用它来检查堆栈是否已满：
 
 \begin{cpp}
 template<typename T, std::size_t Maxsize>
@@ -79,7 +79,7 @@ void Stack<T,Maxsize>::push (T const& elem)
 }
 \end{cpp}
 
-要使用这个类模板，必须同时指定元素类型和最大容量:
+要使用这个类模板，必须同时指定元素类型和最大容量：
 
 \filename{basics/stacknontype.cpp}
 \begin{cpp}
@@ -107,7 +107,7 @@ int main()
 
 每个模板实例化都是独立的类型。因此，int20Stack和int40Stack是两种不同的类型。不能使用其中一个来代替另一个，也不能将其中一个分配给另一个。
 
-同样，可以指定模板参数的默认值:
+同样，可以指定模板参数的默认值：
 
 \begin{cpp}
 template<typename T = int, std::size_t Maxsize = 100>

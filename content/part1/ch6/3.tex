@@ -1,7 +1,7 @@
 \section{使用enable\_if<>禁用模板}
 从C++11开始，标准库提供了辅助模板std::enable\_if<>，以在特定的编译时条件下忽略函数模板。
 
-例如，函数模板foo<>()有如下定义:
+例如，函数模板foo<>()有如下定义：
 
 \begin{cpp}
 template<typename T>
@@ -23,11 +23,11 @@ void foo() {
 }
 \end{cpp}
 
-也就是说，std::enable\_if<>是一种类型特征，计算作为其(第一个)模板参数传递的给定编译时表达式:
+也就是说，std::enable\_if<>是一种类型特征，计算作为其（第一个）模板参数传递的给定编译时表达式：
 
 \begin{itemize}
 \item 
-若表达式结果为true，其类型成员类型将产生一个类型:
+若表达式结果为true，其类型成员类型将产生一个类型：
 
 \begin{itemize}
 \item[-]
@@ -38,10 +38,10 @@ void foo() {
 \end{itemize}
 
 \item 
-若表达式结果为false，则没有定义成员类型。由于名为SFINAE的模板特性(替换失败不为过)(请参阅8.4节)，这将忽略使用enable\_if表达式的函数模板。
+若表达式结果为false，则没有定义成员类型。由于名为SFINAE的模板特性（替换失败不为过）（请参阅8.4节），这将忽略使用enable\_if表达式的函数模板。
 \end{itemize}
 
-对于自C++14产生类型的类型特征，有一个对应的别名模板std::enable\_if\_t<>，允许跳过typename和::type(请参阅第2.8节了解详细信息)。因此，从C++14起就使用
+对于自C++14产生类型的类型特征，有一个对应的别名模板std::enable\_if\_t<>，允许跳过typename和：:type（请参阅第2.8节了解详细信息）。因此，从C++14起就使用
 
 \begin{cpp}
 template<typename T>
@@ -66,7 +66,7 @@ foo() {
 MyType foo();
 \end{cpp}
 
-在声明中间使用enable\_if表达式非常笨拙。由于这个原因，使用std::enable\_if<>的常见方法是使用带有默认值的函数模板参数: 
+在声明中间使用enable\_if表达式非常笨拙。由于这个原因，使用std::enable\_if<>的常见方法是使用带有默认值的函数模板参数： 
 
 \begin{cpp}
 template<typename T,
@@ -86,7 +86,7 @@ void foo() {
 
 当sizeof(T) > 4时。
 
-若感觉还是太笨拙，并且想让需求/约束更明确，可以使用别名模板为它命名:
+若感觉还是太笨拙，并且想让需求/约束更明确，可以使用别名模板为它命名：
 
 \begin{cpp}
 template<typename T>

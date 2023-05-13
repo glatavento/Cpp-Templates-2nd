@@ -1,5 +1,5 @@
 \section{完美转发临时变量}
-如6.1节所示，可以使用转发引用和std::forward<>来“完美转发”泛型参数:
+如6.1节所示，可以使用转发引用和std::forward<>来“完美转发”泛型参数：
 
 \begin{cpp}
 template<typename T>
@@ -19,7 +19,7 @@ void foo(T x)
 }
 \end{cpp}
 
-进一步假设需要更新代码，以便对get()产生的中间值执行一些操作。通过将值保存在使用auto\&\&声明的变量中来实现:
+进一步假设需要更新代码，以便对get()产生的中间值执行一些操作。通过将值保存在使用auto\&\&声明的变量中来实现：
 
 \begin{cpp}
 template<typename T>

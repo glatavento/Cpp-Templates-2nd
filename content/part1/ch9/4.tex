@@ -1,9 +1,9 @@
 \section{解析编译错误}
-普通的编译错误通常是非常简洁和直指要害的。例如，当编译器说“类X没有‘fun’成员”时，通常不难找出我代码中的问题(例如，可能把run错输入为fun)。模板就不是这样了，来看一些例子。
+普通的编译错误通常是非常简洁和直指要害的。例如，当编译器说“类X没有‘fun’成员”时，通常不难找出我代码中的问题（例如，可能把run错输入为fun）。模板就不是这样了，来看一些例子。
 
 \subsubsection{类型不匹配}
 
-考虑以下使用C++标准库例子:
+考虑以下使用C++标准库例子：
 
 \filename{basics/errornovel1.cpp}
 \begin{cpp}
@@ -22,9 +22,9 @@ int main()
 }
 \end{cpp}
 
-包含一个相当小的错误:用于查找集合中第一个匹配字符串的Lambda中，针对给定的字符串进行检查。因为map中的元素是键/值对，所以期望得到std::pair<std::string const，double>。
+包含一个相当小的错误：用于查找集合中第一个匹配字符串的Lambda中，针对给定的字符串进行检查。因为map中的元素是键/值对，所以期望得到std::pair<std::string const，double>。
 
-GNU C++编译器的某个版本会报告以下错误:
+GNU C++编译器的某个版本会报告以下错误：
 
 {\scriptsize
 \begin{shell}
@@ -78,7 +78,7 @@ GNU C++编译器的某个版本会报告以下错误:
 
 这样的信息开始看起来更像一本小说，这可能会让模板新手感到沮丧。通过对这样的消息进行管理，错误会相对更容易定位。
 
-错误消息的第一部分说错误发生在内部predefined\_ops.h头文件中的函数模板实例中，errornovel1.cpp通过其他头文件包含其中。下面几行中，编译器报告用哪个参数实例化了什么。本例中，一切都从errornovel1.cpp的第13行语句开始:
+错误消息的第一部分说错误发生在内部predefined\_ops.h头文件中的函数模板实例中，errornovel1.cpp通过其他头文件包含其中。下面几行中，编译器报告用哪个参数实例化了什么。本例中，一切都从errornovel1.cpp的第13行语句开始：
 
 \begin{cpp}
 auto pos = 
@@ -104,19 +104,19 @@ _Predicate = main()::<lambda(const string&)>
 
 编译器都会进行报告，不期望这些模板实例化。
 
-我们的例子中，所有类型的模板都需要实例化，只是想知道为什么它不工作。这个信息出现在消息的最后一部分:表示“调用不匹配”意味着函数调用无法解析，因为实参类型和形参类型不匹配。
+我们的例子中，所有类型的模板都需要实例化，只是想知道为什么它不工作。这个信息出现在消息的最后一部分：表示“调用不匹配”意味着函数调用无法解析，因为实参类型和形参类型不匹配。
 
 \begin{cpp}
 (main()::<lambda(const string&)>) (std::pair<const std::__cxx11::basic_string<char>, double>&)
 \end{cpp}
 
-导致调用代码错误:
+导致调用代码错误：
 
 \begin{cpp}
 { return bool(_M_pred(*__it)); }
 \end{cpp}
 
-之后，包含“note: candidate:”的行解释了有一个候选类型需要一个const字符串\&，这个候选类型在errornovel1.cpp的第11行定义为Lambda函数[](std::string const\& s)，并说明了为什么候选类型不适合:
+之后，包含“note: candidate:”的行解释了有一个候选类型需要一个const字符串\&，这个候选类型在errornovel1.cpp的第11行定义为Lambda函数[](std::string const\& s)，并说明了为什么候选类型不适合：
 
 {\scriptsize
 \begin{shell}
@@ -128,9 +128,9 @@ to 'const string& {aka const std::__cxx11::basic_string<char>&}'
 
 这也描述了我们的问题。
 
-毫无疑问，错误消息可以呈现的更好。实际问题会在实例化之前发出，而不是使用完全扩展的模板实例化名称，如std::\_\_cxx11::basic\_string<char>，只使用std::string可能就足够了。然而，诊断中的所有信息在某些情况下也可能有用。因此，其他编译器提供类似的信息也就不足为奇了(尽管有些使用了上面提到的结构化技术)。
+毫无疑问，错误消息可以呈现的更好。实际问题会在实例化之前发出，而不是使用完全扩展的模板实例化名称，如std::\_\_cxx11::basic\_string<char>，只使用std::string可能就足够了。然而，诊断中的所有信息在某些情况下也可能有用。因此，其他编译器提供类似的信息也就不足为奇了（尽管有些使用了上面提到的结构化技术）。
 
-例如，Visual C++编译器会输出如下错误信息:
+例如，Visual C++编译器会输出如下错误信息：
 
 {\scriptsize
 \begin{shell}
@@ -191,7 +191,7 @@ with
 
 \subsubsection{缺少const的编译器}
 
-有时泛型代码的问题只是因为某些编译器。考虑下面的例子:
+有时泛型代码的问题只是因为某些编译器。考虑下面的例子：
 
 \filename{basics/errornovel2.cpp}
 \begin{cpp}
@@ -226,7 +226,7 @@ int main()
 }
 \end{cpp}
 
-Visual Studio 2013或2015中，这段代码按预期编译。但是，使用g++或clang时，代码编译时会出错。例如，在g++ 6.1上，第一个错误消息如下所示:
+Visual Studio 2013或2015中，这段代码按预期编译。但是，使用g++或clang时，代码编译时会出错。例如，在g++ 6.1上，第一个错误消息如下所示：
 
 {\scriptsize
 \begin{shell}
@@ -257,7 +257,7 @@ Visual Studio 2013或2015中，这段代码按预期编译。但是，使用g++�
 \end{shell}
 }
 
-紧接着是20多条其他错误消息:
+紧接着是20多条其他错误消息：
 
 {\scriptsize
 \begin{shell}
@@ -301,7 +301,7 @@ Visual Studio 2013或2015中，这段代码按预期编译。但是，使用g++�
 \end{shell}
 }
 
-同样，阅读错误消息也很困难(甚至找到每个消息的开头和结尾都很麻烦)。其要表达的是头文件中hashtable\_policy.h在实例化std::unordered\_set<>中需要
+同样，阅读错误消息也很困难（甚至找到每个消息的开头和结尾都很麻烦）。其要表达的是头文件中hashtable\_policy.h在实例化std::unordered\_set<>中需要
 
 \begin{cpp}
 std::unordered_set<Customer,MyCustomerHash> coll;
@@ -319,7 +319,7 @@ noexcept(declval<const _Hash&>()(declval<const _Key&>()))>
 const main()::MyCustomerHash (const Customer&)
 \end{cpp}
 
-(declval<const\_Hash\&>()是main()::MyCustomerHash类型的表达式。)一个可能的候选是
+（declval<const\_Hash\&>()是main()::MyCustomerHash类型的表达式。）一个可能的候选是
 
 \begin{cpp}
 std::size_t main()::MyCustomerHash::operator()(const Customer&)
@@ -331,7 +331,7 @@ std::size_t main()::MyCustomerHash::operator()(const Customer&)
 std::size_t operator() (const Customer& c) {
 \end{cpp}
 
-错误信息最后说明了这个问题:
+错误信息最后说明了这个问题：
 
 {\scriptsize
 \begin{shell}
@@ -341,9 +341,9 @@ passing 'const main()::MyCustomerHash*' as 'this' argument discards qualifiers
 
 能看出问题出在哪里吗?
 
-这个std::unordered\_set类模板的实现要求哈希对象的函数调用操作符是const成员函数(参见第11.1.1节)；否则，算法内部就会出现错误。
+这个std::unordered\_set类模板的实现要求哈希对象的函数调用操作符是const成员函数（参见第11.1.1节）；否则，算法内部就会出现错误。
 
-所有其他错误消息从第一个开始级联，并在将const限定符简单地添加到哈希函数操作符时消失:
+所有其他错误消息从第一个开始级联，并在将const限定符简单地添加到哈希函数操作符时消失：
 
 \begin{cpp}
 std::size_t operator() (const Customer& c) const {

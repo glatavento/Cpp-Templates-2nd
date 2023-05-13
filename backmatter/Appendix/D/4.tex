@@ -16,12 +16,12 @@
 		make\_signed\textless{}T \textgreater{}           & 对应的有符号非引用类型                         \\ \hline
 		make\_unsigned\textless{}T \textgreater{}         & 对应的无符号非引用类型                       \\ \hline
 		remove\_reference\textless{}T \textgreater{}      & 对应的非引用类型                                \\ \hline
-		add\_lvalue\_reference\textless{}T \textgreater{} & 对应的左值引用类型(右值变成左值)   \\ \hline
-		add\_rvalue\_reference\textless{}T \textgreater{} & 对应的右值引用类型(左值保持不变)   \\ \hline
-		remove\_pointer\textless{}T \textgreater{}        & 指针的引用类型(其他类型相同)               \\ \hline
+		add\_lvalue\_reference\textless{}T \textgreater{} & 对应的左值引用类型（右值变成左值）   \\ \hline
+		add\_rvalue\_reference\textless{}T \textgreater{} & 对应的右值引用类型（左值保持不变）   \\ \hline
+		remove\_pointer\textless{}T \textgreater{}        & 指针的引用类型（其他类型相同）               \\ \hline
 		add\_pointer\textless{}T \textgreater{}           & 指向对应非引用类型的指针类型             \\ \hline
-		remove\_extent\textless{}T \textgreater{}         & 数组的元素类型(其他类型相同)                 \\ \hline
-		remove\_all\_extents\textless{}T \textgreater{}   & 多维数组的元素类型(其他类型相同) \\ \hline
+		remove\_extent\textless{}T \textgreater{}         & 数组的元素类型（其他类型相同）                 \\ \hline
+		remove\_all\_extents\textless{}T \textgreater{}   & 多维数组的元素类型（其他类型相同） \\ \hline
 		decay\textless{}T \textgreater{}                  & 转换为对应的“值”类型                     \\ \hline
 	\end{tabular}
 	\end{center}
@@ -42,7 +42,7 @@
 生成不带const或/和volatile的T类型。
 
 \item
-const指针是const限定类型，而非const指针或指向const类型的引用则不是const限定类型。例如:
+const指针是const限定类型，而非const指针或指向const类型的引用则不是const限定类型。例如：
 
 \begin{cpp}
 remove_cv_t<int> // yields int
@@ -51,7 +51,7 @@ remove_cv_t<int const volatile> // yields int
 remove_const_t<int const&> // yields int const& (only refers to int const)
 \end{cpp}
 
-类型构造特征的顺序很重要:
+类型构造特征的顺序很重要：
 
 \begin{notice}
 由于这个原因，C++17后的下一个标准可能会提供remove\_refcv特性。
@@ -62,7 +62,7 @@ remove_const_t<remove_reference_t<int const&>> // yields int
 remove_reference_t<remove_const_t<int const&>> // yields int const
 \end{cpp}
 
-相反，我们可能更喜欢使用std::decay<>，但它会将数组和函数类型转换成相应的指针类型(见第D.4节):
+相反，我们可能更喜欢使用std::decay<>，但它会将数组和函数类型转换成相应的指针类型（见第D.4节）:
 
 \begin{cpp}
 decay_t<int const&> // yields int
@@ -83,7 +83,7 @@ decay_t<int const&> // yields int
 生成在带有const或/和volatile限定符的T类型。
 
 \item
-将这些特征应用于引用类型或函数类型无效。例如:
+将这些特征应用于引用类型或函数类型无效。例如：
 \begin{cpp}
 add_cv_t<int> // yields int const volatile
 add_cv_t<int const> // yields int const volatile
@@ -103,10 +103,10 @@ add_const_t<int&> // yields int&
 生成对应的有符号/无符号T类型。
 
 \item
-T是枚举类型，或除bool以外的整型(cv限定)。所有其他类型都会导致未定义行为(参见第19.7.1节，讨论如何避免这种未定义行为)。
+T是枚举类型，或除bool以外的整型（cv限定）。所有其他类型都会导致未定义行为（参见第19.7.1节，讨论如何避免这种未定义行为）。
 
 \item
-将这些特征应用于引用类型或函数类型无效，而非const指针或对const类型的引用不由const限定。例如:
+将这些特征应用于引用类型或函数类型无效，而非const指针或对const类型的引用不由const限定。例如：
 \begin{cpp}
 make_unsigned_t<char> // yields unsigned char
 make_unsigned_t<int> // yields unsigned int
@@ -118,10 +118,10 @@ make_unsigned_t<int const&> // undefined behavior
 
 \begin{itemize}
 \item
-生成引用类型T引用的类型(若T不是引用类型，则生成T本身)。
+生成引用类型T引用的类型（若T不是引用类型，则生成T本身）。
 
 \item
-例如:
+例如：
 \begin{cpp}
 remove_reference_t<int> // yields int
 remove_reference_t<int const> // yields int const
@@ -130,7 +130,7 @@ remove_reference_t<int&&> // yields int
 \end{cpp}
 
 \item
-引用类型本身不是const类型。因此，类型构造特征的顺序很重要:
+引用类型本身不是const类型。因此，类型构造特征的顺序很重要：
 
 \begin{notice}
 由于这个原因，C++17后的下一个标准可能会提供remove\_refcv特性。
@@ -141,7 +141,7 @@ remove_const_t<remove_reference_t<int const&>> // yields int
 remove_reference_t<remove_const_t<int const&>> // yields int const
 \end{cpp}
 
-相反，我们可能更喜欢使用std::decay<>，但会将数组和函数类型转换成相应的指针类型(见第D.4节):
+相反，我们可能更喜欢使用std::decay<>，但会将数组和函数类型转换成相应的指针类型（见第D.4节）:
 
 \begin{cpp}
 decay_t<int const&> // yields int
@@ -160,13 +160,13 @@ decay_t<int const&> // yields int
 若T是可引用类型，则生成对T的左值或右值引用。
 
 \item
-若T不是可引用的(cv限定的)void或用const、volatile、\&和/或\&\&限定的函数类型)，则生成T。
+若T不是可引用的（cv限定的）void或用const、volatile、\&和/或\&\&限定的函数类型)，则生成T。
 
 \item
-若T已经是一个引用类型，特性使用引用折叠规则(参见第15.6.1节):只有当使用add\_rvalue\_reference并且T是一个右值引用时，结果是一个右值引用。
+若T已经是一个引用类型，特性使用引用折叠规则（参见第15.6.1节）:只有当使用add\_rvalue\_reference并且T是一个右值引用时，结果是一个右值引用。
 
 \item
-例如:
+例如：
 \begin{cpp}
 add_lvalue_reference_t<int> // yields int&
 add_rvalue_reference_t<int> // yields int&&
@@ -186,10 +186,10 @@ add_rvalue_reference_t<void> // yields void
 
 \begin{itemize}
 \item
-生成指针类型T所指向的类型(若不是指针类型，则生成T本身)。
+生成指针类型T所指向的类型（若不是指针类型，则生成T本身）。
 
 \item
-例如:
+例如：
 \begin{cpp}
 remove_pointer_t<int> // yields int
 remove_pointer_t<int const*> // yields int const
@@ -204,10 +204,10 @@ remove_pointer_t<int const* const* const> // yields int const* const
 生成指向T的指针的类型，或在引用类型T的情况下，生成指向T基础类型的指针的类型。
 
 \item
-若没有这种类型，则生成T(适用于cv限定的函数类型)。
+若没有这种类型，则生成T（适用于cv限定的函数类型）。
 
 \item
-例如:
+例如：
 \begin{cpp}
 add_pointer_t<void> // yields void*
 add_pointer_t<int const* const> // yields int const* const*
@@ -225,13 +225,13 @@ add_pointer_t<void(int) const> // yields void(int) const (no change)
 
 \begin{itemize}
 \item
-给定数组类型，remove\_extent生成直接元素类型(本身可以是数组类型)，而remove\_all\_extents剥离所有“数组层”来产生底层元素类型(因此不再是数组类型)。若T不是数组类型，则生成T本身。
+给定数组类型，remove\_extent生成直接元素类型（本身可以是数组类型），而remove\_all\_extents剥离所有“数组层”来产生底层元素类型（因此不再是数组类型）。若T不是数组类型，则生成T本身。
 
 \item
-指针没有维度信息，数组类型中未指定的边界指定维度(用数组类型声明的函数参数没有实际的数组类型，而且std::array也不是数组类型。参见第D.2.1节)。
+指针没有维度信息，数组类型中未指定的边界指定维度（用数组类型声明的函数参数没有实际的数组类型，而且std::array也不是数组类型。参见第D.2.1节）。
 
 \item
-例如:
+例如：
 \begin{cpp}
 remove_extent_t<int> // yields int
 remove_extent_t<int[10]> // yields int
@@ -256,17 +256,17 @@ remove_all_extents_t<int(*)[5]> // yields int(*)[5]
 生成衰变的T。
 
 \item
-对于T类型执行以下转换:
+对于T类型执行以下转换：
 
 \begin{itemize}
 \item[-]
-首先，使用remove\_reference(参见D.4)。
+首先，使用remove\_reference（参见D.4）。
 
 \item[-]
-若结果是数组类型，则生成指向直接元素类型的指针(参见第7.1节)。
+若结果是数组类型，则生成指向直接元素类型的指针（参见第7.1节）。
 
 \item[-]
-若结果是一个函数类型，则生成该函数类型的add\_pointer产生的类型(参见第11.1.1节)。
+若结果是一个函数类型，则生成该函数类型的add\_pointer产生的类型（参见第11.1.1节）。
 
 \item[-]
 生成的结果不包含const/volatile限定符。
@@ -276,10 +276,10 @@ remove_all_extents_t<int(*)[5]> // yields int(*)[5]
 初始化auto类型的对象时，通过参数的值传递或类型转换decay<>模型。
 
 \item
-decay<>对于处理可能用引用类型替代，但用于确定另一个函数的返回类型或参数类型的模板参数特别有用。关于讨论和使用std::decay<>()(历史上有用后者来实现std::make\_pair<>())的例子，请参阅第1.3.2节和第7.6节。
+decay<>对于处理可能用引用类型替代，但用于确定另一个函数的返回类型或参数类型的模板参数特别有用。关于讨论和使用std::decay<>()（历史上有用后者来实现std::make\_pair<>()）的例子，请参阅第1.3.2节和第7.6节。
 
 \item
-例如:
+例如：
 \begin{cpp}
 decay_t<int const&> // yields int
 decay_t<int const[4]> // yields int const*

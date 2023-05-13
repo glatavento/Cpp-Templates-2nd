@@ -1,24 +1,24 @@
 \section{应用}
-可变参数模板在实现通用库(如C++标准库)时扮演着重要的角色。
+可变参数模板在实现通用库（如C++标准库）时扮演着重要的角色。
 
-典型的应用是转发可变数量的类型参数。例如:
+典型的应用是转发可变数量的类型参数。例如：
 
 \begin{itemize}
 \item 
-向指针中堆对象的构造函数传递参数:
+向指针中堆对象的构造函数传递参数：
 \begin{cpp}
 // create shared pointer to complex<float> initialized by 4.2 and 7.7:
 auto sp = std::make_shared<std::complex<float>>(4.2, 7.7);
 \end{cpp}
 
 \item 
-将参数传递给由线程库启动的线程:
+将参数传递给由线程库启动的线程：
 \begin{cpp}
 std::thread t (foo, 42, "hello"); // call foo(42,"hello") in a separate thread
 \end{cpp}
 
 \item 
-将参数传递给进入vector中元素的构造函数:
+将参数传递给进入vector中元素的构造函数：
 \begin{cpp}
 std::vector<Customer> v;
 ...
@@ -27,7 +27,7 @@ v.emplace_back("Tim", "Jovi", 1962); // insert a Customer initialized by three a
 
 \end{itemize}
 
-通常，参数使用移动语义“完美转发”(见第6.1节)，相应的声明为:
+通常，参数使用移动语义“完美转发”（见第6.1节），相应的声明为：
 
 \begin{cpp}
 namespace std {
@@ -49,7 +49,7 @@ namespace std {
 }
 \end{cpp}
 
-可变参数函数模板参数与普通参数适用相同的规则。通过值传递，参数复制并衰变(例如，数组变成指针)，若通过引用传递，参数指向原始参数，而不衰变:
+可变参数函数模板参数与普通参数适用相同的规则。通过值传递，参数复制并衰变（例如，数组变成指针），若通过引用传递，参数指向原始参数，而不衰变：
 
 \begin{cpp}
 // args are copies with decayed types:

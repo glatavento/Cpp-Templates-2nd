@@ -1,6 +1,6 @@
 \section{偏特化}
 
-类模板可偏特化。可以为特定的情况提供特殊的实现，但有些模板参数仍需要由用户定义。例如，可以为指针定义Stack<>类的特殊实现:
+类模板可偏特化。可以为特定的情况提供特殊的实现，但有些模板参数仍需要由用户定义。例如，可以为指针定义Stack<>类的特殊实现：
 
 \filename{basics/stackpartspec.hpp}
 \begin{cpp}
@@ -52,7 +52,7 @@ class Stack<T*> {
 
 先定义了一个类模板，仍然参数化了T，但特化了指针(Stack<T*>)。
 
-特化可能提供(略微)不同的接口。例如，这里的pop()返回存储的指针，当用new创建值时，用户就可以使用delete删除:
+特化可能提供（略微）不同的接口。例如，这里的pop()返回存储的指针，当用new创建值时，用户就可以使用delete删除：
 
 \begin{cpp}
 Stack<int*> ptrStack; // stack of pointers (special implementation)
@@ -64,7 +64,7 @@ delete ptrStack.pop();
 
 \subsubsection{多个参数的偏特化}
 
-类模板也可以特化多个模板参数之间的关系。例如，对于以下类模板:
+类模板也可以特化多个模板参数之间的关系。例如，对于以下类模板：
 
 \begin{cpp}
 template<typename T1, typename T2>
@@ -73,7 +73,7 @@ class MyClass {
 };
 \end{cpp}
 
-以下几种可能的偏特化:
+以下几种可能的偏特化：
 
 \begin{cpp}
 // partial specialization: both template parameters have same type
@@ -95,7 +95,7 @@ class MyClass<T1*,T2*> {
 };
 \end{cpp}
 
-下面的例子显示了哪个声明使用了哪个模板:
+下面的例子显示了哪个声明使用了哪个模板：
 
 \begin{cpp}
 MyClass<int,float> mif; // uses MyClass<T1,T2>
@@ -104,7 +104,7 @@ MyClass<float,int> mfi; // uses MyClass<T,int>
 MyClass<int*,float*> mp; // uses MyClass<T1*,T2*>
 \end{cpp}
 
-若多个偏特化都匹配调用，则声明有歧义:
+若多个偏特化都匹配调用，则声明有歧义：
 
 \begin{cpp}
 MyClass<int,int> m; // ERROR: matches MyClass<T,T>
@@ -113,7 +113,7 @@ MyClass<int*,int*> m; // ERROR: matches MyClass<T,T>
 					  // and MyClass<T1*,T2*>
 \end{cpp}
 
-要解决歧义，可以为相同类型的指针提供偏特化实现:
+要解决歧义，可以为相同类型的指针提供偏特化实现：
 
 \begin{cpp}
 template<typename T>

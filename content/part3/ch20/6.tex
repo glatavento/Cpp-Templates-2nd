@@ -13,7 +13,7 @@ vector(InputIterator first, InputIterator second,
 		allocator_type const& alloc = allocator_type());
 \end{cpp}
 
-要求“若构造函数调用的，是不符合输入迭代器条件的InputIterator类型，那么构造函数将不参与重载解析”(参见[C++11]23.2.3第14段)。这个措辞非常模糊，可以使用当时最有效的技术来实现它，在将它添加到标准中时，应该会使用std::enable\_if<>实现。
+要求“若构造函数调用的，是不符合输入迭代器条件的InputIterator类型，那么构造函数将不参与重载解析”（参见[C++11]23.2.3第14段）。这个措辞非常模糊，可以使用当时最有效的技术来实现它，在将它添加到标准中时，应该会使用std::enable\_if<>实现。
 
 
 
