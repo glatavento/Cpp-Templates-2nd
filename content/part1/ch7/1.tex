@@ -32,8 +32,7 @@ printV(s);
 模板参数T实例化为std::string，得到
 
 \begin{cpp}
-void printV (std::string arg)
-{
+void printV (std::string arg) {
 	...
 }
 \end{cpp}
@@ -85,8 +84,7 @@ printV(arr); // decays to pointer so that arg has type int*
 因此，当传递字符串字面值"hi"时，类型char const[3]衰变为char const*，从而成为T的推导类型。
 
 \begin{cpp}
-void printV (char const* arg)
-{
+void printV (char const* arg) {
 	...
 }
 \end{cpp}

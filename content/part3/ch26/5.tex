@@ -22,8 +22,7 @@ else {
 #include <iostream>
 
 template<typename V, typename Head, typename... Tail>
-void printImpl(V const& v)
-{
+void printImpl(V const& v) {
 	if (v.template is<Head>()) {
 		std::cout << v.template get<Head>();
 	}
@@ -33,8 +32,7 @@ void printImpl(V const& v)
 }
 
 template<typename... Types>
-void print(Variant<Types...> const& v)
-{
+void print(Variant<Types...> const& v) {
 	printImpl<Variant<Types...>, Types...>(v);
 }
 
@@ -172,8 +170,7 @@ class ComputedResultType;
 \begin{cpp}
 // an explicitly-provided visitor result type:
 template<typename R, typename Visitor, typename... ElementTypes>
-class VisitResultT
-{
+class VisitResultT {
 	public:
 	using Type = R;
 };
@@ -187,8 +184,7 @@ VisitResultT的主要定义了处理R参数显式指定的情况，因此Type定
 
 \begin{cpp}
 template<typename Visitor, typename... ElementTypes>
-class VisitResultT<ComputedResultType, Visitor, ElementTypes...>
-{
+class VisitResultT<ComputedResultType, Visitor, ElementTypes...> {
 	...
 }
 \end{cpp}
@@ -206,8 +202,7 @@ C++已经有了合理结果类型的概念，在第1.3.3节中介绍过：三元
 using std::declval;
 
 template<typename T, typename U>
-class CommonTypeT
-{
+class CommonTypeT {
 	public:
 	using Type = decltype(true? declval<T>() : declval<U>());
 };
@@ -229,8 +224,7 @@ using VisitElementResult = decltype(declval<Visitor>()(declval<T>()));
 
 // the common result type for a visitor called with each of the given element types:
 template<typename Visitor, typename... ElementTypes>
-class VisitResultT<ComputedResultType, Visitor, ElementTypes...>
-{
+class VisitResultT<ComputedResultType, Visitor, ElementTypes...> {
 	using ResultTypes =
 		Typelist<VisitElementResult<Visitor, ElementTypes>...>;
 	public:
@@ -248,8 +242,7 @@ C++11后，标准库提供了一个相应的类型特征，std::common\_type<>�
 \filename{variant/variantvisitresultstd.hpp}
 \begin{cpp}
 template<typename Visitor, typename... ElementTypes>
-class VisitResultT<ComputedResultType, Visitor, ElementTypes...>
-{
+class VisitResultT<ComputedResultType, Visitor, ElementTypes...> {
 	public:
 	using Type =
 		std::common_type_t<VisitElementResult<Visitor, ElementTypes>...>;
@@ -264,8 +257,7 @@ class VisitResultT<ComputedResultType, Visitor, ElementTypes...>
 #include <iostream>
 #include <typeinfo>
 
-int main()
-{
+int main() {
 	Variant<int, short, double, float> v(1.5);
 	auto result = v.visit([](auto const& value) {
 							return value + 1;

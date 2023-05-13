@@ -10,8 +10,7 @@
 template<typename T> int f(T); // #1
 void f(int); // #2
 
-int main()
-{
+int main() {
 	return f(7); // ERROR: selects #2 , which doesn't return a value
 }
 \end{cpp}
@@ -32,13 +31,11 @@ class Base {
 	operator short() const;
 };
 
-class Derived : public Base {
-};
+class Derived : public Base {};
 
 void count(int);
 
-void process(Derived const& object)
-{
+void process(Derived const& object) {
 	count(object); // matches with user-defined conversion
 }
 \end{cpp}
@@ -92,8 +89,7 @@ void count(short);
 void check(void*); // #1
 void check(bool); // #2
 
-void rearrange (Matrix* m)
-{
+void rearrange (Matrix* m) {
 	check(m); // calls #1
 	...
 }
@@ -117,8 +113,7 @@ class Machine : public CommonProcesses {
 char* serialize(Interface*); // #1
 char* serialize(CommonProcesses*); // #2
 
-void dump (Machine* machine)
-{
+void dump (Machine* machine) {
 	char* buffer = serialize(machine); // calls #2
 	...
 }
@@ -163,8 +158,7 @@ void i(Point const& pt) {
 	std::cout << "#5\n";
 }
 
-int main()
-{
+int main() {
 	f({1, 2, 3}); // prints #1
 	f({"hello", "initializer", "list"}); // prints #2
 	g({1, 1, 2, 3, 5}); // prints #3
@@ -194,8 +188,7 @@ void ovl(std::initializer_list<int>) { // #2
 	std::cout << "#2\n";
 }
 
-int main()
-{
+int main() {
 	ovl({'h', 'e', 'l', 'l', 'o', '\0'}); // prints #1
 	ovl({'h', 'e', 'l', 'l', 'o', 0}); // prints #2
 }
@@ -235,14 +228,11 @@ struct Array {
 	}
 };
 
-void arr1(Array<int>) {
-}
+void arr1(Array<int>) {}
 
-void arr2(Array<std::string>) {
-}
+void arr2(Array<std::string>) {}
 
-int main()
-{
+int main() {
 	arr1({1, 2, 3, 4, 5}); // prints #1
 	arr1({1, 2}); // prints #1
 	arr1({10u, 5}); // prints #1
@@ -277,8 +267,7 @@ class IndirectFunctor {
 	operator FuncType*() const;
 };
 
-void activate(IndirectFunctor const& funcObj)
-{
+void activate(IndirectFunctor const& funcObj) {
 	funcObj(3, 5); // ERROR: ambiguous
 }
 \end{cpp}
@@ -317,8 +306,7 @@ class BigNum {
 	...
 };
 
-void initDemo()
-{
+void initDemo() {
 	BigNum bn1(100103); // selects #1
 	BigNum bn2("7057103224.095764"); // selects #3
 	int in = bn1; // selects #5

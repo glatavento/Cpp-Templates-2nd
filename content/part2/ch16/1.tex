@@ -23,8 +23,7 @@ class Array {
 };
 
 template<typename T> inline
-void exchange (T* a, T* b)
-{
+void exchange (T* a, T* b) {
 T tmp(*a);
 *a = *b;
 *b = tmp;
@@ -46,8 +45,7 @@ Array类的用户必须记住多个接口，并且需要小心地使用。
 
 \begin{cpp}
 template<typename T>
-void genericAlgorithm(T* x, T* y)
-{
+void genericAlgorithm(T* x, T* y) {
 	...
 	exchange(x, y); // How do we select the right algorithm?
 	...
@@ -60,21 +58,18 @@ C++模板提供了自定义函数模板和类模板的方法。对于函数模�
 
 \begin{cpp}
 template<typename T>
-void quickExchange(T* a, T* b) // #1
-{
+void quickExchange(T* a, T* b) { // #1
 	T tmp(*a);
 	*a = *b;
 	*b = tmp;
 }
 
 template<typename T>
-void quickExchange(Array<T>* a, Array<T>* b) // #2
-{
+void quickExchange(Array<T>* a, Array<T>* b) { // #2
 	a->exchangeWith(b);
 }
 
-void demo(Array<int>* p1, Array<int>* p2)
-{
+void demo(Array<int>* p1, Array<int>* p2) {
 	int x=42, y=-7;
 	quickExchange(&x, &y); // uses #1
 	quickExchange(p1, p2); // uses #2
@@ -92,8 +87,7 @@ struct S {
 	int x;
 } s1, s2;
 
-void distinguish (Array<int> a1, Array<int> a2)
-{
+void distinguish (Array<int> a1, Array<int> a2) {
 	int* p = &a1[0];
 	int* q = &s1.x;
 	a1[0] = s1.x = 1;
@@ -107,8 +101,7 @@ void distinguish (Array<int> a1, Array<int> a2)
 
 \begin{cpp}
 template<typename T>
-void exchange (Array<T>* a, Array<T>* b)
-{
+void exchange (Array<T>* a, Array<T>* b) {
 	T* p = &(*a)[0];
 	T* q = &(*b)[0];
 	for (std::size_t k = a->size(); k-- != 0; ) {

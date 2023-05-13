@@ -89,8 +89,7 @@ class List<T>::Handle {
 
 template<typename T> // out-of-class member function template definition
   template<typename U>
-List<T>::List (List<U> const& b)
-{
+List<T>::List (List<U> const& b) {
 	...
 }
 
@@ -148,8 +147,7 @@ public:
 	explicit Value(int); // no default constructor
 };
 
-void init (Array<Value>& array)
-{
+void init (Array<Value>& array) {
 	Value zero(0);
 	fill(array, zero); // OK: default constructor not used
 	fill(array); // ERROR: undefined default constructor for Value is used
@@ -162,8 +160,7 @@ void init (Array<Value>& array)
 
 \begin{cpp}
 template<int I>
-class CupBoard
-{
+class CupBoard {
 	class Shelf; // ordinary class in class template
 	void open(); // ordinary function in class template
 	enum Wood : unsigned char; // ordinary enumeration type in class template
@@ -180,8 +177,7 @@ class CupBoard<I>::Shelf {
 };
 
 template<int I> // definition of ordinary function in class template
-void CupBoard<I>::open()
-{
+void CupBoard<I>::open() {
 	...
 }
 

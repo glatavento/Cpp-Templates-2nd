@@ -21,8 +21,7 @@ Variant<int, double, string> field;
 #include <iostream>
 #include <string>
  
-int main()
-{
+int main() {
 	Variant<int, double, std::string> field(17);
 	if (field.is<int>()) {
 		std::cout << "Field stores the integer "

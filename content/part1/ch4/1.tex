@@ -11,13 +11,10 @@
 \begin{cpp}
 #include <iostream>
 
-void print ()
-{
-}
+void print () {}
 
 template<typename T, typename... Types>
-void print (T firstArg, Types... args)
-{
+void print (T firstArg, Types... args) {
 	std::cout << firstArg << '\n'; // print first argument
 	print(args...); // call print() for remaining arguments
 }
@@ -105,14 +102,12 @@ args是空的可变参数模板参数。
 #include <iostream>
 
 template<typename T>
-void print (T arg)
-{
+void print (T arg) {
 	std::cout << arg << '\n'; // print passed argument
 }
 
 template<typename T, typename... Types>
-void print (T firstArg, Types... args)
-{
+void print (T firstArg, Types... args) {
 	print(firstArg); // call print() for the first argument
 	print(args...); // call print() for remaining arguments
 }
@@ -132,8 +127,7 @@ C++11还为可变参模板引入了一种新的操作符：sizeof...，其值为
 
 \begin{cpp}
 template<typename T, typename... Types>
-void print (T firstArg, Types... args)
-{
+void print (T firstArg, Types... args) {
 	std::cout << sizeof...(Types) << '\n'; // print number of remaining types
 	std::cout << sizeof...(args) << '\n'; // print number of remaining args
 	...
@@ -146,8 +140,7 @@ void print (T firstArg, Types... args)
 
 \begin{cpp}
 template<typename T, typename... Types>
-void print (T firstArg, Types... args)
-{
+void print (T firstArg, Types... args) {
 	std::cout << firstArg << '\n';
 	if (sizeof...(args) > 0) { // error if sizeof...(args)==0
 		print(args...); // and no print() for no arguments declared

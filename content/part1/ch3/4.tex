@@ -29,29 +29,25 @@ public:
 // constructor
 template<typename T, auto Maxsize>
 Stack<T,Maxsize>::Stack ()
-: numElems(0) // start with no elements
-{
+: numElems(0) { // start with no elements
 	// nothing else to do
 }
 
 template<typename T, auto Maxsize>
-void Stack<T,Maxsize>::push (T const& elem)
-{
+void Stack<T,Maxsize>::push (T const& elem) {
 	assert(numElems < Maxsize);
 	elems[numElems] = elem; // append element
 	++numElems; // increment number of elements
 }
 
 template<typename T, auto Maxsize>
-void Stack<T,Maxsize>::pop ()
-{
+void Stack<T,Maxsize>::pop () {
 	assert(!empty());
 	--numElems; // decrement number of elements
 }
 
 template<typename T, auto Maxsize>
-T const& Stack<T,Maxsize>::top () const
-{
+T const& Stack<T,Maxsize>::top () const {
 	assert(!empty());
 	return elems[numElems-1]; // return last element
 }
@@ -104,8 +100,7 @@ auto size() const { // return current number of elements
 #include <string>
 #include "stackauto.hpp"
 
-int main()
-{
+int main() {
 	Stack<int,20u> int20Stack; // stack of up to 20 ints
 	Stack<std::string,40> stringStack; // stack of up to 40 strings
 	
@@ -188,8 +183,7 @@ class Message {
 	}
 };
 
-int main()
-{
+int main() {
 	Message<42> msg1;
 	msg1.print(); // initialize with int 42 and print that value
 	

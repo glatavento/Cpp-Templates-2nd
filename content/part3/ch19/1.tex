@@ -16,8 +16,7 @@
 #define ACCUM_HPP
 
 template<typename T>
-T accum (T const* beg, T const* end)
-{
+T accum (T const* beg, T const* end) {
 	T total{}; // assume this actually creates a zero value
 	while (beg != end) {
 		total += *beg;
@@ -37,8 +36,7 @@ T accum (T const* beg, T const* end)
 \begin{cpp}
 #include "accum1.hpp"
 #include <iostream>
-int main()
-{
+int main() {
 	// create array of 5 integer values
 	int num[] = { 1, 2, 3, 4, 5 };
 	
@@ -132,8 +130,7 @@ C++11中，必须声明类似AccT类型的返回类型。
 
 #include "accumtraits2.hpp"
 template<typename T>
-auto accum (T const* beg, T const* end)
-{
+auto accum (T const* beg, T const* end) {
 	// return type is traits of the element type
 	using AccT = typename AccumulationTraits<T>::AccT;
 	
@@ -208,8 +205,7 @@ struct AccumulationTraits<int> {
 #include "accumtraits3.hpp"
 
 template<typename T>
-auto accum (T const* beg, T const* end)
-{
+auto accum (T const* beg, T const* end) {
 	// return type is traits of the element type
 	using AccT = typename AccumulationTraits<T>::AccT;
 	
@@ -375,8 +371,7 @@ AccT total = AccumulationTraits<T>::zero(); // init total by trait function
 #include "accumtraits4.hpp"
 
 template<typename T, typename AT = AccumulationTraits<T>>
-auto accum (T const* beg, T const* end)
-{
+auto accum (T const* beg, T const* end) {
 	typename AT::AccT total = AT::zero();
 	while (beg != end) {
 		total += *beg;

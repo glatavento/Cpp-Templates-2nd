@@ -3,8 +3,7 @@
 
 \begin{cpp}
 template<typename T>
-void f (T&& t) // t is forwarding reference
-{
+void f (T&& t) { // t is forwarding reference
 	g(std::forward<T>(t)); // perfectly forward passed argument t to g()
 }
 \end{cpp}
@@ -13,8 +12,7 @@ void f (T&& t) // t is forwarding reference
 
 \begin{cpp}
 template<typename T>
-void foo(T x)
-{
+void foo(T x) {
 	set(get(x));
 }
 \end{cpp}
@@ -23,8 +21,7 @@ void foo(T x)
 
 \begin{cpp}
 template<typename T>
-void foo(T x)
-{
+void foo(T x) {
 	auto&& val = get(x);
 	...
 	// perfectly forward the return value of get() to set():

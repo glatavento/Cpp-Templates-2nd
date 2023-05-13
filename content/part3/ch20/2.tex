@@ -4,8 +4,7 @@
 
 \begin{cpp}
 template<typename Iterator, typename Distance>
-void advanceIterImpl(Iterator& x, Distance n, std::input_iterator_tag)
-{
+void advanceIterImpl(Iterator& x, Distance n, std::input_iterator_tag) {
 	while (n > 0) { // linear time
 		++x;
 		--n;
@@ -23,8 +22,7 @@ advanceIter()函数模板只是简单地转发参数和相应的标签：
 
 \begin{cpp}
 template<typename Iterator, typename Distance>
-void advanceIter(Iterator& x, Distance n)
-{
+void advanceIter(Iterator& x, Distance n) {
 	advanceIterImpl(x, n,
 				typename
 						std::iterator_traits<Iterator>::iterator_category());

@@ -53,8 +53,7 @@ public:
 	static bool const result = !B;
 };
 
-void g()
-{
+void g() {
 	bool test = Invert<(1>0)>::result; // parentheses required!
 }
 \end{cpp}
@@ -104,8 +103,7 @@ template<typename T> struct Y {
 
 static int const c = 4;
 
-int main()
-{
+int main() {
 	std::cout << (Y<X<1> >::c >::c>::c) << ' ';
 	std::cout << (Y<X< 1>>::c >::c>::c) << '\n';
 }
@@ -178,8 +176,7 @@ class Trap<void> { // evil specialization!
 	using x = int; // #3 x is a type here
 };
 
-void boom(Victim<void>& bomb)
-{
+void boom(Victim<void>& bomb) {
 	bomb.poof();
 }
 \end{cpp}
@@ -364,8 +361,7 @@ namespace N {
 	template<int I> void select(X*);
 }
 
-void g (N::X* xp)
-{
+void g (N::X* xp) {
 	select<3>(xp); // ERROR: no ADL!
 }
 \end{cpp}
@@ -387,8 +383,7 @@ template<typename T> void select();
 表达式可以以几种不同的方式依赖于模板参数。依赖型表达式最常见的形式是类型依赖，表达式本身的类型可以从一个实例化到下一个实例化，例如：一个表达式引用一个函数参数，其类型是模板参数的类型：
 
 \begin{cpp}
-template<typename T> void typeDependent1(T x)
-{
+template<typename T> void typeDependent1(T x) {
 	x; // the expression type-dependent, because the type of x can vary
 }
 \end{cpp}
@@ -396,8 +391,7 @@ template<typename T> void typeDependent1(T x)
 具有依赖于类型子表达式的表达式本身通常也依赖于类型——使用参数x调用函数f():
 
 \begin{cpp}
-template<typename T> void typeDependent2(T x)
-{
+template<typename T> void typeDependent2(T x) {
 	f(x); // the expression is type-dependent, because x is type-dependent
 }
 \end{cpp}
@@ -407,8 +401,7 @@ template<typename T> void typeDependent2(T x)
 并非所有涉及模板参数的表达式都依赖于类型。包含模板参数的表达式，可以在每次实例化到下一次实例化时产生不同的常量值。这样的表达式称为值依赖型表达式，最简单的是引用非依赖类型的非类型模板参数表达式。例如：
 
 \begin{cpp}
-template<int N> void valueDependent1()
-{
+template<int N> void valueDependent1() {
 	N; // the expression is value-dependent but not type-dependent,
 	// because N has a fixed type but a varying constant value
 }
@@ -419,8 +412,7 @@ template<int N> void valueDependent1()
 有趣的是，有些操作（如sizeof）具有已知的结果类型，因此可以将依赖操作数类型的表达式，转换为不依赖值类型的表达式。例如：
 
 \begin{cpp}
-template<typename T> void valueDependent2(T x)
-{
+template<typename T> void valueDependent2(T x) {
 	sizeof(x); // the expression is value-dependent but not type-dependent
 }
 \end{cpp}
@@ -430,8 +422,7 @@ sizeof操作会产生std::size\_t类型的值，不管输入是什么。因此si
 如果对值依赖型表达式应用sizeof会怎样呢?
 
 \begin{cpp}
-template<typename T> void maybeDependent(T const& x)
-{
+template<typename T> void maybeDependent(T const& x) {
 	sizeof(sizeof(x));
 }
 \end{cpp}
@@ -460,8 +451,7 @@ C++标准中使用了类型和值依赖型的表达式来描述模板的语义�
 \begin{cpp}
 void f() { }
 
-template<int x> void nondependentCall()
-{
+template<int x> void nondependentCall() {
 	f(x); // x is value-dependent, so f() is nondependent;
 	// this call will never succeed
 }
@@ -470,8 +460,7 @@ template<int x> void nondependentCall()
 这里，调用f(x)在每个实例中都会产生错误，因为f是一个非依赖名称，而且唯一可见的f不接受参数。C++编译器在解析模板时会产生错误，或者会等到第一个模板实例化时才会产生错误：即使在这个简单的例子中，常用编译器的表现也会有所不同。可以构造相似的例子：表达式是实例依赖的，但并不是值依赖的。
 
 \begin{cpp}
-template<int N> void instantiationDependentBound()
-{
+template<int N> void instantiationDependentBound() {
 	constexpr int x = sizeof(N);
 	constexpr int y = sizeof(N) + 1;
 	int array[x - y]; // array will have a negative size in all instantiations

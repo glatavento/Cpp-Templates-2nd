@@ -21,16 +21,13 @@
 
 \begin{cpp}
 template<typename T>
-class B {
-};
+class B {};
 
 template<typename T>
-class D : public B<T> {
-};
+class D : public B<T> {};
 
 template<typename T> void f(B<T>*);
-void g(D<long> dl)
-{
+void g(D<long> dl) {
 	f(&dl); // deduction succeeds with T substituted with long
 }
 \end{cpp}
@@ -56,8 +53,7 @@ int r = f(v, 7.0); // OK: T is deduced to V through the first parameter,
 这些规则的作用范围非常窄，忽略了（例如）可以应用于函数参数以使调用成功的各种转换。例如，下面对max()函数模板的调用，如15.1节所示：
 
 \begin{cpp}
-std::string maxWithHello(std::string s)
-{
+std::string maxWithHello(std::string s) {
 	return ::max(s, "hello");
 }
 \end{cpp}
@@ -98,8 +94,7 @@ S x(12); // ERROR before C++17: the class template parameter T was not deduced f
 
 \begin{cpp}
 template<typename T>
-void init (T* loc, T const& val = T())
-{
+void init (T* loc, T const& val = T()) {
 	*loc = val;
 }
 \end{cpp}
@@ -127,11 +122,9 @@ int main()
 
 \begin{cpp}
 template<typename T>
-void f (T x = 42)
-{ }
+void f (T x = 42) { }
 
-int main()
-{
+int main() {
 	f<int>(); // OK: T = int
 	f(); // ERROR: cannot deduce T from default call argument
 }
@@ -147,8 +140,7 @@ void f(T, int) noexcept(nonexistent(T())); // #1
 
 template<typename T>
 void f(T, ...); // #2 (C-style vararg function)
-void test(int i)
-{
+void test(int i) {
 	f(i, i); // ERROR: chooses #1 , but the expression nonexistent(T()) is ill-formed
 }
 \end{cpp}
@@ -164,8 +156,7 @@ void g(T, int) throw(typename T::Nonexistent); // #1
 template<typename T>
 void g(T, ...); // #2
 
-void test(int i)
-{
+void test(int i) {
 	g(i, i); // ERROR: chooses #1 , but the type T::Nonexistent is ill-formed
 }
 \end{cpp}

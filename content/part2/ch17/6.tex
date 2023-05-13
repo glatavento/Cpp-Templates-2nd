@@ -26,8 +26,7 @@ struct Back<Types..., BackT> { // ERROR: pack expansion not at the end of
 可变参数函数模板的模板参数推导也受到类似的限制。关于包展开和偏特化的模板参数推导的规则将放宽，允许包展开发生在模板参数列表的任何地方，这使得操作更加简单。此外，推论允许在同一个参数列表中进行多个包扩展（尽管可能性较小）:
 
 \begin{cpp}
-template<typename... Types> class Tuple {
-};
+template<typename... Types> class Tuple {};
 
 template<typename T, typename... Types>
 struct Split;

@@ -44,8 +44,7 @@ void f (X&& val) {
 	g(std::move(val)); // val is non-const lvalue => needs std::move() to call g(X&&)
 }
 
-int main()
-{
+int main() {
 	X v; // create variable
 	X const c; // create constant
 	
@@ -149,8 +148,7 @@ void f (T&& val) {
 	g(std::forward<T>(val)); // call the right g() for any passed argument val
 }
 
-int main()
-{
+int main() {
 	X v; // create variable
 	X const c; // create constant
 	

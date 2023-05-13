@@ -45,9 +45,7 @@ static_assert(std::disjunction<std::is_constructible<X, int>,
 template<typename T>
 struct isNoPtrT : std::negation<std::disjunction<std::is_null_pointer<T>,
 												std::is_member_pointer<T>,
-												std::is_pointer<T>>>
-{
-};
+												std::is_pointer<T>>> {};
 \end{cpp}
 
 因为结合了相应的特征类，所以这里不能使用逻辑操作符。根据这个定义，以下方式可用：
@@ -80,8 +78,7 @@ template<typename... Ts>
 std::enable_if_t<std::conjunction_v<std::negation<std::is_class<Ts>>...,
 									std::negation<std::is_union<Ts>>...
 									>>
-print(Ts...)
-{
+print(Ts...) {
 	...
 }
 \end{cpp}

@@ -5,8 +5,7 @@
 \begin{cpp}
 template<typename... Types>
 template<typename T>
-bool Variant<Types...>::is() const
-{
+bool Variant<Types...>::is() const {
 	return this->getDiscriminator() ==
 	VariantChoice<T, Types...>::Discriminator;
 }
@@ -22,8 +21,7 @@ get()成员函数提取对存储值的引用。必须提供要提取的类型（
 \begin{cpp}
 #include <exception>
 
-class EmptyVariant : public std::exception {
-};
+class EmptyVariant : public std::exception {};
 
 template<typename... Types>
 template<typename T>

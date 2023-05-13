@@ -9,8 +9,7 @@
 \filename{basics/max1.hpp}
 \begin{cpp}
 template<typename T>
-T max (T a, T b)
-{
+T max (T a, T b) {
 	// if b < a then yield a else yield b
 	return b < a ? a : b;
 }
@@ -40,8 +39,7 @@ C++17之前，类型T也必须可复制才能传递参数。C++17以后，即使
 
 \begin{cpp}
 template<class T>
-T max (T a, T b)
-{
+T max (T a, T b) {
 	return b < a ? a : b;
 }
 \end{cpp}
@@ -58,8 +56,7 @@ T max (T a, T b)
 #include <iostream>
 #include <string>
 
-int main()
-{
+int main() {
 	int i = 42;
 	std::cout << "max(7,i): " << ::max(7,i) << '\n';
 	
@@ -103,8 +100,7 @@ int i = 42;
 使用int作为模板形参T的函数模板。因此，等同于调用的如下函数：
 
 \begin{cpp}
-int max (int a, int b)
-{
+int max (int a, int b) {
 	return b < a ? a : b;
 }
 \end{cpp}
@@ -128,9 +124,7 @@ std::string max (std::string, std::string);
 
 \begin{cpp}
 template<typename T>
-T foo(T*)
-{
-}
+T foo(T*) {}
 
 void* vp = nullptr;
 foo(vp); // OK: deduces void foo(void*)
@@ -170,8 +164,7 @@ std::complex<float> c1, c2; // doesn't provide operator <
 
 \begin{cpp}
 template<typename T>
-void foo(T t)
-{
+void foo(T t) {
 	undeclared(); // 若undeclared()未知，则在第一阶段编译时报错
 	undeclared(t); // 若undeclared(T)未知，则在第二阶段编译时报错
 	static_assert(sizeof(int) > 10, // 若sizeof(int)<=10，始终断言失败

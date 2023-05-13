@@ -14,8 +14,7 @@ C++17引入了类参数模板推导，若模板参数可以从构造函数派生
 #include <iostream>
 #include <string>
 
-int main()
-{
+int main() {
 	Stack<int> intStack; // stack of ints
 	Stack<std::string> stringStack; // stack of strings
 	
@@ -39,8 +38,7 @@ int main()
 可以像使用其他类型一样使用实例化的类模板类型。可以使用const、volatile或从中派生数组和引用类型对其进行限定。也可以将其作为类型定义的一部分，使用typedef或using（请参阅第2.8节了解关于类型定义的详细信息），或者在构建另一个模板类型时将其用作类型参数。例如：
 
 \begin{cpp}
-void foo(Stack<int> const& s) // parameter s is int stack
-{
+void foo(Stack<int> const& s) { // parameter s is int stack
 	using IntStack = Stack<int>; // IntStack is another name for Stack<int>
 	Stack<int> istack[10]; // istack is array of 10 int stacks
 	IntStack istack2[10]; // istack2 is also an array of 10 int stacks (same type)

@@ -22,21 +22,18 @@ public:
 };
 
 template<typename T, typename Cont>
-void Stack<T,Cont>::push (T const& elem)
-{
+void Stack<T,Cont>::push (T const& elem) {
 	elems.push_back(elem); // append copy of passed elem
 }
 
 template<typename T, typename Cont>
-void Stack<T,Cont>::pop ()
-{
+void Stack<T,Cont>::pop () {
 	assert(!elems.empty());
 	elems.pop_back(); // remove last element
 }
 
 template<typename T, typename Cont>
-T const& Stack<T,Cont>::top () const
-{
+T const& Stack<T,Cont>::top () const {
 	assert(!elems.empty());
 	return elems.back(); // return last element
 }
@@ -46,8 +43,7 @@ T const& Stack<T,Cont>::top () const
 
 \begin{cpp}
 template<typename T, typename Cont>
-void Stack<T,Cont>::push (T const& elem)
-{
+void Stack<T,Cont>::push (T const& elem) {
 	elems.push_back(elem); // append copy of passed elem
 }
 \end{cpp}
@@ -71,8 +67,7 @@ private:
 #include <iostream>
 #include <deque>
 
-int main()
-{
+int main() {
 	// stack of ints:
 	Stack<int> intStack;
 

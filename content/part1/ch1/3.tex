@@ -20,8 +20,7 @@ T max (T a, T b) // a和b调用参数
 
 \begin{cpp}
 template<typename T1, typename T2>
-T1 max (T1 a, T2 b)
-{
+T1 max (T1 a, T2 b) {
 	return b < a ? a : b;
 }
 ...
@@ -106,8 +105,7 @@ RT max (T1 a, T2 b);
 \filename{basics/maxauto.hpp}
 \begin{cpp}
 template<typename T1, typename T2>
-auto max (T1 a, T2 b)
-{
+auto max (T1 a, T2 b) {
 	return b < a ? a : b;
 }
 \end{cpp}
@@ -119,8 +117,7 @@ C++14之前，只能让编译器通过将函数的实现作为其声明的一部
 \filename{basics/maxdecltype.hpp}
 \begin{cpp}
 template<typename T1, typename T2>
-auto max (T1 a, T2 b) -> decltype(b<a?a:b)
-{
+auto max (T1 a, T2 b) -> decltype(b<a?a:b) {
 	return b < a ? a : b;
 }
 \end{cpp}
@@ -148,8 +145,7 @@ auto max (T1 a, T2 b) -> decltype(true?a:b);
 #include <type_traits>
 
 template<typename T1, typename T2>
-auto max (T1 a, T2 b) -> typename std::decay<decltype(true?a:b)>::type
-{
+auto max (T1 a, T2 b) -> typename std::decay<decltype(true?a:b)>::type {
 	return b < a ? a : b;
 }
 \end{cpp}
@@ -173,8 +169,7 @@ C++11后，标准库提供了一种方法来指定选择“公共类型”。std
 #include <type_traits>
 
 template<typename T1, typename T2>
-std::common_type_t<T1,T2> max (T1 a, T2 b)
-{
+std::common_type_t<T1,T2> max (T1 a, T2 b) {
 	return b < a ? a : b;
 }
 \end{cpp}

@@ -75,8 +75,7 @@ class SArray {
 \begin{cpp}
 // addition of two SArrays
 template<typename T>
-SArray<T> operator+ (SArray<T> const& a, SArray<T> const& b)
-{
+SArray<T> operator+ (SArray<T> const& a, SArray<T> const& b) {
 	assert(a.size()==b.size());
 	SArray<T> result(a.size());
 	for (std::size_t k = 0; k<a.size(); ++k) {
@@ -87,8 +86,7 @@ SArray<T> operator+ (SArray<T> const& a, SArray<T> const& b)
 
 // multiplication of two SArrays
 template<typename T>
-SArray<T> operator* (SArray<T> const& a, SArray<T> const& b)
-{
+SArray<T> operator* (SArray<T> const& a, SArray<T> const& b) {
 	assert(a.size()==b.size());
 	SArray<T> result(a.size());
 	for (std::size_t k = 0; k<a.size(); ++k) {
@@ -99,8 +97,7 @@ SArray<T> operator* (SArray<T> const& a, SArray<T> const& b)
 
 // multiplication of scalar and SArray
 template<typename T>
-SArray<T> operator* (T const& s, SArray<T> const& a)
-{
+SArray<T> operator* (T const& s, SArray<T> const& a) {
 	SArray<T> result(a.size());
 	for (std::size_t k = 0; k<a.size(); ++k) {
 		result[k] = s*a[k];
@@ -121,8 +118,7 @@ SArray<T> operator* (T const& s, SArray<T> const& a)
 #include "sarray1.hpp"
 #include "sarrayops1.hpp"
 
-int main()
-{
+int main() {
 	SArray<double> x(1000), y(1000);
 	...
 	x = 1.2*x + x*y;
@@ -160,8 +156,7 @@ x = tmp3; // 1,000 read operations and 1,000 write operations
 \begin{cpp}
 // additive assignment of SArray
 template<typename T>
-SArray<T>& SArray<T>::operator+= (SArray<T> const& b)
-{
+SArray<T>& SArray<T>::operator+= (SArray<T> const& b) {
 	assert(size()==orig.size());
 	for (std::size_t k = 0; k<size(); ++k) {
 		(*this)[k] += b[k];
@@ -171,8 +166,7 @@ SArray<T>& SArray<T>::operator+= (SArray<T> const& b)
 
 // multiplicative assignment of SArray
 template<typename T>
-SArray<T>& SArray<T>::operator*= (SArray<T> const& b)
-{
+SArray<T>& SArray<T>::operator*= (SArray<T> const& b) {
 	assert(size()==orig.size());
 	for (std::size_t k = 0; k<size(); ++k) {
 		(*this)[k] *= b[k];
@@ -182,8 +176,7 @@ SArray<T>& SArray<T>::operator*= (SArray<T> const& b)
 
 // multiplicative assignment of scalar
 template<typename T>
-SArray<T>& SArray<T>::operator*= (T const& s)
-{
+SArray<T>& SArray<T>::operator*= (T const& s) {
 	for (std::size_t k = 0; k<size(); ++k) {
 		(*this)[k] *= s;
 	}
@@ -199,8 +192,7 @@ SArray<T>& SArray<T>::operator*= (T const& s)
 #include "sarrayops1.hpp"
 #include "sarrayops2.hpp"
 
-int main()
-{
+int main() {
 	SArray<double> x(1000), y(1000);
 	...
 	// process x = 1.2*x + x*y
@@ -227,8 +219,7 @@ int main()
 我们真正想要的是一个“理想循环”，可以处理每个索引的整个表达式：
 
 \begin{cpp}
-int main()
-{
+int main() {
 	SArray<double> x(1000), y(1000);
 	...
 	for (int idx = 0; idx<x.size(); ++idx) {

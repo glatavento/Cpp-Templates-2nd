@@ -8,12 +8,10 @@
 
 \begin{cpp}
 // a.cpp:
-int main()
-{ }
+int main() { }
 
 // b.cpp:
-int main()
-{ }
+int main() { }
 \end{cpp}
 
 C++编译器会分别编译模块不会有问题，因为确实是有效的C++单元。但若试图将两者链接在一起，链接器很可能会抗议——不允许重复定义。
@@ -30,21 +28,18 @@ class S {
 };
 
 template<typename T>
-void S::f() // member definition
-{ }
+void S::f() {} // member definition
 void helper(S<int>*);
 
 // a.cpp:
 #include "t.hpp"
-void helper(S<int>* s)
-{
+void helper(S<int>* s) {
 	s->f(); // #1 first point of instantiation of S::f
 }
 
 // b.cpp:
 #include "t.hpp"
-int main()
-{
+int main() {
 	S<int> s;
 	helper(&s);
 	s.f(); // #2 second point of instantiation of S::f

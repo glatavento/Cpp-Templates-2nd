@@ -30,8 +30,7 @@ C++标准库引入了更宽泛的可调用类型概念，可以是函数对象�
 \filename{basics/foreach.hpp}
 \begin{cpp}
 template<typename Iter, typename Callable>
-void foreach (Iter current, Iter end, Callable op)
-{
+void foreach (Iter current, Iter end, Callable op) {
 	while (current != end) { // as long as not reached the end
 		op(*current); // call passed operator for current element
 		++current; // and move iterator to next element
@@ -47,8 +46,7 @@ void foreach (Iter current, Iter end, Callable op)
 #include <vector>
 #include "foreach.hpp"
 // a function to call:
-void func(int i)
-{
+void func(int i) {
 	std::cout << "func() called for: " << i << '\n';
 }
 
@@ -60,8 +58,7 @@ class FuncObj {
 	}
 };
 
-int main()
-{
+int main() {
 	std::vector<int> primes = { 2, 3, 5, 7, 11, 13, 17, 19 };
 	foreach(primes.begin(), primes.end(), // range
 			func); // function as callable (decays to pointer)
@@ -136,8 +133,7 @@ C++17后，标准库提供了一个实用工具std::invoke()，会将这种情�
 #include <utility>
 #include <functional>
 template<typename Iter, typename Callable, typename... Args>
-void foreach (Iter current, Iter end, Callable op, Args const&... args)
-{
+void foreach (Iter current, Iter end, Callable op, Args const&... args) {
 	while (current != end) { // as long as not reached the end of the elements
 		std::invoke(op, // call passed callable with
 					args..., // any additional args
@@ -182,8 +178,7 @@ class MyClass {
 	}
 };
 
-int main()
-{
+int main() {
 	std::vector<int> primes = { 2, 3, 5, 7, 11, 13, 17, 19 };
 	// pass lambda as callable and an additional argument:
 	foreach(primes.begin(), primes.end(), // elements for 2nd arg of lambda
@@ -214,8 +209,7 @@ std::invoke()的一个常见应用是封装单个函数调用（例如，记录�
 #include <functional> // for std::forward()
 
 template<typename Callable, typename... Args>
-decltype(auto) call(Callable&& op, Args&&... args)
-{
+decltype(auto) call(Callable&& op, Args&&... args) {
 	return std::invoke(std::forward<Callable>(op), // passed callable with
 					   std::forward<Args>(args)...); // any additional args
 }
@@ -267,8 +261,7 @@ return std::invoke(std::forward<Callable>(op),
 #include <type_traits> // for std::is_same<> and invoke_result<>
 
 template<typename Callable, typename... Args>
-decltype(auto) call(Callable&& op, Args&&... args)
-{
+decltype(auto) call(Callable&& op, Args&&... args) {
 	if constexpr(std::is_same_v<std::invoke_result_t<Callable, Args...>,
 	void>) {
 		// return type is void:

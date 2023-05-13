@@ -59,8 +59,7 @@ C++谈到“模板实例化”而不确定是完整还是部分实例化时，�
 \filename{details/lazy1.hpp}
 \begin{cpp}
 template<typename T>
-class Safe {
-};
+class Safe {};
 
 template<int N>
 class Danger {
@@ -119,8 +118,7 @@ class VirtualClass {
 	virtual T vmem(); // Likely ERROR if instantiated without definition
 };
 
-int main()
-{
+int main() {
 	VirtualClass<int> inst;
 }
 \end{cpp}

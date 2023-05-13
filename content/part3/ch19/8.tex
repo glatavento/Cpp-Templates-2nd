@@ -51,8 +51,7 @@ C++标准库定义了几个类似的特征，以确定类型的主要类型和�
  bool_constant<>
 // primary template: in general T is not a fundamental type
 template<typename T>
-struct IsFundaT : std::false_type {
-};
+struct IsFundaT : std::false_type {};
 
 // macro to specialize for fundamental types
 #define MK_FUNDA_TYPE(T) \
@@ -117,8 +116,7 @@ template<> struct IsFundaT<bool> : std::true_type {
 #include <iostream>
 
 template<typename T>
-void test (T const&)
-{
+void test (T const&) {
 	if (IsFundaT<T>::value) {
 		std::cout << "T is a fundamental type" << '\n';
 	}
@@ -127,8 +125,7 @@ void test (T const&)
 	}
 }
 
-int main()
-{
+int main() {
 	test(7);
 	test("hello");
 }
@@ -212,8 +209,7 @@ class IsReferenceT
 	: public IfThenElseT<IsLValueReferenceT<T>::value,
 						IsLValueReferenceT<T>,
 						IsRValueReferenceT<T>
-	>::Type {
-};
+	>::Type {};
 \end{cpp}
 
 使用IfThenElseT（19.7.1节）来选择IsLValueReference<T>或IsRValueReference<T>作为基类，使用元函数转发（19.3.2节讨论）。如果T是左值引用，则继承IsLValueReference<T>以获得适当的值和BaseT成员。否则，继承IsRValueReference<T>，确定类型是否是右值引用（并在两种情况下提供适当的成员）。
@@ -375,8 +371,7 @@ struct IsClassT : std::false_type { // primary template: by default no class
 
 template<typename T>
 struct IsClassT<T, std::void_t<int T::*>> // classes can have pointer-to-member
-: std::true_type {
-};
+: std::true_type {};
 \end{cpp}
 
 C++语言指定Lambda表达式的类型是“唯一、未命名的非联合类类型”。因此，检查Lambda表达式是否为类类型对象时，结果为true:

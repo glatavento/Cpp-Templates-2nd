@@ -24,8 +24,7 @@ Variant<Types...>::Variant() {
 #include "variant.hpp"
 #include <iostream>
 
-int main()
-{
+int main() {
 	Variant<int, double> v;
 	if (v.is<int>()) {
 		std::cout << "Default-constructed v stores the int "
@@ -103,8 +102,7 @@ Variant<Types...>::Variant(Variant<SourceTypes...> const& source) {
 #include <iostream>
 #include <string>
 
-int main()
-{
+int main() {
 	Variant<short, float, char const*> v1((short)123);
 	
 	Variant<int, std::string, double> v2(v1);

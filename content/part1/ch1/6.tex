@@ -54,8 +54,7 @@ C++11后，可以使用constexpr提供在编译时计算某些值的能力。对
 \filename{basics/maxconstexpr.hpp}
 \begin{cpp}
 template<typename T1, typename T2>
-constexpr auto max (T1 a, T2 b)
-{
+constexpr auto max (T1 a, T2 b) {
 	return b < a ? a : b;
 }
 \end{cpp}

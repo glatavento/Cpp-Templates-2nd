@@ -20,8 +20,7 @@ class C {
 	void f(); // #3 member declaration
 }; // #4 class template definition completed
 
-void g (C<int>& c) // #5 use class template declaration only
-{
+void g (C<int>& c) { // #5 use class template declaration only
 	c.f(); // #6 use class template definition;
 } // will need definition of C::f()
 
@@ -53,8 +52,7 @@ public:
 void candidate(C<double>); // #1
 void candidate(int) { } // #2
 
-int main()
-{
+int main() {
 	candidate(42); // both previous function declarations can be called
 }
 \end{cpp}

@@ -33,8 +33,7 @@ union VariantStorage<Head, Tail...> {
 };
 
 template<>
-union VariantStorage<> {
-};
+union VariantStorage<> {};
 \end{cpp}
 
 联合保证有足够的大小和对齐方式，以允许在相应时间内存储Types中的类型。但联合本身就很难处理，因为实现Variant将使用继承，这是联合不允许的。

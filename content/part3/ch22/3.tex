@@ -4,8 +4,7 @@ FunctorBridge类模板负责底层函数对象的所有权和操作，实现为�
 \filename{bridge/functorbridge.hpp}
 \begin{cpp}
 template<typename R, typename... Args>
-class FunctorBridge
-{
+class FunctorBridge {
 	public:
 	virtual ~FunctorBridge() {
 	}
@@ -26,16 +25,14 @@ FunctorBridge提供了通过虚函数操作存储函数对象所需的基本操�
 \begin{cpp}
 template<typename R, typename... Args>
 FunctionPtr<R(Args...)>::FunctionPtr(FunctionPtr const& other)
-: bridge(nullptr)
-{
+: bridge(nullptr) {
 	if (other.bridge) {
 		bridge = other.bridge->clone();
 	}
 }
 
 template<typename R, typename... Args>
-R FunctionPtr<R(Args...)>::operator()(Args... args) const
-{
+R FunctionPtr<R(Args...)>::operator()(Args... args) const {
 	return bridge->invoke(std::forward<Args>(args)...);
 }
 \end{cpp}

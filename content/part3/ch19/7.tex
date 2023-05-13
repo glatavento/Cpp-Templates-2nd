@@ -161,8 +161,7 @@ class Pair {
 Pair(Pair&& other) noexcept(IsNothrowMoveConstructibleT<T1>::value &&
 		 IsNothrowMoveConstructibleT<T2>::value)
 : first(std::forward<T1>(other.first)),
-second(std::forward<T2>(other.second))
-{ }
+second(std::forward<T2>(other.second)) { }
 \end{cpp}
 
 剩下的工作就是实现IsNothrowMoveConstructibleT特征。可以使用noexcept操作符直接实现此特征，确定给定表达式是否不抛出异常：
@@ -174,9 +173,7 @@ second(std::forward<T2>(other.second))
 
 template<typename T>
 struct IsNothrowMoveConstructibleT
-: std::bool_constant<noexcept(T(std::declval<T>()))>
-{
-};
+: std::bool_constant<noexcept(T(std::declval<T>()))> {};
 \end{cpp}
 
 这里使用了操作符版本的noexcept，用于确定表达式不抛出异常。因为结果是一个布尔值，可以直接传递它来定义基类std::bool\_constant<>，可用于定义std::true\_type和std::false\_type（参见19.3.3节）。
@@ -208,16 +205,13 @@ std::cout << IsNothrowMoveConstructibleT<E>::value; // compile-time ERROR
 // primary template:
 template<typename T, typename = std::void_t<>>
 struct IsNothrowMoveConstructibleT : std::false_type
-{
-};
+{};
 
 // partial specialization (may be SFINAE'd away):
 template<typename T>
 struct IsNothrowMoveConstructibleT
 		<T, std::void_t<decltype(T(std::declval<T>()))>>
-: std::bool_constant<noexcept(T(std::declval<T>()))>
-{
-};
+: std::bool_constant<noexcept(T(std::declval<T>()))> {};
 \end{cpp}
 
 若替换偏特化中的std::void\_t<...>有效，特化版本匹配，基类说明符中的noexcept(...)表达式可以安全地求值。否则，非实例化偏特化就会丢弃，而会实例化主模板（产生std::false\_type结果）。

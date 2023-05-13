@@ -22,21 +22,18 @@ public:
 };
 
 template<typename T>
-void Stack<T>::push (T const& elem)
-{
+void Stack<T>::push (T const& elem) {
 	elems.push_back(elem); // append copy of passed elem
 }
 
 template<typename T>
-void Stack<T>::pop ()
-{
+void Stack<T>::pop () {
 	assert(!elems.empty());
 	elems.pop_back(); // remove last element
 }
 
 template<typename T>
-T const& Stack<T>::top () const
-{
+T const& Stack<T>::top () const {
 	assert(!elems.empty());
 	return elems.back(); // return copy of last element
 }
@@ -127,8 +124,7 @@ bool operator== (Stack<T> const& lhs, Stack<T> const& rhs);
 
 \begin{cpp}
 template<typename T>
-void Stack<T>::push (T const& elem)
-{
+void Stack<T>::push (T const& elem) {
 	elems.push_back(elem); // append copy of passed elem
 }
 \end{cpp}
@@ -139,8 +135,7 @@ void Stack<T>::push (T const& elem)
 
 \begin{cpp}
 template<typename T>
-T Stack<T>::pop ()
-{
+T Stack<T>::pop () {
 	assert(!elems.empty());
 	T elem = elems.back(); // save copy of last element
 	elems.pop_back(); // remove last element
@@ -152,8 +147,7 @@ T Stack<T>::pop ()
 
 \begin{cpp}
 template<typename T>
-T const& Stack<T>::top () const
-{
+T const& Stack<T>::top () const {
 	assert(!elems.empty());
 	return elems.back(); // return last element
 }

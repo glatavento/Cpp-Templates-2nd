@@ -69,8 +69,7 @@ using Primes = CTTypelist<int, 2, 3, 5, 7, 11>;
 \filename{typelist/valuelist.hpp}
 \begin{cpp}
 template<typename T, T... Values>
-struct Valuelist {
-};
+struct Valuelist {};
 
 template<typename T, T... Values>
 struct IsEmpty<Valuelist<T, Values...>> {
@@ -110,8 +109,7 @@ template<typename T, T First, T Second>
 struct GreaterThanT<CTValue<T, First>, CTValue<T, Second>> {
 	static constexpr bool value = First > Second;
 };
-void valuelisttest()
-{
+void valuelisttest() {
 	using Integers = Valuelist<int, 6, 2, 4, 9, 5, 2, 1, 7>;
 	
 	using SortedIntegers = InsertionSort<Integers, GreaterThanT>;

@@ -4,8 +4,7 @@
 
 \begin{cpp}
 template<typename Key, typename Value>
-class Dictionary
-{
+class Dictionary {
 	private:
 	vector<pair<Key const, Value>> data;
 	public:
@@ -34,8 +33,7 @@ class Dictionary
 
 \begin{cpp}
 template<typename Key, typename Value, typename = void>
-class Dictionary
-{
+class Dictionary {
 	... // vector implementation as above
 };
 \end{cpp}
@@ -45,8 +43,7 @@ class Dictionary
 \begin{cpp}
 template<typename Key, typename Value>
 class Dictionary<Key, Value,
-				EnableIf<HasLess<Key>>>
-{
+				EnableIf<HasLess<Key>>> {
 	private:
 	map<Key, Value> data;
 	public:
@@ -61,8 +58,7 @@ class Dictionary<Key, Value,
 
 \begin{cpp}
 template<typename Key, typename Value, typename = void>
-class Dictionary
-{
+class Dictionary {
 	... // vector implementation as above
 };
 
@@ -75,8 +71,7 @@ class Dictionary<Key, Value,
 
 template<typename Key, typename Value>
 class Dictionary<Key, Value,
-EnableIf<HasHash<Key>>>
-{
+EnableIf<HasHash<Key>>> {
 	private:
 	unordered_map<Key, Value> data;
 	public:
@@ -105,8 +100,7 @@ class Advance;
 
 // general, linear-time implementation for input iterators:
 template<typename Iterator>
-class Advance<Iterator, std::input_iterator_tag>
-{
+class Advance<Iterator, std::input_iterator_tag> {
 	public:
 	using DifferenceType =
 	typename std::iterator_traits<Iterator>::difference_type;
@@ -121,8 +115,7 @@ class Advance<Iterator, std::input_iterator_tag>
 
 // bidirectional, linear-time algorithm for bidirectional iterators:
 template<typename Iterator>
-class Advance<Iterator, std::bidirectional_iterator_tag>
-{
+class Advance<Iterator, std::bidirectional_iterator_tag> {
 	public:
 	using DifferenceType =
 		typename std::iterator_traits<Iterator>::difference_type;
@@ -145,8 +138,7 @@ class Advance<Iterator, std::bidirectional_iterator_tag>
 
 // bidirectional, constant-time algorithm for random access iterators:
 template<typename Iterator>
-class Advance<Iterator, std::random_access_iterator_tag>
-{
+class Advance<Iterator, std::random_access_iterator_tag> {
 	public:
 	using DifferenceType =
 		typename std::iterator_traits<Iterator>::difference_type;

@@ -57,8 +57,7 @@ template<typename T>
 using EnableIfString = std::enable_if_t<
 						std::is_convertible_v<T,std::string>>;
 
-class Person
-{
+class Person {
 private:
 	std::string name;
 public:
@@ -85,8 +84,7 @@ public:
 \begin{cpp}
 #include "specialmemtmpl3.hpp"
 
-int main()
-{
+int main() {
 	std::string s = "sname";
 	Person p1(s); // init with string object => calls TMPL-CONSTR
 	Person p2("tmp"); // init with string literal => calls TMPL-CONSTR
@@ -155,8 +153,7 @@ C y{x}; // still uses the predefined copy constructor (not the member template)
 可以为const volatile参数声明复制构造函数，并将其标记为“已删除”（即用= delete修饰）。这样做可以防止隐式声明另一个复制构造函数。有了这些，就可以定义一个构造函数模板，对于非volatile类型，该构造函数将优先于（已删除的）复制构造函数：
 
 \begin{cpp}
-class C
-{
+class C {
 public:
 	...
 	// user-define the predefined copy constructor as deleted
@@ -183,8 +180,7 @@ C y{x}; // uses the member template
 
 \begin{cpp}
 template<typename T>
-class C
-{
+class C {
 public:
 	...
 	// user-define the predefined copy constructor as deleted

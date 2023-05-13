@@ -15,8 +15,7 @@ C++14后，计算平方根的编译时函数很容易写成这样：
 \filename{meta/sqrtconstexpr.hpp}
 \begin{cpp}
 template<typename T>
-constexpr T sqrt(T x)
-{
+constexpr T sqrt(T x) {
 	// handle cases where x and its square root are equal as a special case to simplify
 	// the iteration criterion for larger x:
 	if (x <= 1) {
@@ -118,8 +117,7 @@ namespace std {
 
 \begin{cpp}
 template<typename T, std::size_t N>
-auto dotProduct(std::array<T, N> const& x, std::array<T, N> const& y)
-{
+auto dotProduct(std::array<T, N> const& x, std::array<T, N> const& y) {
 	T result{};
 	for (std::size_t k = 0; k<N; ++k) {
 		result += x[k]*y[k];
@@ -162,8 +160,7 @@ struct DotProductT<T, 0> {
 
 template<typename T, std::size_t N>
 auto dotProduct(std::array<T, N> const& x,
-				std::array<T, N> const& y)
-{
+				std::array<T, N> const& y) {
 	return DotProductT<T, N>::result(x.begin(), y.begin());
 }
 \end{cpp}
@@ -273,8 +270,7 @@ class Duration {
 // adding two durations where unit type might differ:
 template<typename T1, typename U1, typename T2, typename U2>
 auto constexpr operator+(Duration<T1, U1> const& lhs,
-						 Duration<T2, U2> const& rhs)
-{
+						 Duration<T2, U2> const& rhs) {
 	// resulting type is a unit with 1 a nominator and
 	// the resulting denominator of adding both unit type fractions
 	using VT = Ratio<1,RatioAdd<U1,U2>::den>;

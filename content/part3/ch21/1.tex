@@ -8,11 +8,9 @@ C++类通常是“空的”，内部表示在运行时不需要内存位。对�
 \begin{cpp}
 #include <iostream>
 
-class EmptyClass {
-};
+class EmptyClass {};
 
-int main()
-{
+int main() {
 	std::cout << "sizeof(EmptyClass): " << sizeof(EmptyClass) << '\n';
 }
 \end{cpp}
@@ -41,14 +39,11 @@ class Empty {
 	using Int = int; // type alias members don't make a class nonempty
 };
 
-class EmptyToo : public Empty {
-};
+class EmptyToo : public Empty {};
 
-class EmptyThree : public EmptyToo {
-};
+class EmptyThree : public EmptyToo {};
 
-int main()
-{
+int main() {
 	std::cout << "sizeof(Empty): " << sizeof(Empty) << '\n';
 	std::cout << "sizeof(EmptyToo): " << sizeof(EmptyToo) << '\n';
 	std::cout << "sizeof(EmptyThree): " << sizeof(EmptyThree) << '\n';
@@ -77,14 +72,11 @@ class Empty {
 	using Int = int; // type alias members don't make a class nonempty
 };
 
-class EmptyToo : public Empty {
-};
+class EmptyToo : public Empty {};
 
-class NonEmpty : public Empty, public EmptyToo {
-};
+class NonEmpty : public Empty, public EmptyToo {};
 
-int main()
-{
+int main() {
 	std::cout << "sizeof(Empty): " << sizeof(Empty) << '\n';
 	std::cout << "sizeof(EmptyToo): " << sizeof(EmptyToo) << '\n';
 	std::cout << "sizeof(NonEmpty): " << sizeof(NonEmpty) << '\n';
@@ -126,8 +118,7 @@ class MyClass {
 
 \begin{cpp}
 template<typename T1, typename T2>
-class MyClass : private T1, private T2 {
-};
+class MyClass : private T1, private T2 {};
 \end{cpp}
 
 这种简单的替代方法也存在一些问题：

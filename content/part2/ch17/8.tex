@@ -4,18 +4,15 @@
 
 \begin{cpp}
 template<typename T>
-T max(T a, T b)
-{
+T max(T a, T b) {
 	return b < a ? a : b; // ERROR: “no match for operator <
 	// (operator types are 'X' and 'X')”
 }
 
-struct X {
-};
+struct X {};
 bool operator> (X, X);
 
-int main()
-{
+int main() {
 	X a, b;
 	X m = max(a, b); // NOTE: “in instantiation of function template specialization
 					// 'max<X>' requested here”
@@ -28,16 +25,14 @@ int main()
 
 \begin{cpp}
 template<typename T> requires LessThanComparable<T>
-T max(T a, T b)
-{
+T max(T a, T b) {
 	return b < a ? a : b;
 }
 
 struct X { };
 bool operator> (X, X);
 
-int main()
-{
+int main() {
 	X a, b;
 	X m = max(a, b); // ERROR: X does not meet the LessThanComparable requirement
 }

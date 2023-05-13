@@ -9,26 +9,22 @@
 
 \begin{cpp}
 template<typename T>
-void clear (T& p)
-{
+void clear (T& p) {
 	*p = 0; // assumes T is a pointer-like type
 }
 
 template<typename T>
-void core (T& p)
-{
+void core (T& p) {
 	clear(p);
 }
 
 template<typename T>
-void middle (typename T::Index p)
-{
+void middle (typename T::Index p) {
 	core(p);
 }
 
 template<typename T>
-void shell (T const& env)
-{
+void shell (T const& env) {
 	typename T::Index i;
 	middle<T>(i);
 }
@@ -39,14 +35,12 @@ void shell (T const& env)
 该错误仅在实例化时可检测到。例如：
 
 \begin{cpp}
-class Client
-{
+class Client {
 	public:
 	using Index = int;
 };
 
-int main()
-{
+int main() {
 	Client mainClient;
 	shell(mainClient);
 }
@@ -60,12 +54,10 @@ int main()
 
 \begin{cpp}
 template<typename T>
-void ignore(T const&)
-{ }
+void ignore(T const&) { }
 
 template<typename T>
-void shell (T const& env)
-{
+void shell (T const& env) {
 	class ShallowChecks
 	{
 		void deref(typename T::Index ptr) {

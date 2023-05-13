@@ -341,8 +341,7 @@ return Array<T,A_Mult<T,A_Scalar<T>,R2>> (...);
 第一次发现表达式模板思想时，各种声明和定义之间的交互可能会令人生畏。因此，对示例代码所发生的事情进行自上而下的审查，有助于理解。这里将要分析的代码如下所示（可以在meta/exprmain.cpp中找到）:
 
 \begin{cpp}
-int main()
-{
+int main() {
 	Array<double> x(1000), y(1000);
 	...
 	x = 1.2*x + x*y;

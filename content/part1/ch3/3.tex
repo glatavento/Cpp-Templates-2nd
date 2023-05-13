@@ -5,8 +5,7 @@
 
 \begin{cpp}
 template<double VAT> // ERROR: floating-point values are not
-double process (double v) // allowed as template parameters
-{
+double process (double v) { // allowed as template parameters
 	return v * VAT;
 }
 
@@ -42,8 +41,7 @@ Message<"hello"> x; // ERROR: string literal "hello" not allowed
 \begin{cpp}
 extern char const s03[] = "hi"; // external linkage
 char const s11[] = "hi"; // internal linkage
-int main()
-{
+int main() {
 	Message<s03> m03; // OK (all versions)
 	Message<s11> m11; // OK since C++11
 	static char const s17[] = "hi"; // no linkage

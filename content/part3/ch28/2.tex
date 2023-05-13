@@ -31,8 +31,7 @@ class HasDereference {
 
 \begin{cpp}
 template<typename T>
-void shell (T const& env)
-{
+void shell (T const& env) {
 	static_assert(HasDereference<T>::value, "T is not dereferenceable");
 	typename T::Index i;
 	middle(i);

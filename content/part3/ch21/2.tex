@@ -96,8 +96,7 @@ class MyString : public ObjectCounter<MyString<CharT>> {
 	...
 };
 
-int main()
-{
+int main() {
 	MyString<char> s1, s2;
 	MyString<wchar_t> ws;
 	std::cout << "num of MyString<char>: "
@@ -127,8 +126,7 @@ class Array {
 };
 
 template<typename T>
-bool operator== (Array<T> const& a, Array<T> const& b)
-{
+bool operator== (Array<T> const& a, Array<T> const& b) {
 	...
 }
 \end{cpp}
@@ -162,8 +160,7 @@ operator== (Array<T> const&, Array<T> const&)
 
 \filename{inherit/wrapper.cpp}
 \begin{cpp}
-class S {
-};
+class S {};
 
 template<typename T>
 class Wrapper {
@@ -176,8 +173,7 @@ class Wrapper {
 	}
 };
 
-int main()
-{
+int main() {
 	S s;
 	Wrapper<S> w(s);
 	foo(w); // OK: Wrapper<S> is a class associated with w
@@ -221,24 +217,21 @@ C++标准库中也包含类似的定义，作为<utility>头文件的一部分�
 \filename{inherit/equalitycomparable.cpp}
 \begin{cpp}
 template<typename Derived>
-class EqualityComparable
-{
+class EqualityComparable {
 	public:
 	friend bool operator!= (Derived const& x1, Derived const& x2) {
 		return !(x1 == x2);
 	}
 };
 
-class X : public EqualityComparable<X>
-{
+class X : public EqualityComparable<X> {
 	public:
 	friend bool operator== (X const& x1, X const& x2) {
 		// implement logic for comparing two objects of type X
 	}
 };
 
-int main()
-{
+int main() {
 	X x1, x2;
 	if (x1 != x2) { }
 }
@@ -258,8 +251,7 @@ int main()
 \begin{cpp}
 template<typename Derived, typename Value, typename Category,
 		typename Reference = Value&, typename Distance = std::ptrdiff_t>
-class IteratorFacade
-{
+class IteratorFacade {
 	public:
 	using value_type = typename std::remove_const<Value>::type;
 	using reference = Reference;
@@ -369,8 +361,7 @@ IteratorFacade const& rhs) {
 \filename{inherit/listnode.hpp}
 \begin{cpp}
 template<typename T>
-class ListNode
-{
+class ListNode {
 	public:
 	T value;
 	ListNode<T>* next = nullptr;
@@ -385,8 +376,7 @@ class ListNode
 template<typename T>
 class ListNodeIterator
 : public IteratorFacade<ListNodeIterator<T>, T,
-std::forward_iterator_tag>
-{
+std::forward_iterator_tag> {
 	ListNode<T>* current = nullptr;
 	public:
 	T& dereference() const {
@@ -411,8 +401,7 @@ ListNodeIterator实现的缺点是，需要作为公共接口公开操作derefer
 \filename{inherit/iteratorfacadeaccessskel.hpp}
 \begin{cpp}
 // ‘friend’ this class to allow IteratorFacade access to core iterator operations:
-class IteratorFacadeAccess
-{
+class IteratorFacadeAccess {
 	// only IteratorFacade can use these definitions
 	template<typename Derived, typename Value, typename Category,
 			typename Reference, typename Distance>
@@ -474,8 +463,7 @@ class ProjectionIterator
 			T,
 			typename std::iterator_traits<Iterator>::iterator_category,
 			T&,
-			typename std::iterator_traits<Iterator>::difference_type>
-{
+			typename std::iterator_traits<Iterator>::difference_type> {
 	using Base = typename std::iterator_traits<Iterator>::value_type;
 	using Distance =
 		typename std::iterator_traits<Iterator>::difference_type;
@@ -536,8 +524,7 @@ void decrement() {
 #include <algorithm>
 #include <iterator>
 
-int main()
-{
+int main() {
 	std::vector<Person> authors = { {"David", "Vandevoorde"},
 		{"Nicolai", "Josuttis"},
 		{"Douglas", "Gregor"} };

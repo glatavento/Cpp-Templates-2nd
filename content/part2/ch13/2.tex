@@ -12,11 +12,9 @@ class B {
 	int i;
 };
 
-class D : public B {
-};
+class D : public B {};
 
-void f(D* pd)
-{
+void f(D* pd) {
 	pd->i = 3; // finds B::i
 	D::x = 2; // ERROR: does not find ::x in the enclosing scope
 }
@@ -27,8 +25,7 @@ void f(D* pd)
 \begin{cpp}
 extern int count; // #1
 
-int lookup_example(int count) // #2
-{
+int lookup_example(int count) { // #2
 	if (count < 0) {
 		int count = 1; // #3
 		lookup_example(count); // unqualified count refers to #3
@@ -47,8 +44,7 @@ int lookup_example(int count) // #2
 
 \begin{cpp}
 template<typename T>
-T max (T a, T b)
-{
+T max (T a, T b) {
 	return b < a ? a : b;
 }
 \end{cpp}
@@ -66,8 +62,7 @@ namespace BigMath {
 
 using BigMath::BigNumber;
 
-void g (BigNumber const& a, BigNumber const& b)
-{
+void g (BigNumber const& a, BigNumber const& b) {
 	...
 	BigNumber x = ::max(a,b);
 	...
@@ -142,13 +137,11 @@ namespace N {
 	}
 }
 
-void f(int)
-{
+void f(int) {
 	std::cout << "::f(int) called\n";
 }
 
-int main()
-{
+int main() {
 	::f(N::e1); // qualified function name: no ADL
 	f(N::e1); // ordinary lookup finds ::f() and ADL finds N::f(),
 } // the latter is preferred
@@ -169,8 +162,7 @@ class C {
 	...
 };
 
-void g (C<int>* p)
-{
+void g (C<int>* p) {
 	f(); // is f() visible here?
 	f(*p); // is f(C<int> const&) visible here?
 }
@@ -207,13 +199,11 @@ public:
 	}
 };
 
-int f()
-{
+int f() {
 	return sizeof(C);
 }
 
-int main()
-{
+int main() {
 	std::cout << "C::f() = " << C::f() << ','
 	<< " ::f() = " << ::f() << '\n';
 }
@@ -224,8 +214,7 @@ int main()
 类模板也有注入类名，但比普通的方式更奇怪：它们后面可以跟着模板参数（这种情况下，注入的是类模板名），但是如果后面没有模板参数，就表示将其形参作为实参的类（对于偏特化，则表示其特化的实参），如果是上下文需要类型，则表示为模板。这就解释了以下情况：
 
 \begin{cpp}
-template<template<typename> class TT> class X {
-};
+template<template<typename> class TT> class X {};
 
 template<typename T> class C {
 	C* a; // OK: same as “C<T>* a;”

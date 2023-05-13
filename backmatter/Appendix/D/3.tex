@@ -159,8 +159,7 @@ is_volatile<int volatile[]>::value // true
 帮助确定是否需要列表初始化。例如：
 \begin{cpp}
 template<typename Coll, typename... T>
-void insert(Coll& coll, T&&... val)
-{
+void insert(Coll& coll, T&&... val) {
 	if constexpr(!std::is_aggregate_v<typename Coll::value_type>) {
 		coll.emplace_back(std::forward<T>(val)...); // invalid for aggregates
 	}
@@ -689,8 +688,7 @@ class C {
 	virtual ~C() = default; // makes C nontrivial
 };
 
-int main()
-{
+int main() {
 	using namespace std;
 	cout << is_default_constructible_v<C> << '\n'; // true
 	cout << is_trivially_default_constructible_v<C> << '\n'; // false
@@ -1108,14 +1106,10 @@ is_same_v<decltype(x),decltype(z)> // yields false
 \item
 例如：
 \begin{cpp}
-class B {
-};
-class D1 : B {
-};
-class D2 : B {
-};
-class DD : private D1, private D2 {
-};
+class B {};
+class D1 : B {};
+class D2 : B {};
+class DD : private D1, private D2 {};
 is_base_of_v<B, D1> // yields true
 is_base_of_v<B, DD> // yields true
 is_base_of_v<B const, DD> // yields true

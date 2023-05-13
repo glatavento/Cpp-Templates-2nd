@@ -28,8 +28,7 @@ requires LessThanComparable<T>
 require子句不必用概念来表示（这样做是很好的实践，会产生更好的诊断信息）:可以使用布尔常量表达式。如6.5节所讨论的，下面的代码确保模板构造函数不能用作复制构造函数：
 
 \begin{cpp}
-class Person
-{
+class Person {
 	private:
 	std::string name;
 	public:
@@ -60,8 +59,7 @@ template<typename Seq>
 	requires Sequence<Seq> &&
 			EqualityComparable<typename Seq::value_type>
 	typename Seq::iterator find(Seq const& seq,
-								typename Seq::value_type const& val)
-{
+								typename Seq::value_type const& val) {
 	return std::find(seq.begin(), seq.end(), val);
 }
 \end{cpp}
@@ -106,8 +104,7 @@ T max(T a, T b) {
 template<Sequence Seq>
 	requires EqualityComparable<typename Seq::value_type>
 typename Seq::iterator find(Seq const& seq,
-							typename Seq::value_type const& val)
-{
+							typename Seq::value_type const& val) {
 	return std::find(seq.begin(), seq.end(), val);
 }
 \end{cpp}

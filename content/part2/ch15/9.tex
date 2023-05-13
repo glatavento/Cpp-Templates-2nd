@@ -2,13 +2,11 @@
 当不能推导函数模板参数时，可以在函数模板名称后面显式地指定。例如：
 
 \begin{cpp}
-template<typename T> T default_value()
-{
+template<typename T> T default_value() {
 	return T{};
 }
 
-int main()
-{
+int main() {
 	return default_value<int>();
 }
 \end{cpp}
@@ -16,13 +14,11 @@ int main()
 对于可推导的模板参数也可以这样做：
 
 \begin{cpp}
-template<typename T> void compute(T p)
-{
+template<typename T> void compute(T p) {
 	...
 }
 
-int main()
-{
+int main() {
 	compute<double>(2);
 }
 \end{cpp}
@@ -33,8 +29,7 @@ int main()
 
 \begin{cpp}
 template<typename Out, typename In>
-Out convert(In p)
-{
+Out convert(In p) {
 	...
 }
 

@@ -32,8 +32,7 @@ std::trait_v<...> // since C++17
 #include <type_traits>
 #include <iostream>
 
-int main()
-{
+int main() {
 	int i = 42;
 	std::add_const<int>::type c = i; // c is int const
 	std::add_const_t<int> c14 = i; // since C++14
@@ -113,8 +112,7 @@ C++17前，该标准不包括别名模板bool\_constant<>。std::true\_type和st
 #include <type_traits>
 #include <iostream>
 
-int main()
-{
+int main() {
 	using namespace std;
 	cout << boolalpha;
 	
@@ -153,8 +151,7 @@ int main()
 类型特征应用于类型，但decltype允许测试表达式、变量和函数的属性，decltype只在变量或函数的命名没有附加括号的情况下才会产生类型；对于任何其他表达式，生成的类型也反映表达式的类型类别。例如：
 
 \begin{cpp}
-void foo (std::string&& s)
-{
+void foo (std::string&& s) {
 	// check the type of s:
 	std::is_lvalue_reference<decltype(s)>::value // false
 	std::is_rvalue_reference<decltype(s)>::value // true, as declared

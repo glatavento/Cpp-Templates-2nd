@@ -102,8 +102,7 @@ void Variant<Types...>::destroy() {
 \filename{variant/variantdestroy17.hpp}
 \begin{cpp}
 template<typename... Types>
-void Variant<Types...>::destroy()
-{
+void Variant<Types...>::destroy() {
 	// call destroy() on each VariantChoice base class; at most one will succeed:
 	(VariantChoice<Types, Types...>::destroy() , ...);
 	
@@ -196,12 +195,9 @@ include "variant.hpp"
 #include <iostream>
 #include <string>
 
-class CopiedNonCopyable : public std::exception
-{
-};
+class CopiedNonCopyable : public std::exception {};
 
-class NonCopyable
-{
+class NonCopyable {
 	public:
 	NonCopyable() {
 	}
@@ -218,8 +214,7 @@ class NonCopyable
 	NonCopyable& operator= (NonCopyable&&) = default;
 	};
 
-int main()
-{
+int main() {
 	Variant<int, NonCopyable> v(17);
 	try {
 		NonCopyable nc;

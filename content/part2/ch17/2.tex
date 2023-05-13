@@ -10,8 +10,7 @@ class Diagnoser {
 	void print();
 };
 
-int main()
-{
+int main() {
 	Diagnoser<"Surprise!">().print();
 }
 \end{cpp}
@@ -27,8 +26,7 @@ class Diagnoser {
 	void print();
 };
 
-int main()
-{
+int main() {
 	// instantiates Diagnoser<'S','u','r','p','r','i','s','e','!'>
 	Diagnoser<"Surprise!">().print();
 }
@@ -45,14 +43,12 @@ class Bracket {
 };
 
 template<char const* str>
-char const* Bracket<str>::address()
-{
+char const* Bracket<str>::address() {
 	return str;
 }
 
 template<char const* str>
-char const* Bracket<str>::bytes()
-{
+char const* Bracket<str>::bytes() {
 	return str;
 }
 \end{cpp}

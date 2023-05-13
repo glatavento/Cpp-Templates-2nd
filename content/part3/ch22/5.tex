@@ -49,8 +49,7 @@ operator==的问题由类型擦除导致，因为当对FunctionPtr赋值或初�
 #include <type_traits> // for true_type and false_type
 
 template<typename T>
-class IsEqualityComparable
-{
+class IsEqualityComparable {
 	private:
 	// test convertibility of == and ! == to bool:
 	static void* conv(bool); // to check convertibility to bool
@@ -88,13 +87,10 @@ struct TryEquals
 	}
 };
 
-class NotEqualityComparable : public std::exception
-{
-};
+class NotEqualityComparable : public std::exception {};
 
 template<typename T>
-struct TryEquals<T, false>
-{
+struct TryEquals<T, false> {
 	static bool equals(T const& x1, T const& x2) {
 		throw NotEqualityComparable();
 	}

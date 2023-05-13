@@ -41,15 +41,11 @@ template<typename List, typename T, unsigned N>
 struct FindIndexOfT<List, T, N, false>
 : public IfThenElse<std::is_same<Front<List>, T>::value,
 					std::integral_constant<unsigned, N>,
-					FindIndexOfT<PopFront<List>, T, N+1>>
-{
-};
+					FindIndexOfT<PopFront<List>, T, N+1>> {};
 
 // basis case:
 template<typename List, typename T, unsigned N>
-struct FindIndexOfT<List, T, N, true>
-{
-};
+struct FindIndexOfT<List, T, N, true> {};
 \end{cpp}
 
 该指标值用于计算T对应的辨别器的值；稍后我们将返回特定的判别值。

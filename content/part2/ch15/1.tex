@@ -3,8 +3,7 @@
  
 \begin{cpp}
 template<typename T>
-T max (T a, T b)
-{
+T max (T a, T b) {
 	return b < a ? a : b;
 }
 
@@ -17,13 +16,11 @@ auto g = max(1, 1.0);
 
 \begin{cpp}
 template<typename T>
-typename T::ElementT at (T a, int i)
-{
+typename T::ElementT at (T a, int i) {
 	return a[i];
 }
 
-void f (int* p)
-{
+void f (int* p) {
 	int x = at(p, 7);
 }
 \end{cpp} 

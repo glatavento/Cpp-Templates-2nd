@@ -4,8 +4,7 @@
 
 \begin{cpp}
 template<typename T>
-void swap(T& x, T& y)
-{
+void swap(T& x, T& y) {
 	T tmp(x);
 	x = y;
 	y = tmp;
@@ -16,8 +15,7 @@ void swap(T& x, T& y)
 
 \begin{cpp}
 template<typename T>
-void swap(Array<T>& x, Array<T>& y)
-{
+void swap(Array<T>& x, Array<T>& y) {
 	swap(x.ptr, y.ptr);
 	swap(x.len, y.len);
 }
@@ -39,8 +37,7 @@ swap()的一个更好的选择是使用std::move()来避免在主模板中进行
 
 \begin{cpp}
 template<typename InputIterator, typename Distance>
-void advanceIter(InputIterator& x, Distance n)
-{
+void advanceIter(InputIterator& x, Distance n) {
 	while (n > 0) { // linear time
 		++x;
 		--n;

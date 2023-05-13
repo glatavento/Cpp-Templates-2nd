@@ -186,8 +186,7 @@ struct IsDefaultConstructibleHelper {
 };
 
 template<typename T>
-struct IsDefaultConstructibleT : IsDefaultConstructibleHelper<T>::Type {
-};
+struct IsDefaultConstructibleT : IsDefaultConstructibleHelper<T>::Type {};
 \end{cpp}
 
 若第一个test()函数模板有效，是首选重载，因此成员IsDefaultConstructibleHelper::Type由它的返回类型std::true\_type初始化。因此，IsDefaultConstructibleT<...>派生于std::true\_type。
@@ -209,14 +208,12 @@ template<typename...> using VoidT = void;
 // primary template:
 template<typename, typename = VoidT<>>
 struct IsDefaultConstructibleT : std::false_type
-{
-};
+{};
 
 // partial specialization (may be SFINAE'd away):
 template<typename T>
 struct IsDefaultConstructibleT<T, VoidT<decltype(T())>> : std::true_type
-{
-};
+{};
 \end{cpp}
 
 与上面针对谓词特征的IsDefaultConstructibleT改进版本一样，定义了从std::false\_type派生的一般情况，默认情况下，假定类型没有默认构造函数。
@@ -411,10 +408,8 @@ operator+ (Array<T1> const&, Array<T2> const&);
 若没有为数组元素定义相应的加法操作符，这里使用PlusResultT<>将出现错误。
 
 \begin{cpp}
-class A {
-};
-class B {
-};
+class A {};
+class B {};
 void addAB(Array<A> arrayA, Array<B> arrayB) {
 	auto sum = arrayA + arrayB; // ERROR: fails in instantiation of PlusResultT<A, B>
 	...
@@ -463,16 +458,14 @@ struct PlusResultT {
 // primary template:
 template<typename, typename, typename = std::void_t<>>
 struct HasPlusT : std::false_type
-{
-};
+{};
 
 // partial specialization (may be SFINAE'd away):
 template<typename T1, typename T2>
 struct HasPlusT<T1, T2, std::void_t<decltype(std::declval<T1>()
 						+ std::declval<T2>())>>
 : std::true_type
-{
-};
+{};
 \end{cpp}
 
 若产生结果，PlusResultT可以使用现有的实现。否则，PlusResultT需要一个安全的默认值。对于一组模板参数没有任何意义的结果特征，最好的默认值是不提供成员Type。这样，若特征在SFINAE中使用——上面数组加法操作符模板的返回类型——缺失的成员Type将导致模板参数推导失败，这正是数组加法操作符模板所期望的行为。
@@ -518,8 +511,7 @@ struct ElementT {
 };
 
 template<typename C>
-struct ElementT<C, false> {
-};
+struct ElementT<C, false> {};
 \end{cpp}
 
 使特征对SFINAE友好的第三个例子在第19.7.2节，其中IsNothrowMoveConstructibleT首先检查移动构造函数是否存在，然后检查其是否使用noexcept声明。

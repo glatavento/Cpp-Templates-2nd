@@ -20,8 +20,7 @@ C++11前，因为历史原因，默认模板参数只允许在类模板中使用
 
 template<typename T1, typename T2,
 typename RT = std::decay_t<decltype(true ? T1() : T2())>>
-RT max (T1 a, T2 b)
-{
+RT max (T1 a, T2 b) {
 	return b < a ? a : b;
 }
 \end{cpp}
@@ -43,8 +42,7 @@ C++11中，必须使用typename std::decay<...>::type，而非std::decay\_t<...>
 
 template<typename T1, typename T2,
 typename RT = std::common_type_t<T1,T2>>
-RT max (T1 a, T2 b)
-{
+RT max (T1 a, T2 b) {
 	return b < a ? a : b;
 }
 \end{cpp}
@@ -68,8 +66,7 @@ auto b = ::max<double,int,long double>(7.2, 4);
 
 \begin{cpp}
 template<typename RT = long, typename T1, typename T2>
-RT max (T1 a, T2 b)
-{
+RT max (T1 a, T2 b) {
 	return b < a ? a : b;
 }
 \end{cpp}

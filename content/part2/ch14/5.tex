@@ -4,8 +4,7 @@
 
 \begin{cpp}
 template<typename T>
-void f(T)
-{ }
+void f(T) { }
 
 // four valid explicit instantiations:
 template void f<int>(int);
@@ -49,14 +48,12 @@ template class S<void>;
 // translation unit 1:
 template<typename T> void f(); // no definition: prevents instantiation
 								// in this translation unit
-void g()
-{
+void g() {
 	f<int>();
 }
 
 // translation unit 2:
-template<typename T> void f()
-{
+template<typename T> void f() {
 	// implementation
 }
 
@@ -64,8 +61,7 @@ template void f<int>(); // manual instantiation
 
 void g();
 
-int main()
-{
+int main() {
 	g();
 }
 \end{cpp}
@@ -84,8 +80,7 @@ template<typename T> void f(); // no definition: prevents instantiation
 
 // f.tpp:
 #include "f.hpp"
-template<typename T> void f() // definition
-{
+template<typename T> void f() { // definition
 	// implementation
 }
 
@@ -122,8 +117,7 @@ template void f<int>(); // manual instantiation
 
 \begin{cpp}
 // t.hpp:
-template<typename T> void f()
-{ }
+template<typename T> void f() { }
 
 extern template void f<int>(); // declared but not defined
 extern template void f<float>(); // declared but not defined

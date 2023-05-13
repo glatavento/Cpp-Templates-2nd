@@ -16,14 +16,12 @@ template<typename...> using VoidT = void;
 // primary template:
 template<typename, typename = VoidT<>>
 struct HasSizeTypeT : std::false_type
-{
-};
+{};
 
 // partial specialization (may be SFINAE'd away):
 template<typename T>
 struct HasSizeTypeT<T, VoidT<typename T::size_type>> : std::true_type
-{
-};
+{};
 \end{cpp}
 
 使用SFINAE的方法剔除了偏特化。
@@ -73,8 +71,7 @@ std::cout << HasSizeTypeT<CXR&>::value; // OOPS: prints false
 \begin{cpp}
 template<typename T>
 struct HasSizeTypeT<T, VoidT<RemoveReference<T>::size_type>>
-: std::true_type {
-};
+: std::true_type {};
 \end{cpp}
 
 \subsubsection{注入类名}
@@ -82,11 +79,9 @@ struct HasSizeTypeT<T, VoidT<RemoveReference<T>::size_type>>
 用来检测成员类型的特征也会为注入类名生成一个真实值（参见第13.2.3节）。例如：
 
 \begin{cpp}
-struct size_type {
-};
+struct size_type {};
 
-struct Sizeable : size_type {
-};
+struct Sizeable : size_type {};
 
 static_assert(HasSizeTypeT<Sizeable>::value,
 			"Compiler bug: Injected class name missing");
@@ -132,8 +127,7 @@ struct HasTypeT_##MemType<T, std::void_t<typename T::MemType>> \
 DEFINE_HAS_TYPE(value_type);
 DEFINE_HAS_TYPE(char_type);
 
-int main()
-{
+int main() {
 	std::cout << "int::value_type: "
 	<< HasTypeT_value_type<int>::value << '\n';
 	std::cout << "std::vector<int>::value_type: "
@@ -191,8 +185,7 @@ struct HasMemberT_##Member<T, std::void_t<decltype(&T::Member)>> \
 DEFINE_HAS_MEMBER(size);
 DEFINE_HAS_MEMBER(first);
 
-int main()
-{
+int main() {
 	std::cout << "int::size: "
 				<< HasMemberT_size<int>::value << '\n';
 	std::cout << "std::vector<int>::size: "
@@ -224,14 +217,12 @@ std::cout << HasMemberT_begin<std::vector<int>>::value; // false
 
 // primary template:
 template<typename, typename = std::void_t<>>
-struct HasBeginT : std::false_type {
-};
+struct HasBeginT : std::false_type {};
 
 // partial specialization (may be SFINAE'd away):
 template<typename T>
 struct HasBeginT<T, std::void_t<decltype(std::declval<T>().begin())>>
-: std::true_type {
-};
+: std::true_type {};
 \end{cpp}
 
 这里，我们使用
@@ -258,16 +249,14 @@ include <utility> // for declval
 // primary template:
 template<typename, typename, typename = std::void_t<>>
 struct HasLessT : std::false_type
-{
-};
+{};
 
 // partial specialization (may be SFINAE'd away):
 template<typename T1, typename T2>
 struct HasLessT<T1, T2, std::void_t<decltype(std::declval<T1>()
 					< std::declval<T2>())>>
 : std::true_type
-{
-};
+{};
 \end{cpp}
 
 这里的挑战在于为条件检查定义一个有效的表达式，并使用decltype将其放置在SFINAE中，若表达式无效，则会回退到主模板：
@@ -296,8 +285,7 @@ HasLessT<std::complex<double>, std::complex<double>>::value // yields false
 
 \begin{cpp}
 template<typename T>
-class C
-{
+class C {
 	static_assert(HasLessT<T>::value,
 				  "Class C requires comparable elements");
 	...
@@ -314,8 +302,7 @@ class C
 // primary template:
 template<typename, typename = std::void_t<>>
 struct HasVariousT : std::false_type
-{
-};
+{};
 
 // partial specialization (may be SFINAE'd away):
 template<typename T>
@@ -323,8 +310,7 @@ struct HasVariousT<T, std::void_t<decltype(std::declval<T>().begin()),
 					typename T::difference_type,
 					typename T::iterator>>
 : std::true_type
-{
-};
+{};
 \end{cpp}
 
 检测特定语法有效性的特性非常强大，允许模板根据特定操作的存在或不存在来定制行为。这些特征将再次作为SFINAE友好特征的一部分（第19.4.4节）和协助基于类型属性的重载（第20章）。
@@ -342,8 +328,7 @@ struct HasVariousT<T, std::void_t<decltype(std::declval<T>().begin()),
 #include<string>
 #include<utility>
 
-int main()
-{
+int main() {
 	using namespace std;
 	cout << boolalpha;
 	
@@ -412,8 +397,7 @@ constexpr auto hasLess
 template<typename T1, typename T2>
 using HasLessT = decltype(hasLess(std::declval<T1>(), std::declval<T2>()));
 
-int main()
-{
+int main() {
 	using namespace std;
 	
 	cout << "first: " << HasFirstT<pair<int,int>>::value << '\n'; // true

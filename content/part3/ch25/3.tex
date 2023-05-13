@@ -70,8 +70,7 @@ std::cout << t2;
 \begin{cpp}
 template<typename... Types, typename V>
 PushFront<Tuple<Types...>, V>
-pushFront(Tuple<Types...> const& tuple, V const& value)
-{
+pushFront(Tuple<Types...> const& tuple, V const& value) {
 	return PushFront<Tuple<Types...>, V>(value, tuple);
 }
 \end{cpp}
@@ -84,16 +83,14 @@ pushFront(Tuple<Types...> const& tuple, V const& value)
 \begin{cpp}
 // basis case
 template<typename V>
-Tuple<V> pushBack(Tuple<> const&, V const& value)
-{
+Tuple<V> pushBack(Tuple<> const&, V const& value) {
 	return Tuple<V>(value);
 }
 
 // recursive case
 template<typename Head, typename... Tail, typename V>
 Tuple<Head, Tail..., V>
-pushBack(Tuple<Head, Tail...> const& tuple, V const& value)
-{
+pushBack(Tuple<Head, Tail...> const& tuple, V const& value) {
 	return Tuple<Head, Tail..., V>(tuple.getHead(),
 	pushBack(tuple.getTail(), value));
 }
@@ -107,8 +104,7 @@ pushBack(Tuple<Head, Tail...> const& tuple, V const& value)
 \begin{cpp}
 template<typename... Types>
 PopFront<Tuple<Types...>>
-popFront(Tuple<Types...> const& tuple)
-{
+popFront(Tuple<Types...> const& tuple) {
 	return tuple.getTail();
 }
 \end{cpp}
@@ -134,15 +130,13 @@ std::cout << std::boolalpha << t2 << '\n';
 \filename{typelist/reverse.hpp}
 \begin{cpp}
 // basis case
-Tuple<> reverse(Tuple<> const& t)
-{
+Tuple<> reverse(Tuple<> const& t) {
 	return t;
 }
 
 // recursive case
 template<typename Head, typename... Tail>
-Reverse<Tuple<Head, Tail...>> reverse(Tuple<Head, Tail...> const& t)
-{
+Reverse<Tuple<Head, Tail...>> reverse(Tuple<Head, Tail...> const& t) {
 	return pushBack(reverse(t.getTail()), t.getHead());
 }
 \end{cpp}
@@ -161,8 +155,7 @@ reverse(makeTuple(1, 2.5, std::string("hello")))
 \begin{cpp}
 template<typename... Types>
 PopBack<Tuple<Types...>>
-popBack(Tuple<Types...> const& tuple)
-{
+popBack(Tuple<Types...> const& tuple) {
 	return reverse(popFront(reverse(tuple)));
 }
 \end{cpp}
@@ -193,8 +186,7 @@ struct CopyCounter
 
 \filename{typelist/copycountertest.hpp}
 \begin{cpp}
-void copycountertest()
-{
+void copycountertest() {
 	Tuple<CopyCounter<0>, CopyCounter<1>, CopyCounter<2>,
 			CopyCounter<3>, CopyCounter<4>> copies;
 	auto reversed = reverse(copies);
@@ -257,14 +249,11 @@ C++14提供了一个类似的模板make\_index\_sequence，生成了std::size\_t
 // recursive case
 template<unsigned N, typename Result = Valuelist<unsigned>>
 struct MakeIndexListT
-: MakeIndexListT<N-1, PushFront<Result, CTValue<unsigned, N-1>>>
-{
-};
+: MakeIndexListT<N-1, PushFront<Result, CTValue<unsigned, N-1>>> {};
 
 // basis case
 template<typename Result>
-struct MakeIndexListT<0, Result>
-{
+struct MakeIndexListT<0, Result> {
 	using Type = Result;
 };
 
@@ -285,14 +274,12 @@ using MyIndexList = Reverse<MakeIndexList<5>>;
 \begin{cpp}
 template<typename... Elements, unsigned... Indices>
 auto reverseImpl(Tuple<Elements...> const& t,
-Valuelist<unsigned, Indices...>)
-{
+Valuelist<unsigned, Indices...>) {
 	return makeTuple(get<Indices>(t)...);
 }
 
 template<typename... Elements>
-auto reverse(Tuple<Elements...> const& t)
-{
+auto reverse(Tuple<Elements...> const& t) {
 	return reverseImpl(t,
 	Reverse<MakeIndexList<sizeof...(Elements)>>());
 }
@@ -326,8 +313,7 @@ C++11中，返回类型必须声明为\texttt{->}decltype(makeTuple(get<indices>
 \begin{cpp}
 template<typename... Elements, unsigned... Indices>
 auto select(Tuple<Elements...> const& t,
-			Valuelist<unsigned, Indices...>)
-{
+			Valuelist<unsigned, Indices...>) {
 	return makeTuple(get<Indices>(t)...);
 }
 \end{cpp}
@@ -360,8 +346,7 @@ class ReplicatedIndexListT;
 template<unsigned I, unsigned N, unsigned... Indices>
 class ReplicatedIndexListT<I, N, Valuelist<unsigned, Indices...>>
 : public ReplicatedIndexListT<I, N-1,
-								Valuelist<unsigned, Indices..., I>> {
-};
+								Valuelist<unsigned, Indices..., I>> {};
 
 template<unsigned I, unsigned... Indices>
 class ReplicatedIndexListT<I, 0, Valuelist<unsigned, Indices...>> {
@@ -373,8 +358,7 @@ template<unsigned I, unsigned N>
 using ReplicatedIndexList = typename ReplicatedIndexListT<I, N>::Type;
 
 template<unsigned I, unsigned N, typename... Elements>
-auto splat(Tuple<Elements...> const& t)
-{
+auto splat(Tuple<Elements...> const& t) {
 	return select(t, ReplicatedIndexList<I, N>());
 }
 \end{cpp}
@@ -386,14 +370,12 @@ auto splat(Tuple<Elements...> const& t)
 #include <complex>
 
 template<typename T, typename U>
-class SmallerThanT
-{
+class SmallerThanT {
 	public:
 	static constexpr bool value = sizeof(T) < sizeof(U);
 };
 
-void testTupleSort()
-{
+void testTupleSort() {
 	auto t1 = makeTuple(17LL, std::complex<double>(42,77), 'c', 42, 7.7);
 	std::cout << t1 << '\n';
 	auto t2 = sort<SmallerThanT>(t1); // t2 is Tuple<int, long, std::string>
@@ -433,8 +415,7 @@ class MetafunOfNthElementT {
 // sort a tuple based on comparing the element types:
 template<template<typename T, typename U> class Compare,
 typename... Elements>
-auto sort(Tuple<Elements...> const& t)
-{
+auto sort(Tuple<Elements...> const& t) {
 	return select(t,
 					InsertionSort<MakeIndexList<sizeof...(Elements)>,
 									MetafunOfNthElementT<
@@ -451,8 +432,7 @@ auto sort(Tuple<Elements...> const& t)
 #include <algorithm>
 #include <string>
 
-int main()
-{
+int main() {
 	std::vector<std::string> strings = {"banana", "apple", "cherry"};
 	std::vector<unsigned> indices = { 0, 1, 2 };
 	std::sort(indices.begin(), indices.end(),

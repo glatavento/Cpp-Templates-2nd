@@ -14,8 +14,7 @@ public:
 这个类可以与不完整类型一起使用。例如：当类引用自己类型的元素时：
 
 \begin{cpp}
-struct Node
-{
+struct Node {
 	std::string value;
 	Cont<Node> next; // only possible if Cont accepts incomplete types
 };

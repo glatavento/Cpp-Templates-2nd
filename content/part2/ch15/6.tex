@@ -44,8 +44,7 @@ volatile应用于引用类型RCI（int const\&的别名），因此丢弃。然�
 \begin{cpp}
 template<typename T> void f(T&& p); // p is a forwarding reference
 
-void g()
-{
+void g() {
 	int i;
 	int const j = 0;
 	f(i); // argument is an lvalue; deduces T to int& and
@@ -62,8 +61,7 @@ void g()
 将T推导为引用类型会对模板的实例化产生一些影响。例如，用T类型声明的局部变量在左值实例化后具有引用类型，因此需要初始化式：
 
 \begin{cpp}
-template<typename T> void f(T&&) // p is a forwarding reference
-{
+template<typename T> void f(T&&) { // p is a forwarding reference
 	T x; // for passed lvalues, x is a reference
 	...
 }
@@ -72,8 +70,7 @@ template<typename T> void f(T&&) // p is a forwarding reference
 上面函数f()的定义需要注意如何使用T类型，否则函数模板本身在使用左值参数时，将无法正常工作。为了处理这种情况，常使用std::remove\_reference类型特性来确定x不是一个引用：
 
 \begin{cpp}
-template<typename T> void f(T&&) // p is a forwarding reference
-{
+template<typename T> void f(T&&) { // p is a forwarding reference
 	std::remove_reference_t<T> x; // x is never a reference
 	...
 }
@@ -100,13 +97,11 @@ void g(C const&);
 void g(C&&);
 
 template<typename T>
-void forwardToG(T&& x)
-{
+void forwardToG(T&& x) {
 	g(static_cast<T&&>(x)); // forward x to g()
 }
 
-void foo()
-{
+void foo() {
 	C v;
 	C const c;
 	forwardToG(v); // eventually calls g(C&)
@@ -131,8 +126,7 @@ static\_cast将x转换为原始类型和左值或右值。类型T\&\&要么折�
 \begin{cpp}
 #include <utility>
 
-template<typename T> void forwardToG(T&& x)
-{
+template<typename T> void forwardToG(T&& x) {
 	g(std::forward<T>(x)); // forward x to g()
 }
 \end{cpp}
@@ -142,8 +136,7 @@ template<typename T> void forwardToG(T&& x)
 完美转发与可变参数模板可以很好的结合，允许函数模板接受任意数量的函数调用参数，并将每个参数转发给另一个函数：
 
 \begin{cpp}
-template<typename... Ts> void forwardToG(Ts&&... xs)
-{
+template<typename... Ts> void forwardToG(Ts&&... xs) {
 	g(std::forward<Ts>(xs)...); // forward all xs to g()
 }
 \end{cpp}
@@ -156,13 +149,11 @@ forwardToG()调用中的参数将（独立地）推导参数包Ts的连续值（
 void g(int*);
 void g(...);
 
-template<typename T> void forwardToG(T&& x)
-{
+template<typename T> void forwardToG(T&& x) {
 	g(std::forward<T>(x)); // forward x to g()
 }
 
-void foo()
-{
+void foo() {
 	g(0); // calls g(int*)
 	forwardToG(0); // eventually calls g(...)
 }
@@ -179,8 +170,7 @@ forwardToG(nullptr); // eventually calls g(int*)
 
 \begin{cpp}
 template<typename... Ts>
-auto forwardToG(Ts&&... xs) -> decltype(g(std::forward<Ts>(xs)...))
-{
+auto forwardToG(Ts&&... xs) -> decltype(g(std::forward<Ts>(xs)...)) {
 	return g(std::forward<Ts>(xs)...); // forward all xs to g()
 }
 \end{cpp}
@@ -191,8 +181,7 @@ C++14引入了其他特性进一步简化这种情况：
 
 \begin{cpp}
 template<typename... Ts>
-decltype(auto) forwardToG(Ts&&... xs)
-{
+decltype(auto) forwardToG(Ts&&... xs) {
 	return g(std::forward<Ts>(xs)...); // forward all xs to g()
 }
 \end{cpp}
@@ -216,8 +205,7 @@ template<typename T> void anything(T&&); // SURPRISE: accepts lvalues and
 
 \begin{cpp}
 template<typename T>
-class X
-{
+class X {
 	public:
 	X(X&&); // X is not a template parameter
 	X(T&&); // this constructor is not a function template

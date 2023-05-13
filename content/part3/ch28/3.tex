@@ -27,12 +27,9 @@ int find(T const* array, int n, T const& value) {
 下面是一个原型，用于满足find()算法文档中描述的EqualityComparable概念需求：
 
 \begin{cpp}
-class EqualityComparableArchetype
-{
-};
+class EqualityComparableArchetype {};
 
-class ConvertibleToBoolArchetype
-{
+class ConvertibleToBoolArchetype {
 	public:
 	operator bool() const;
 };
@@ -72,8 +69,7 @@ int find(T const* array, int n, T const& value) {
 使用原型展示find()中的第二个问题需要更多的技巧。ind()的新定义现在应用了operator!直接指向operator==的结果。原型中，这依赖于用户定义的到bool的转换和内置的逻辑求反operator!。ConvertibleToBoolArchetype的实现会毒害operator!，使其不能恰当地使用：
 
 \begin{cpp}
-class ConvertibleToBoolArchetype
-{
+class ConvertibleToBoolArchetype {
 	public:
 	operator bool() const;
 	bool operator!() = delete; // logical negation was not explicitly required

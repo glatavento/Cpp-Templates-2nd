@@ -6,14 +6,12 @@ C++11引入了一个新特性constexpr，简化了各种形式的编译时计算
 \filename{basics/isprime11.hpp}
 \begin{cpp}
 constexpr bool
-doIsPrime (unsigned p, unsigned d) // p: number to check, d: current divisor
-{
+doIsPrime (unsigned p, unsigned d) { // p: number to check, d: current divisor
 	return d!=2 ? (p%d!=0) && doIsPrime(p,d-1) // check this and smaller divisors
 	: (p%2!=0); // end recursion if divisor is 2
 }
 
-constexpr bool isPrime (unsigned p)
-{
+constexpr bool isPrime (unsigned p) {
 	return p < 4 ? !(p<2) // handle special cases
 	: doIsPrime(p,p/2); // start recursion with divisor from p/2
 }
@@ -25,8 +23,7 @@ C++14中，constexpr函数可以使用通用C++代码中的控制结构。因此
 
 \filename{basics/isprime14.hpp}
 \begin{cpp}
-constexpr bool isPrime (unsigned int p)
-{
+constexpr bool isPrime (unsigned int p) {
 	for (unsigned int d=2; d<=p/2; ++d) {
 		if (p % d == 0) {
 			return false; // found divisor without remainder

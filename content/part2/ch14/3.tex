@@ -61,15 +61,13 @@ bool operator > (MyInt const&, MyInt const&);
 using Int = MyInt;
 
 template<typename T>
-void f(T i)
-{
+void f(T i) {
 	if (i>0) {
 		g(-i);
 	}
 }
 // #1
-void g(Int)
-{
+void g(Int) {
 	// #2
 	f<Int>(42); // point of call
 	// #3
@@ -91,16 +89,13 @@ using Int = int;
 
 \begin{cpp}
 template<typename T>
-void f1(T x)
-{
+void f1(T x) {
 	g1(x); // #1
 }
 
-void g1(int)
-{ }
+void g1(int) { }
 
-int main()
-{
+int main() {
 	f1(7); // ERROR: g1 not found!
 }
 // #2 POI for f1<int>(int)
@@ -123,8 +118,7 @@ class S {
 	T m;
 };
 // #1
-unsigned long h()
-{
+unsigned long h() {
 	// #2
 	return (unsigned long)sizeof(S<int>);
 	// #3
@@ -151,14 +145,12 @@ class S {
 
 // #1
 template<typename T>
-void f()
-{
+void f() {
 	S<char>::I var1 = 41;
 	typename S<T>::I var2 = 42;
 }
 
-int main()
-{
+int main() {
 	f<double>();
 }
 // #2 : #2a , #2b

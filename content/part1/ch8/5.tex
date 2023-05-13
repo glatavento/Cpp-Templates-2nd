@@ -9,8 +9,7 @@
 
 \begin{cpp}
 template<typename T, typename... Types>
-void print (T const& firstArg, Types const&... args)
-{
+void print (T const& firstArg, Types const&... args) {
 	std::cout << firstArg << '\n';
 	if constexpr(sizeof...(args) > 0) {
 		print(args...); // code only available if sizeof...(args)>0 (since C++17)
@@ -24,8 +23,7 @@ void print (T const& firstArg, Types const&... args)
 
 \begin{cpp}
 template<typename T>
-void foo(T t)
-{
+void foo(T t) {
 	if constexpr(std::is_integral_v<T>) {
 		if (t > 0) {
 			foo(t-1); // OK
@@ -43,8 +41,7 @@ void foo(T t)
 若constexpr可以用于任何函数，而不仅在模板中。只需要一个产生布尔值的编译时表达式。例如：
 
 \begin{cpp}
-int main()
-{
+int main() {
 	if constexpr(std::numeric_limits<char>::is_signed) {
 		foo(42); // OK
 	}
@@ -61,8 +58,7 @@ int main()
 
 \begin{cpp}
 template<typename T, std::size_t SZ>
-void foo (std::array<T,SZ> const& coll)
-{
+void foo (std::array<T,SZ> const& coll) {
 	if constexpr(!isPrime(SZ)) {
 		... // special additional handling if the passed array has no prime number as size
 	}

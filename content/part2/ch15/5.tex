@@ -6,8 +6,7 @@
 template<typename First, typename... Rest>
 void f(First first, Rest... rest);
 
-void g(int i, double j, int* k)
-{
+void g(int i, double j, int* k) {
 	f(i, j, k); // deduces First to int, Rest to {double, int*}
 }
 \end{cpp}
@@ -26,8 +25,7 @@ template<typename... Ts, typename... Rest>
 	void h2(pair<Ts, Rest> const&...);
 
 void foo(pair<int, float> pif, pair<int, double> pid,
-pair<double, double> pdd)
-{
+pair<double, double> pdd) {
 	h1(pif, pid); // OK: deduces T to int, Rest to {float, double}
 	h2(pif, pid); // OK: deduces Ts to {int, int}, Rest to {float, double}
 	h1(pif, pdd); // ERROR: T deduced to int from the 1st arg, but to double from the 2nd
@@ -55,8 +53,7 @@ template<typename... Types1, typename... Types2>
 bool f2(Tuple<Types1...>, Tuple<Types2...>);
 
 void bar(Tuple<short, int, long> sv,
-		Tuple<unsigned short, unsigned, unsigned long> uv)
-{
+		Tuple<unsigned short, unsigned, unsigned long> uv) {
 	f1(sv, sv); // OK: Types is deduced to {short, int, long}
 	f2(sv, sv); // OK: Types1 is deduced to {short, int, long},
 				// Types2 is deduced to {short, int, long}
@@ -83,8 +80,7 @@ int a = 121_B7; // #2
 
 \begin{cpp}
 template<char... cs>
-int operator"" _B7()
-{
+int operator"" _B7() {
 	std::array<char,sizeof...(cs)> chars{cs...}; // initialize array of passed chars
 	for (char c : chars) { // and use it (print it here)
 		std::cout << "'" << c << "' ";

@@ -51,8 +51,7 @@ Node* traverse (T np, TP... paths) {
 	return (np ->* ... ->* paths); // np ->* paths1 ->* paths2 ...
 }
 
-int main()
-{
+int main() {
 	// init binary tree structure:
 	Node* root = new Node{0};
 	root->left = new Node{1};
@@ -76,8 +75,7 @@ int main()
 
 \begin{cpp}
 template<typename... Types>
-void print (Types const&... args)
-{
+void print (Types const&... args) {
 	(std::cout << ... << args) << '\n';
 }
 \end{cpp}
@@ -87,8 +85,7 @@ void print (Types const&... args)
 \filename{basics/addspace.hpp}
 \begin{cpp}
 template<typename T>
-class AddSpace
-{
+class AddSpace {
 private:
 	T const& ref; // refer to argument passed in constructor
 public:

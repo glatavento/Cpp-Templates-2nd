@@ -9,8 +9,7 @@ std::invoke()只是标准库为实现泛型库提供的有用实用程序的一�
 \begin{cpp}
 #include <type_traits>
 template<typename T>
-class C
-{
+class C {
 	// ensure that T is not void (ignoring const or volatile):
 	static_assert(!std::is_same_v<std::remove_cv_t<T>,void>,
 					"invalid instantiation of class C for void type");
@@ -105,8 +104,7 @@ std::addressof<>()函数模板生成对象或函数的实际地址。即使对�
 
 \begin{cpp}
 template<typename T>
-void f (T&& x)
-{
+void f (T&& x) {
 	auto p = &x; // might fail with overloaded operator &
 	auto q = std::addressof(x); // works even with overloaded operator &
 	...
@@ -125,8 +123,7 @@ std::declval<>()函数模板可以用作特定类型的对象引用的占位符�
 template<typename T1, typename T2,
 		 typename RT = std::decay_t<decltype(true ? std::declval<T1>()
 												  : std::declval<T2>())>>
-RT max (T1 a, T2 b)
-{
+RT max (T1 a, T2 b) {
 	return b < a ? a : b;
 }
 \end{cpp}

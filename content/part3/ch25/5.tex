@@ -12,8 +12,7 @@
 \begin{cpp}
 // recursive case:
 template<typename Head, typename... Tail>
-class Tuple<Head, Tail...> : private Tuple<Tail...>
-{
+class Tuple<Head, Tail...> : private Tuple<Tail...> {
 	private:
 	Head head;
 	public:
@@ -38,8 +37,7 @@ template<typename... Types>
 class Tuple;
 
 template<typename T>
-class TupleElt
-{
+class TupleElt {
 	T value;
 	
 	public:
@@ -54,8 +52,7 @@ class TupleElt
 // recursive case:
 template<typename Head, typename... Tail>
 class Tuple<Head, Tail...>
-: private TupleElt<Head>, private Tuple<Tail...>
-{
+: private TupleElt<Head>, private Tuple<Tail...> {
 	public:
 	Head& getHead() {
 		// potentially ambiguous
@@ -110,8 +107,7 @@ class Tuple;
 // recursive case:
 template<typename Head, typename... Tail>
 class Tuple<Head, Tail...>
-: private TupleElt<sizeof...(Tail), Head>, private Tuple<Tail...>
-{
+: private TupleElt<sizeof...(Tail), Head>, private Tuple<Tail...> {
 	using HeadElt = TupleElt<sizeof...(Tail), Head>;
 	public:
 	Head& getHead() {
@@ -152,8 +148,7 @@ struct B {
 	}
 };
 
-int main()
-{
+int main() {
 	Tuple<A, char, A, char, B> t1;
 	std::cout << sizeof(t1) << " bytes" << '\n';
 }
@@ -179,8 +174,7 @@ template<unsigned Height, typename T,
 class TupleElt;
 
 template<unsigned Height, typename T>
-class TupleElt<Height, T, false>
-{
+class TupleElt<Height, T, false> {
 	T value;
 	
 	public:
@@ -193,8 +187,7 @@ class TupleElt<Height, T, false>
 };
 
 template<unsigned Height, typename T>
-class TupleElt<Height, T, true> : private T
-{
+class TupleElt<Height, T, true> : private T {
 	public:
 	TupleElt() = default;
 	template<typename U>
@@ -223,8 +216,7 @@ B()
 \filename{tuples/constantget.hpp}
 \begin{cpp}
 template<unsigned H, typename T>
-T& getHeight(TupleElt<H,T>& te)
-{
+T& getHeight(TupleElt<H,T>& te) {
 	return te.get();
 }
 
@@ -233,8 +225,7 @@ class Tuple;
 
 template<unsigned I, typename... Elements>
 auto get(Tuple<Elements...>& t)
-	-> decltype(getHeight<sizeof...(Elements)-I-1>(t))
-{
+	-> decltype(getHeight<sizeof...(Elements)-I-1>(t)) {
 	return getHeight<sizeof...(Elements)-I-1>(t);
 }
 \end{cpp}

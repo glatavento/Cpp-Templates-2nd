@@ -6,14 +6,12 @@
 \filename{deduce/funcoverload1.hpp}
 \begin{cpp}
 template<typename T>
-int f(T)
-{
+int f(T) {
 	return 1;
 }
 
 template<typename T>
-int f(T*)
-{
+int f(T*) {
 	return 2;
 }
 \end{cpp}
@@ -26,8 +24,7 @@ int f(T*)
 \begin{cpp}
 #include <iostream>
 #include "funcoverload1.hpp"
-int main()
-{
+int main() {
 	std::cout << f<int*>((int*)nullptr); // calls f<T>(T)
 	std::cout << f<int>((int*)nullptr); // calls f<T>(T*)
 }
@@ -95,20 +92,17 @@ char f2(T);
 \begin{cpp}
 #include <iostream>
 template<typename T1, typename T2>
-void f1(T1, T2)
-{
+void f1(T1, T2) {
 	std::cout << "f1(T1, T2)\n";
 }
 
 template<typename T1, typename T2>
-void f1(T2, T1)
-{
+void f1(T2, T1) {
 	std::cout << "f1(T2, T1)\n";
 }
 
 // fine so far
-int main()
-{
+int main() {
 	f1<char, char>('a', 'b'); // ERROR: ambiguous
 }
 \end{cpp}
@@ -132,13 +126,11 @@ f1<T1 = char, T2 = char>(T2, T1)
 #include <iostream>
 
 template<typename T1, typename T2>
-void f1(T1, T2)
-{
+void f1(T1, T2) {
 	std::cout << "f1(T1, T2)\n";
 }
 
-void g()
-{
+void g() {
 	f1<char, char>('a', 'b');
 }
 
@@ -146,15 +138,13 @@ void g()
 #include <iostream>
 
 template<typename T1, typename T2>
-void f1(T2, T1)
-{
+void f1(T2, T1) {
 	std::cout << "f1(T2, T1)\n";
 }
 
 extern void g(); // defined in translation unit 1
 
-int main()
-{
+int main() {
 	f1<char, char>('a', 'b');
 	g();
 }
@@ -183,19 +173,16 @@ std::cout << f<int>((int*)nullptr); // calls f<T>(T*)
 #include <iostream>
 
 template<typename T>
-int f(T)
-{
+int f(T) {
 	return 1;
 }
 
 template<typename T>
-int f(T*)
-{
+int f(T*) {
 	return 2;
 }
 
-int main()
-{
+int main() {
 	std::cout << f(0); // calls f<T>(T)
 	std::cout << f(nullptr); // calls f<T>(T)
 	std::cout << f((int*)nullptr); // calls f<T>(T*)
@@ -253,8 +240,7 @@ void t(T*, T const* = nullptr, ...);
 template<typename T>
 void t(T const*, T*, T* = nullptr);
 
-void example(int* p)
-{
+void example(int* p) {
 	t(p, p);
 }
 \end{cpp}
@@ -275,18 +261,15 @@ void example(int* p)
 #include <iostream>
 
 template<typename T>
-std::string f(T)
-{
+std::string f(T) {
 	return "Template";
 }
 
-std::string f(int&)
-{
+std::string f(int&) {
 	return "Nontemplate";
 }
 
-int main()
-{
+int main() {
 	int x = 7;
 	std::cout << f(x) << '\n'; // prints: Nontemplate
 }
@@ -306,18 +289,15 @@ Nontemplate
 #include <iostream>
 
 template<typename T>
-std::string f(T&)
-{
+std::string f(T&) {
 	return "Template";
 }
 
-std::string f(int const&)
-{
+std::string f(int const&) {
 	return "Nontemplate";
 }
 
-int main()
-{
+int main() {
 	int x = 7;
 	std::cout << f(x) << '\n'; // prints: Template
 	int const c = 7;
@@ -338,8 +318,7 @@ Nontemplate
 
 \begin{cpp}
 template<typename T>
-std::string f(T const&)
-{
+std::string f(T const&) {
 	return "Template";
 }
 \end{cpp}
@@ -366,8 +345,7 @@ class C {
 	}
 };
 
-int main()
-{
+int main() {
 	C x;
 	C x2{x}; // prints: template constructor
 	C x3{std::move(x)}; // prints: move constructor
@@ -399,25 +377,21 @@ template constructor
 #include <iostream>
 
 template<typename T>
-int f(T*)
-{
+int f(T*) {
 	return 1;
 }
 
 template<typename... Ts>
-int f(Ts...)
-{
+int f(Ts...) {
 	return 2;
 }
 
 template<typename... Ts>
-int f(Ts*...)
-{
+int f(Ts*...) {
 	return 3;
 }
 
-int main()
-{
+int main() {
 	std::cout << f(0, 0.0); // calls f<>(Ts...)
 	std::cout << f((int*)nullptr, (double*)nullptr); // calls f<>(Ts*...)
 	std::cout << f((int*)nullptr); // calls f<>(T*)
@@ -455,29 +429,24 @@ f<int,double>((int*)nullptr, (double*)nullptr) // for third template
 #include <iostream>
 
 template<typename... Ts> class Tuple
-{
-};
+{};
 
 template<typename T>
-int f(Tuple<T*>)
-{
+int f(Tuple<T*>) {
 	return 1;
 }
 
 template<typename... Ts>
-int f(Tuple<Ts...>)
-{
+int f(Tuple<Ts...>) {
 	return 2;
 }
 
 template<typename... Ts>
-int f(Tuple<Ts*...>)
-{
+int f(Tuple<Ts*...>) {
 	return 3;
 }
 
-int main()
-{
+int main() {
 	std::cout << f(Tuple<int, double>()); // calls f<>(Tuple<Ts...>)
 	std::cout << f(Tuple<int*, double*>()); // calls f<>(Tuple<Ts*...>)
 	std::cout << f(Tuple<int*>()); // calls f<>(Tuple<T*>)

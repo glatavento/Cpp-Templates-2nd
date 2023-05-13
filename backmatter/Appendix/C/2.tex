@@ -6,8 +6,7 @@
 void combine(int, double);
 void combine(long, int);
 
-int main()
-{
+int main() {
 	combine(1, 2); // ambiguous!
 }
 \end{cpp}
@@ -75,8 +74,7 @@ class MyString {
 template<typename T>
 MyString<T> truncate(MyString<T> const&, int);
 
-int main()
-{
+int main() {
 	MyString<char> str1, str2;
 	str1 = truncate<char>("Hello World", 5); // OK
 	str2 = truncate("Hello World", 5); // ERROR
@@ -91,8 +89,7 @@ int main()
 template<typename T> void strange(T&&, T&&);
 template<typename T> void bizarre(T&&, double&&);
 
-int main()
-{
+int main() {
 	strange(1.2, 3.4); // OK: with T deduced to double
 	double val = 1.2;
 	strange(val, val); // OK: with T deduced to double&
@@ -133,8 +130,7 @@ class BadString {
 	...
 };
 
-int main()
-{
+int main() {
 	BadString str("correkt");
 	str[5] = 'c'; // possibly an overload resolution ambiguity!
 }
@@ -163,8 +159,7 @@ struct S {
 从这个例子中可以看出，不仅可以使隐式参数成为右值引用（带\&\&后缀），还可以确认左值引用情况（带\&后缀）。有趣的是，指定\&后缀并不完全等同于引用它：旧的特殊情况允许右值绑定到对非const类型的左值引用，当该引用是传统的隐式*this参数时，但若显式请求左值引用处理，这种特殊情况（有些危险）不再适用。因此，根据上面S的定义，有如下的结果：
 
 \begin{cpp}
-int main()
-{
+int main() {
 	S().f1(); // OK: old rule allows rvalue S() to match implied
 			// lvalue reference type S& of *this
 	S().f2(); // OK: rvalue S() matches rvalue reference type
@@ -183,8 +178,7 @@ int main()
 void report(int&); // #1
 void report(int const&); // #2
 
-int main()
-{
+int main() {
 	for (int k = 0; k<10; ++k) {
 		report(k); // calls #1
 	}
@@ -203,8 +197,7 @@ struct Value {
 void pass(Value const&); // #1
 void pass(Value&&); // #2
 
-void g(X&& x)
-{
+void g(X&& x) {
 	pass(x); // calls #1 , because x is an lvalue
 	pass(X()); // calls #2 , because X() is an rvalue (in fact, prvalue)
 	pass(std::move(x)); // calls #2 , because std::move(x) is an rvalue (in fact, xvalue)
@@ -223,8 +216,7 @@ class Wonder {
 	void tack() const; // #3
 };
 
-void run(Wonder& device)
-{
+void run(Wonder& device) {
 	device.tick(); // calls #1
 	device.tack(); // calls #3 , because there is no non-const version
 				  // of Wonder::tack()
@@ -238,8 +230,7 @@ void report(int); // #1
 void report(int&); // #2
 void report(int const&); // #3
 
-int main()
-{
+int main() {
 	for (int k = 0; k<10; ++k) {
 		report(k); // ambiguous: #1 and #2 match equally well
 	}

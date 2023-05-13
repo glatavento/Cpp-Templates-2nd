@@ -118,8 +118,7 @@ is_array_v<int[]> // yields true
 is_array_v<int[5]> // yields true
 is_array_v<int*> // yields false
 
-void foo(int a[], int b[5], int* c)
-{
+void foo(int a[], int b[5], int* c) {
 	is_array_v<decltype(a)> // yields false (a has type int*)
 	is_array_v<decltype(b)> // yields false (b has type int*)
 	is_array_v<decltype(c)> // yields false (c has type int*)
@@ -164,8 +163,7 @@ is_pointer_v<int* const> // yields true
 is_pointer_v<int*&> // yields false
 is_pointer_v<decltype(nullptr)> // yields false
 
-int* foo(int a[5], void(f)())
-{
+int* foo(int a[5], void(f)()) {
 	is_pointer_v<decltype(a)> // yields true (a has type int*)
 	is_pointer_v<decltype(f)> // yields true (f has type void(*)())
 	is_pointer_v<decltype(foo)> // yields false
@@ -284,8 +282,7 @@ is_class_v<decltype(l1)> // yields true (a lambda is a class object)
 \item 
 例如：
 \begin{cpp}
-void foo(void(f)())
-{
+void foo(void(f)()) {
 	is_function_v<decltype(f)> // yields false (f has type void(*)())
 	is_function_v<decltype(foo)> // yields true
 	is_function_v<decltype(&foo)> // yields false

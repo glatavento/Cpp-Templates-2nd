@@ -6,9 +6,7 @@
 \filename{typelist/typelist.hpp}
 \begin{cpp}
 template<typename... Elements>
-class Typelist
-{
-};
+class Typelist {};
 \end{cpp}
 
 类型列表的元素可以直接作为模板参数。空的类型列表表示为<>，只包含int的类型列表表示为<int>，依此类推。下面是一个包含所有带符号整型的类型列表：
@@ -26,8 +24,7 @@ template<typename List>
 class FrontT;
 
 template<typename Head, typename... Tail>
-class FrontT<Typelist<Head, Tail...>>
-{
+class FrontT<Typelist<Head, Tail...>> {
 	public:
 	using Type = Head;
 };

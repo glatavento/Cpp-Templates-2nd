@@ -32,8 +32,7 @@
 
 \begin{cpp}
 template<typename T>
-void printVector (std::vector<T> const& v)
-{
+void printVector (std::vector<T> const& v) {
 	...
 }
 \end{cpp}
@@ -50,8 +49,7 @@ C++98中，make\_pair<>()在命名空间std中声明，使用引用调用来避�
 
 \begin{cpp}
 template<typename T1, typename T2>
-pair<T1,T2> make_pair (T1 const& a, T2 const& b)
-{
+pair<T1,T2> make_pair (T1 const& a, T2 const& b) {
 	return pair<T1,T2>(a,b);
 }
 \end{cpp}
@@ -67,8 +65,7 @@ C++03中，函数定义改为使用按值调用：
 
 \begin{cpp}
 template<typename T1, typename T2>
-pair<T1,T2> make_pair (T1 a, T2 b)
-{
+pair<T1,T2> make_pair (T1 a, T2 b) {
 	return pair<T1,T2>(a,b);
 }
 \end{cpp}
@@ -81,8 +78,7 @@ C++11中，make\_pair()必须支持移动语义，因此参数必须成为转发
 \begin{cpp}
 template<typename T1, typename T2>
 constexpr pair<typename decay<T1>::type, typename decay<T2>::type>
-make_pair (T1&& a, T2&& b)
-{
+make_pair (T1&& a, T2&& b) {
 	return pair<typename decay<T1>::type,
 				typename decay<T2>::type>(forward<T1>(a),
 										  forward<T2>(b));

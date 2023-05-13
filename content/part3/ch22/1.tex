@@ -8,21 +8,18 @@
 #include <iostream>
 
 template<typename F>
-void forUpTo(int n, F f)
-{
+void forUpTo(int n, F f) {
 	for (int i = 0; i != n; ++i)
 	{
 		f(i); // call passed function f for i
 	}
 }
 
-void printInt(int i)
-{
+void printInt(int i) {
 	std::cout << i << ' ';
 }
 
-int main()
-{
+int main() {
 	std::vector<int> values;
 	
 	// insert values from 0 to 4:
@@ -44,8 +41,7 @@ forUpTo()函数模板可以与函数对象一起使用，包括Lambda、函数�
 
 \filename{bridge/forupto2.hpp}
 \begin{cpp}
-void forUpTo(int n, void (*f)(int))
-{
+void forUpTo(int n, void (*f)(int)) {
 	for (int i = 0; i != n; ++i)
 	{
 		f(i); // call passed function f for i
@@ -70,8 +66,7 @@ forUpTo(5,
 \filename{bridge/forupto3.hpp}
 \begin{cpp}
 #include <functional>
-void forUpTo(int n, std::function<void(int)> f)
-{
+void forUpTo(int n, std::function<void(int)> f) {
 	for (int i = 0; i != n; ++i)
 	{
 		f(i); // call passed function f for i

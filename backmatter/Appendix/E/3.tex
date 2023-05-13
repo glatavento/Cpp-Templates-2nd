@@ -10,8 +10,7 @@ template<StringLike T> void print(T val); // #2
 若没有不同的约束，这两个声明将声明相同的模板。但约束是模板签名的一部分，为了在重载解析期间区分模板。若发现两个模板都是可行的候选模板，但只有模板\#1满足其约束，那么重载会选择满足条件的模板。假设int满足IntegerLike, std::string满足StringLike，但反之不行：
 
 \begin{cpp}
-int main()
-{
+int main() {
 	printf(1); // selects template #1
 	printf("1"s); // selects template #2
 }
@@ -53,15 +52,13 @@ template<typename T>
 
 \begin{cpp}
 template<ForwardIterator T, typename D>
-void advanceIter(T& it, D n)
-{
+void advanceIter(T& it, D n) {
 	assert(n >= 0);
 	for (; n != 0; --n) { ++it; }
 }
 
 template<BidirectionalIterator T, typename D>
-void advanceIter(T& it, D n)
-{
+void advanceIter(T& it, D n) {
 	if (n > 0) {
 		for (; n != 0; --n) { ++it; }
 	} else if (n < 0) {

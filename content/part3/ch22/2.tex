@@ -25,21 +25,18 @@ std::function<>类型实际上是C++函数指针的泛化形式，提供了相�
 #include <vector>
 #include <iostream>
 
-void forUpTo(int n, FunctionPtr<void(int)> f)
-{
+void forUpTo(int n, FunctionPtr<void(int)> f) {
 	for (int i = 0; i != n; ++i)
 	{
 		f(i); // call passed function f for i
 	}
 }
 
-void printInt(int i)
-{
+void printInt(int i) {
 	std::cout << i << ' ';
 }
 
-int main()
-{
+int main() {
 	std::vector<int> values;
 	
 	// insert values from 0 to 4:
@@ -65,8 +62,7 @@ class FunctionPtr;
 
 // partial specialization:
 template<typename R, typename... Args>
-class FunctionPtr<R(Args...)>
-{
+class FunctionPtr<R(Args...)> {
 	private:
 	FunctorBridge<R, Args...>* bridge;
 	public:

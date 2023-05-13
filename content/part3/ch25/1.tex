@@ -15,8 +15,7 @@ class Tuple;
 
 // recursive case:
 template<typename Head, typename... Tail>
-class Tuple<Head, Tail...>
-{
+class Tuple<Head, Tail...> {
 	private:
 	Head head;
 	Tuple<Tail...> tail;
@@ -83,20 +82,17 @@ auto get(Tuple<Types...> const& t) {
 除了目前定义的构造函数之外：
 
 \begin{cpp}
-Tuple() {
-}
+Tuple() {}
 
 Tuple(Head const& head, Tuple<Tail...> const& tail)
-: head(head), tail(tail) {
-}
+: head(head), tail(tail) {}
 \end{cpp}
 
 要使元组有效，需要能够从一组独立的值（每个元素一个值）和另一个元组中进行构造。复制构造从一组独立的值传递第一个值来初始化头部元素（通过基类），然后将剩余的值传递给基类，表示尾部：
 
 \begin{cpp}
 Tuple(Head const& head, Tail const&... tail)
-: head(head), tail(tail...) {
-}
+: head(head), tail(tail...) {}
 \end{cpp}
 
 初始化元组：
@@ -111,8 +107,7 @@ Tuple<int, double, std::string> t(17, 3.14, "Hello, World!");
 template<typename VHead, typename... VTail>
 Tuple(VHead&& vhead, VTail&&... vtail)
 	: head(std::forward<VHead>(vhead)),
-		tail(std::forward<VTail>(vtail)...) {
-}
+		tail(std::forward<VTail>(vtail)...) {}
 \end{cpp}
 
 接下来，实现使用一个元组构造另一个元组：
@@ -152,8 +147,7 @@ makeTuple()函数模板使用推导来确定返回元组的元素类型，使得
 \filename{typelist/maketuple.hpp}
 \begin{cpp}
 template<typename... Types>
-auto makeTuple(Types&&... elems)
-{
+auto makeTuple(Types&&... elems) {
 	return Tuple<std::decay_t<Types>...>(std::forward<Types>(elems)...);
 }
 \end{cpp}

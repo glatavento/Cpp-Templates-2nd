@@ -10,8 +10,7 @@
 #include <string>
 #include <map>
 #include <algorithm>
-int main()
-{
+int main() {
 	std::map<std::string,double> coll;
 	...
 	// find the first nonempty string in coll:
@@ -197,8 +196,7 @@ with
 \begin{cpp}
 #include <string>
 #include <unordered_set>
-class Customer
-{
+class Customer {
 private:
 	std::string name;
 public:
@@ -210,8 +208,7 @@ public:
 	}
 };
 
-int main()
-{
+int main() {
 	// provide our own hash function:
 	struct MyCustomerHash {
 		// NOTE: missing const is only an error with g++ and clang:

@@ -6,8 +6,7 @@
 \filename{basics/lessarray.hpp}
 \begin{cpp}
 template<typename T, int N, int M>
-bool less (T(&a)[N], T(&b)[M])
-{
+bool less (T(&a)[N], T(&b)[M]) {
 	for (int i = 0; i<N && i<M; ++i) {
 		if (a[i]<b[i]) return true;
 		if (b[i]<a[i]) return false;
@@ -39,8 +38,7 @@ std::cout << less("ab","abc") << '\n';
 \filename{basics/lessstring.hpp}
 \begin{cpp}
 template<int N, int M>
-bool less (char const(&a)[N], char const(&b)[M])
-{
+bool less (char const(&a)[N], char const(&b)[M]) {
 	for (int i = 0; i<N && i<M; ++i) {
 		if (a[i]<b[i]) return true;
 		if (b[i]<a[i]) return false;
@@ -59,32 +57,27 @@ template<typename T>
 struct MyClass; // primary template
 
 template<typename T, std::size_t SZ>
-struct MyClass<T[SZ]> // partial specialization for arrays of known bounds
-{
+struct MyClass<T[SZ]> { // partial specialization for arrays of known bounds
 	static void print() { std::cout << "print() for T[" << SZ << "]\n"; }
 };
 
 template<typename T, std::size_t SZ>
-struct MyClass<T(&)[SZ]> // partial spec. for references to arrays of known bounds
-{
+struct MyClass<T(&)[SZ]> { // partial spec. for references to arrays of known bounds
 	static void print() { std::cout << "print() for T(&)[" << SZ << "]\n"; }
 };
 
 template<typename T>
-struct MyClass<T[]> // partial specialization for arrays of unknown bounds
-{
+struct MyClass<T[]> { // partial specialization for arrays of unknown bounds
 	static void print() { std::cout << "print() for T[]\n"; }
 };
 
 template<typename T>
-struct MyClass<T(&)[]> // partial spec. for references to arrays of unknown bounds
-{
+struct MyClass<T(&)[]> { // partial spec. for references to arrays of unknown bounds
 	static void print() { std::cout << "print() for T(&)[]\n"; }
 };
 
 template<typename T>
-struct MyClass<T*> // partial specialization for pointers
-{
+struct MyClass<T*> { // partial specialization for pointers
 	static void print() { std::cout << "print() for T*\n"; }
 };
 \end{cpp}
@@ -100,8 +93,7 @@ void foo(int a1[7], int a2[], // pointers by language rules
 		int (&a3)[42], // reference to array of known bound
 		int (&x0)[], // reference to array of unknown bound
 		T1 x1, // passing by value decays
-		T2& x2, T3&& x3) // passing by reference
-{
+		T2& x2, T3&& x3) { // passing by reference
 	MyClass<decltype(a1)>::print(); // uses MyClass<T*>
 	MyClass<decltype(a2)>::print(); // uses MyClass<T*>
 	MyClass<decltype(a3)>::print(); // uses MyClass<T(&)[SZ]>
@@ -111,8 +103,7 @@ void foo(int a1[7], int a2[], // pointers by language rules
 	MyClass<decltype(x3)>::print(); // uses MyClass<T(&)[]>
 }
 
-int main()
-{
+int main() {
 	int a[42];
 	MyClass<decltype(a)>::print(); // uses MyClass<T[SZ]>
 	

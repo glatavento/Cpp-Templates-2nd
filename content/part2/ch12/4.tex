@@ -177,8 +177,7 @@ Vs是一个非类型模板参数包，其每个实际模板参数都可以具有
 
 \begin{cpp}
 template<typename... Mixins>
-class Point : public Mixins...
-{
+class Point : public Mixins... {
 	double x, y, z;
 public:
 	// default constructor, visitor function, etc. elided
@@ -197,8 +196,7 @@ Point<Color, Label> p({0x7F, 0, 0x7F}, {"center"});
 template<typename... Types>
 void print(Types... values);
 
-int main()
-{
+int main() {
 	std::string welcome("Welcome to ");
 	print(welcome, "C++ ", 2011, '\n'); // calls print<std::string, char const*,
 } // int, char>

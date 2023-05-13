@@ -14,15 +14,13 @@ C++中，以各种参数类型重载的函数很常见。因此，当编译器�
 \begin{cpp}
 // number of elements in a raw array:
 template<typename T, unsigned N>
-std::size_t len (T(&)[N])
-{
+std::size_t len (T(&)[N]) {
 	return N;
 }
 
 // number of elements for a type having size_type:
 template<typename T>
-typename T::size_type len (T const& t)
-{
+typename T::size_type len (T const& t) {
 	return t.size();
 }
 \end{cpp}
@@ -80,21 +78,18 @@ std::cout << len(x); // ERROR: len() function found, but can't size()
 \begin{cpp}
 // number of elements in a raw array:
 template<typename T, unsigned N>
-std::size_t len (T(&)[N])
-{
+std::size_t len (T(&)[N]) {
 	return N;
 }
 
 // number of elements for a type having size_type:
 template<typename T>
-typename T::size_type len (T const& t)
-{
+typename T::size_type len (T const& t) {
 	return t.size();
 }
 
 // fallback for all other types:
-std::size_t len (...)
-{
+std::size_t len (...) {
 	return 0;
 }
 \end{cpp}
@@ -184,8 +179,7 @@ namespace std {
 
 \begin{cpp}
 template<typename T>
-typename T::size_type len (T const& t)
-{
+typename T::size_type len (T const& t) {
 	return t.size();
 }
 
@@ -213,8 +207,7 @@ std::cout << len(x) << '\n'; // ERROR: len() selected, but x has no size()
 
 \begin{cpp}
 template<typename T>
-auto len (T const& t) -> decltype( (void)(t.size()), T::size_type() )
-{
+auto len (T const& t) -> decltype( (void)(t.size()), T::size_type() ) {
 	return t.size();
 }
 \end{cpp}

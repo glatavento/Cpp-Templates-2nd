@@ -23,13 +23,11 @@
 \filename{details/max.cpp}
 \begin{cpp}
 template<typename T>
-T max (T a, T b)
-{
+T max (T a, T b) {
 	return b < a ? a : b;
 }
 
-int main()
-{
+int main() {
 	::max<double>(1.0, -3.0); // explicitly specify template argument
 	::max(1.0, -3.0); // template argument is implicitly deduced to be double
 	::max<int>(1.0, 3.0); // the explicit <int> inhibits the deduction;
@@ -42,13 +40,11 @@ int main()
 \filename{details/implicit.cpp}
 \begin{cpp}
 template<typename DstT, typename SrcT>
-DstT implicit_cast (SrcT const& x) // SrcT can be deduced, but DstT cannot
-{
+DstT implicit_cast (SrcT const& x) { // SrcT can be deduced, but DstT cannot
 	return x;
 }
 
-int main()
-{
+int main() {
 	double value = implicit_cast<double>(-1);
 }
 \end{cpp}
@@ -67,8 +63,7 @@ void f(double (&)[N+1], Ts ... ps); // useless declaration because N
 
 \begin{cpp}
 template<typename Func, typename T>
-void apply (Func funcPtr, T x)
-{
+void apply (Func funcPtr, T x) {
 	funcPtr(x);
 }
 
@@ -77,8 +72,7 @@ template<typename T> void single(T);
 template<typename T> void multi(T);
 template<typename T> void multi(T*);
 
-int main()
-{
+int main() {
 	apply(&single<int>, 3); // OK
 	apply(&multi<int>, 7); // ERROR: no single multi<int>
 }
@@ -101,13 +95,11 @@ template<typename T> RT2 test(...);
 
 \begin{cpp}
 template<typename T>
-void clear (T p)
-{
+void clear (T p) {
 	*p = 0; // requires that the unary * be applicable to T
 }
 
-int main()
-{
+int main() {
 	int a;
 	clear(a); // ERROR: int doesn't support the unary *
 }
@@ -199,8 +191,7 @@ class Message {
 extern char const hello[] = "Hello World!";
 char const hello11[] = "Hello World!";
 
-void foo()
-{
+void foo() {
 	static char const hello17[] = "Hello World!";
 	
 	Message<hello> msg03; // OK in all versions
@@ -223,8 +214,7 @@ struct Base {
 	int i;
 } base;
 
-struct Derived : public Base {
-} derived;
+struct Derived : public Base {} derived;
 
 C<Base*, &derived>* err1; // ERROR: derived-to-base conversions are not considered
 
@@ -290,8 +280,7 @@ Rel<int, double, std::list> rel; // OK: std::list has two template parameters
 	// class array;
 	
 template<template<typename... > class TT>
-class AlmostAnyTmpl {
-};
+class AlmostAnyTmpl {};
 
 AlmostAnyTmpl<std::vector> withVector; // two type parameters
 AlmostAnyTmpl<std::map> withMap; // four type parameters

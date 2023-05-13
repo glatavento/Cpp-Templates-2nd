@@ -10,8 +10,7 @@
 
 \begin{cpp}
 template<typename... T>
-void printDoubled (T const&... args)
-{
+void printDoubled (T const&... args) {
 	print (args + args...);
 }
 \end{cpp}
@@ -34,8 +33,7 @@ print(7.5 + 7.5,
 
 \begin{cpp}
 template<typename... T>
-void addOne (T const&... args)
-{
+void addOne (T const&... args) {
 	print (args + 1...); // ERROR: 1... is a literal with too many decimal points
 	print (args + 1 ...); // OK
 	print ((args + 1)...); // OK
@@ -46,8 +44,7 @@ void addOne (T const&... args)
 
 \begin{cpp}
 template<typename T1, typename... TN>
-constexpr bool isHomogeneous (T1, TN...)
-{
+constexpr bool isHomogeneous (T1, TN...) {
 	return (std::is_same<T1,TN>::value && ...); // since C++17
 }
 \end{cpp}
@@ -78,8 +75,7 @@ isHomogeneous("hello", " ", "world", "!")
 
 \begin{cpp}
 template<typename C, typename... Idx>
-void printElems (C const& coll, Idx... idx)
-{
+void printElems (C const& coll, Idx... idx) {
 	print (coll[idx]...);
 }
 \end{cpp}
@@ -101,8 +97,7 @@ print (coll[2], coll[0], coll[3]);
 
 \begin{cpp}
 template<std::size_t... Idx, typename C>
-void printIdx (C const& coll)
-{
+void printIdx (C const& coll) {
 	print(coll[Idx]...);
 }
 \end{cpp}
@@ -145,16 +140,14 @@ Variant<int, std::string, char> v; // v can hold integer, string, or character
 \begin{cpp}
 // type for arbitrary number of indices:
 template<std::size_t...>
-struct Indices {
-};
+struct Indices {};
 \end{cpp}
 
 可以用来定义函数，该函数在编译时对给定索引使用get<>()访问std::array或std::tuple的元素调用print():
 
 \begin{cpp}
 template<typename T, std::size_t... Idx>
-void printByIdx(T t, Indices<Idx...>)
-{
+void printByIdx(T t, Indices<Idx...>) {
 	print(std::get<Idx>(t)...);
 }
 \end{cpp}
@@ -216,8 +209,7 @@ is_same_v<T, U1> && is_same_v<T, U2> && is_same_v<T, U3> ...
 #include <string>
 #include <unordered_set>
 
-class Customer
-{
+class Customer {
 	private:
 	std::string name;
 	public:
@@ -244,8 +236,7 @@ struct Overloader : Bases...
 	using Bases::operator()...; // OK since C++17
 };
 
-int main()
-{
+int main() {
 	// combine hasher and equality for customers in one type:
 	using CustomerOP = Overloader<CustomerHash,CustomerEq>;
 	

@@ -12,8 +12,7 @@ C++上下文中，泛型编程有时定义为使用模板编程（而面向对�
 \begin{cpp}
 template<typename Iterator>
 Iterator max_element (Iterator beg, // refers to start of collection
-					  Iterator end) // refers to end of collection
-{
+					  Iterator end) { // refers to end of collection
 	// use only certain Iterator operations to traverse all elements
 	// of the collection to find the element with the maximum value
 	// and return its position as Iterator
@@ -58,8 +57,7 @@ namespace std {
 #include "MyClass.hpp"
 
 template<typename T>
-void printMax (T const& coll)
-{
+void printMax (T const& coll) {
 	// compute position of maximum value
 	auto pos = std::max_element(coll.begin(),coll.end());
 	
@@ -72,8 +70,7 @@ void printMax (T const& coll)
 	}
 }
 
-int main()
-{
+int main() {
 	std::vector<MyClass> c1;
 	std::list<MyClass> c2;
 	...

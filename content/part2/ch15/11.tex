@@ -18,8 +18,7 @@ void f2(DequeStack<T>);
 template<typename T>
 void f3(Stack<T, std::deque<T>); // equivalent to f2
 
-void test(DequeStack<int> intStack)
-{
+void test(DequeStack<int> intStack) {
 	f1(intStack); // OK: T deduced to int, Cont deduced to std::deque<int>
 	f2(intStack); // OK: T deduced to int
 	f3(intStack); // OK: T deduced to int

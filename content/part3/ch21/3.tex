@@ -3,16 +3,14 @@
 简单的Polygon类，由一系列Point组成：
 
 \begin{cpp}
-class Point
-{
+class Point {
 	public:
 	double x, y;
 	Point() : x(0.0), y(0.0) { }
 	Point(double x, double y) : x(x), y(y) { }
 };
 
-class Polygon
-{
+class Polygon {
 	private:
 	std::vector<Point> points;
 	public:
@@ -24,8 +22,7 @@ class Polygon
 
 \begin{cpp}
 template<typename P>
-class Polygon
-{
+class Polygon {
 	private:
 	std::vector<P> points;
 	public:
@@ -36,8 +33,7 @@ class Polygon
 用户可以使用继承创建自己的Point数据类型，提供与Point相同的接口，但包含其他应用程序特定的数据：
 
 \begin{cpp}
-class LabeledPoint : public Point
-{
+class LabeledPoint : public Point {
 	public:
 	std::string label;
 	LabeledPoint() : Point(), label("") { }
@@ -53,8 +49,7 @@ class LabeledPoint : public Point
 
 \begin{cpp}
 template<typename... Mixins>
-class Point : public Mixins...
-{
+class Point : public Mixins... {
 	public:
 	double x, y;
 	Point() : Mixins()..., x(0.0), y(0.0) { }
@@ -65,8 +60,7 @@ class Point : public Mixins...
 现在，可以“混合”一个包含标签的基类来生成一个LabeledPoint:
 
 \begin{cpp}
-class Label
-{
+class Label {
 	public:
 	std::string label;
 	Label() : label("") { }
@@ -78,8 +72,7 @@ using LabeledPoint = Point<Label>;
 或者混合几个基类：
 
 \begin{cpp}
-class Color
-{
+class Color {
 	public:
 	unsigned char red = 0, green = 0, blue = 0;
 };
@@ -91,8 +84,7 @@ using MyPoint = Point<Label, Color>;
 
 \begin{cpp}
 template<typename... Mixins>
-class Polygon
-{
+class Polygon {
 	private:
 	std::vector<Point<Mixins...>> points;
 	public:
@@ -108,8 +100,7 @@ class Polygon
 
 \begin{cpp}
 template<template<typename>... Mixins>
-class Point : public Mixins<Point>...
-{
+class Point : public Mixins<Point>... {
 	public:
 	double x, y;
 	Point() : Mixins<Point>()..., x(0.0), y(0.0) { }
@@ -127,8 +118,7 @@ class Point : public Mixins<Point>...
 \begin{cpp}
 #include <iostream>
 
-class NotVirtual {
-};
+class NotVirtual {};
 
 class Virtual {
 	public:
@@ -154,8 +144,7 @@ class Derived : public Base<Mixins...> {
 	}
 };
 
-int main()
-{
+int main() {
 	Base<NotVirtual>* p1 = new Derived<NotVirtual>;
 	p1->foo(); // calls Base::foo()
 	

@@ -10,21 +10,18 @@ struct Helper;
 
 // implementation if SZ is not a prime number:
 template<int SZ>
-struct Helper<SZ, false>
-{
+struct Helper<SZ, false> {
 	...
 };
 
 // implementation if SZ is a prime number:
 template<int SZ>
-struct Helper<SZ, true>
-{
+struct Helper<SZ, true> {
 	...
 };
 
 template<typename T, std::size_t SZ>
-long foo (std::array<T,SZ> const& coll)
-{
+long foo (std::array<T,SZ> const& coll) {
 	Helper<SZ> h; // implementation depends on whether array has prime number as size
 	...
 }
@@ -44,8 +41,7 @@ struct Helper
 
 // special implementation if SZ is a prime number:
 template<int SZ>
-struct Helper<SZ, true>
-{
+struct Helper<SZ, true> {
 	...
 };
 \end{cpp}

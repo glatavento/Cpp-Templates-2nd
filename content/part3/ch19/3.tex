@@ -14,8 +14,7 @@ struct TypeSize {
 	static std::size_t const value = sizeof(T);
 };
 
-int main()
-{
+int main() {
 	std::cout << "TypeSize<int>::value = "
 	<< TypeSize<int>::value << '\n';
 }
@@ -72,15 +71,13 @@ struct ElementT<T[]> { // partial specialization for arrays of unknown bounds
 #include <typeinfo>
 
 template<typename T>
-void printElementType (T const& c)
-{
+void printElementType (T const& c) {
 	std::cout << "Container of "
 	<< typeid(typename ElementT<T>::Type).name()
 	<< " elements.\n";
 }
 
-int main()
-{
+int main() {
 	std::vector<bool> s;
 	printElementType(s);
 	int arr[42];
@@ -273,8 +270,7 @@ using RemoveConst = typename RemoveConstT<T>::Type;
 #include "removevolatile.hpp"
 
 template<typename T>
-struct RemoveCVT : RemoveConstT<typename RemoveVolatileT<T>::Type> {
-};
+struct RemoveCVT : RemoveConstT<typename RemoveVolatileT<T>::Type> {};
 
 template<typename T>
 using RemoveCV = typename RemoveCVT<T>::Type;
@@ -312,20 +308,17 @@ C++标准库也提供了相应的类型特征std::remove\_volatile<>， std::rem
 #include <type_traits>
 
 template<typename T>
-void f(T)
-{ }
+void f(T) { }
 
 template<typename A>
-void printParameterType(void (*)(A))
-{
+void printParameterType(void (*)(A)) {
 	std::cout << "Parameter type: " << typeid(A).name() << '\n';
 	std::cout << "- is int: " << std::is_same<A,int>::value << '\n';
 	std::cout << "- is const: " << std::is_const<A>::value << '\n';
 	std::cout << "- is pointer: " << std::is_pointer<A>::value << '\n';
 }
 
-int main()
-{
+int main() {
 	printParameterType(&f<int>);
 	printParameterType(&f<int const>);
 	printParameterType(&f<int[7]>);
@@ -347,8 +340,7 @@ int main()
 
 \begin{cpp}
 template<typename T>
-struct DecayT : RemoveCVT<T> {
-};
+struct DecayT : RemoveCVT<T> {};
 \end{cpp}
 
 接下来，处理数组到指针的衰变，要求使用偏特化来识别数组类型（有或没有绑定）:
@@ -395,8 +387,7 @@ struct DecayT<R(Args..., ...)> {
 #include "decay.hpp"
 
 template<typename T>
-void printDecayedType()
-{
+void printDecayedType() {
 	using A = typename DecayT<T>::Type;
 	td::cout << "Parameter type: " << typeid(A).name() << '\n';
 	std::cout << "- is int: " << std::is_same<A,int>::value << '\n';
@@ -404,8 +395,7 @@ void printDecayedType()
 	std::cout << "- is pointer: " << std::is_pointer<A>::value << '\n';
 }
 
-int main()
-{
+int main() {
 	printDecayedType<int>();
 	printDecayedType<int const>();
 	printDecayedType<int[7]>();
@@ -483,13 +473,11 @@ using FalseType = BoolConstant<false>;
 
 template<typename T1, typename T2>
 struct IsSameT : FalseType
-{
-};
+{};
 
 template<typename T>
 struct IsSameT<T, T> : TrueType
-{
-};
+{};
 \end{cpp}
 
 结果类型为
@@ -506,25 +494,21 @@ IsSameT<T,int>
 #include <iostream>
 
 template<typename T>
-void fooImpl(T, TrueType)
-{
+void fooImpl(T, TrueType) {
 	std::cout << "fooImpl(T,true) for int called\n";
 }
 
 template<typename T>
-void fooImpl(T, FalseType)
-{
+void fooImpl(T, FalseType) {
 	std::cout << "fooImpl(T,false) for other type called\n";
 }
 
 template<typename T>
-void foo(T t)
-{
+void foo(T t) {
 	fooImpl(t, IsSameT<T,int>{}); // choose impl. depending on whether T is int
 }
 
-int main()
-{
+int main() {
 	foo(42); // calls fooImpl(42, TrueType)
 	foo(7.7); // calls fooImpl(7.7, FalseType)
 }

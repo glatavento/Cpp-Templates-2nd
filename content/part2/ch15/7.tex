@@ -11,19 +11,16 @@ SFINAE也适用于部分类模板特化的替换。参见第16.4节
 
 \begin{cpp}
 template<typename T, unsigned N>
-T* begin(T (&array)[N])
-{
+T* begin(T (&array)[N]) {
 	return array;
 }
 
 template<typename Container>
-typename Container::iterator begin(Container& c)
-{
+typename Container::iterator begin(Container& c) {
 	return c.begin();
 }
 
-int main()
-{
+int main() {
 	std::vector<int> v;
 	int a[10];
 	
@@ -99,8 +96,7 @@ void f(Array<T>::iterator first, Array<T>::iterator last);
 template<typename T>
 void f(T*, T*);
 
-int main()
-{
+int main() {
 	f<int&>(0, 0); // ERROR: substituting int& for T in the first function template
 } // instantiates Array<int&>, which then fails
 \end{cpp}
@@ -118,8 +114,7 @@ int f(...);
 
 template<typename T> auto g(T p) -> decltype(f(p));
 
-int main()
-{
+int main() {
 	g(42);
 }
 \end{cpp}

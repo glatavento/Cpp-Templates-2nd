@@ -22,14 +22,12 @@ public:
 };
 
 template<typename T>
-void Stack<T*>::push (T* elem)
-{
+void Stack<T*>::push (T* elem) {
 	elems.push_back(elem); // append copy of passed elem
 }
 
 template<typename T>
-T* Stack<T*>::pop ()
-{
+T* Stack<T*>::pop () {
 	assert(!elems.empty());
 	T* p = elems.back();
 	elems.pop_back(); // remove last element
@@ -37,8 +35,7 @@ T* Stack<T*>::pop ()
 }
 
 template<typename T>
-T* Stack<T*>::top () const
-{
+T* Stack<T*>::top () const {
 	assert(!elems.empty());
 	return elems.back(); // return copy of last element
 }
@@ -46,8 +43,7 @@ T* Stack<T*>::top () const
 
 \begin{cpp}
 template<typename T>
-class Stack<T*> {
-};
+class Stack<T*> {};
 \end{cpp}
 
 先定义了一个类模板，仍然参数化了T，但特化了指针(Stack<T*>)。

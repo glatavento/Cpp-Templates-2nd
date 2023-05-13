@@ -44,8 +44,7 @@ ps.printOn(std::cout); // ERROR: 元素类型不支持操作符<<
 
 \begin{cpp}
 template<typename T>
-class C
-{
+class C {
 	static_assert(std::is_default_constructible<T>::value,
 	"Class C requires default-constructible elements");
 	...

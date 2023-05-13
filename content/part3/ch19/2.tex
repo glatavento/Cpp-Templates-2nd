@@ -15,8 +15,7 @@
 template<typename T,
 		typename Policy = SumPolicy,
 		typename Traits = AccumulationTraits<T>>
-auto accum (T const* beg, T const* end)
-{
+auto accum (T const* beg, T const* end) {
 	using AccT = typename Traits::AccT;
 	AccT total = Traits::zero();
 	while (beg != end) {
@@ -65,8 +64,7 @@ class MultPolicy {
 		total *= value;
 	}
 };
-int main()
-{
+int main() {
 	// create array of 5 integer values
 	int num[] = { 1, 2, 3, 4, 5 };
 	
@@ -196,8 +194,7 @@ Accum的接口可以适应使用双重模板参数：
 template<typename T,
 		template<typename,typename> class Policy = SumPolicy,
 		typename Traits = AccumulationTraits<T>>
-auto accum (T const* beg, T const* end)
-{
+auto accum (T const* beg, T const* end) {
 	using AccT = typename Traits::AccT;
 	AccT total = Traits::zero();
 	while (beg != end) {
@@ -240,8 +237,7 @@ C++11中，必须将返回类型声明为VT。
 #include <iterator>
 
 template<typename Iter>
-auto accum (Iter start, Iter end)
-{
+auto accum (Iter start, Iter end) {
 	using VT = typename std::iterator_traits<Iter>::value_type;
 	VT total{}; // assume this actually creates a zero value
 	while (start != end) {

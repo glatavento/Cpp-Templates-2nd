@@ -22,8 +22,7 @@ struct IsConvertibleHelper {
 };
 
 template<typename FROM, typename TO>
-struct IsConvertibleT : IsConvertibleHelper<FROM, TO>::Type {
-};
+struct IsConvertibleT : IsConvertibleHelper<FROM, TO>::Type {};
 
 template<typename FROM, typename TO>
 using IsConvertible = typename IsConvertibleT<FROM, TO>::Type;
@@ -41,8 +40,7 @@ template<...> static std::false_type test(...);
 using Type = decltype(test<FROM>(nullptr));
 ...
 template<typename FROM, typename TO>
-struct IsConvertibleT : IsConvertibleHelper<FROM, TO>::Type {
-};
+struct IsConvertibleT : IsConvertibleHelper<FROM, TO>::Type {};
 \end{cpp}
 
 与往常一样，第一个test()重载设计在检查成功时匹配，而第二个重载会回退。因此，目标是使第一个test()重载在当类型FROM转换为类型TO时有效。为了实现这一点，再次给出test的第一个声明，一个虚拟的（未命名的）模板参数初始化使用了构造，当转换有效时该构造才有效。这个模板参数不能推导，也不会提供显式的模板参数。因此，参数将进行替换，若替换失败，将丢弃test()的声明。

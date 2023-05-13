@@ -16,8 +16,7 @@ class S {
 	void f(double*);
 };
 
-void g (int*** ppp)
-{
+void g (int*** ppp) {
 	bool b[42];
 	f1(ppp); // deduces T to be int**
 	f2(b); // deduces E to be bool and N to be 42
@@ -50,8 +49,7 @@ class X {
 template<int N>
 void fppm(void (X<N>::*p)(typename X<N>::I));
 
-int main()
-{
+int main() {
 	fppm(&X<33>::f); // fine: N deduced to be 33
 }
 \end{cpp}
@@ -64,8 +62,7 @@ int main()
 template<typename T>
 void f(X<Y<T>, Y<T>>);
 
-void g()
-{
+void g() {
 	f(X<Y<int>, Y<int>>()); // OK
 	f(X<Y<int>, Y<char>>()); // ERROR: deduction fails
 }

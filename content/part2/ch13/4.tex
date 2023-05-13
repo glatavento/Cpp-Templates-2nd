@@ -30,8 +30,7 @@ class D2 : public Base<double> { // nondependent base
 模板中的非依赖型基类类似于普通非模板类中的基类，但当在模板派生中查找非限定名称时，非依赖型基类会优先考虑该名称，而后才是模板参数列表。类模板D2的成员strange总是对应Base<double>::T（就是int）的类型T。例如，下面的函数是无效的：
 
 \begin{cpp}
-void g (D2<int*>& d2, int* p)
-{
+void g (D2<int*>& d2, int* p) {
 	d2.strange = p; // ERROR: type mismatch!
 }
 \end{cpp}
@@ -55,8 +54,7 @@ class Base<bool> {
 	enum { basefield = 42 }; // #2 tricky!
 };
 
-void g (DD<bool>& d)
-{
+void g (DD<bool>& d) {
 	d.f(); // #3 oops?
 }
 \end{cpp}

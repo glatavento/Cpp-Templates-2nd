@@ -14,8 +14,7 @@
 
 \begin{cpp}
 template<typename T>
-void foo (T const& arg1, T const& arg2)
-{
+void foo (T const& arg1, T const& arg2) {
 	...
 }
 
@@ -28,8 +27,7 @@ foo("hi", "guy"); // ERROR
 
 \begin{cpp}
 template<typename T>
-void foo (T arg1, T arg2)
-{
+void foo (T arg1, T arg2) {
 	...
 }
 
@@ -40,8 +38,7 @@ foo("hi", "guy"); // compiles, but ...
 
 \begin{cpp}
 template<typename T>
-void foo (T arg1, T arg2)
-{
+void foo (T arg1, T arg2) {
 	if (arg1 == arg2) { // OOPS: compares addresses of passed arrays
 		...
 	}
@@ -68,8 +65,7 @@ foo("hi", "guy"); // compiles, but ...
 
 \begin{cpp}
 template<typename T, std::size_t L1, std::size_t L2>
-void foo(T (&arg1)[L1], T (&arg2)[L2])
-{
+void foo(T (&arg1)[L1], T (&arg2)[L2]) {
 	T* pa = arg1; // decay arg1
 	T* pb = arg2; // decay arg2
 	if (compareArrays(pa, L1, pb, L2)) {
@@ -86,8 +82,7 @@ void foo(T (&arg1)[L1], T (&arg2)[L2])
 \begin{cpp}
 template<typename T,
 		 typename = std::enable_if_t<std::is_array_v<T>>>
-void foo (T&& arg1, T&& arg2)
-{
+void foo (T&& arg1, T&& arg2) {
 	...
 }
 \end{cpp}

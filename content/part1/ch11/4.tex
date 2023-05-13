@@ -9,8 +9,7 @@ template<typename T>
 void tmplParamIsReference(T) {
 	std::cout << "T is reference: " << std::is_reference_v<T> << '\n';
 }
-int main()
-{
+int main() {
 	std::cout << std::boolalpha;
 	int i;
 	int& r = i;
@@ -43,8 +42,7 @@ public:
 
 int null = 0;
 
-int main()
-{
+int main() {
 	RefMem<int> rm1, rm2;
 	rm1 = rm2; // OK
 
@@ -93,8 +91,7 @@ public:
 
 int size = 10;
 
-int main()
-{
+int main() {
 	Arr<int&,size> y; // compile-time ERROR deep in the code of class std::vector<>
 
 	Arr<int,size> x; // initializes internal vector with 10 elements
@@ -165,8 +162,7 @@ namespace std {
 
 \begin{cpp}
 template<typename T>
-class optional
-{
+class optional {
 	static_assert(!std::is_reference<T>::value,
 					"Invalid instantiation of optional<T> for references");
 	...

@@ -27,8 +27,7 @@ EnableIf有一个相当简单的实现：
 \filename{typeoverload/enableif.hpp}
 \begin{cpp}
 template<bool, typename T = void>
-struct EnableIfT {
-};
+struct EnableIfT {};
 
 template<typename T>
 struct EnableIfT<true, T> {
@@ -52,8 +51,7 @@ EnableIf也可以放在默认的模板参数中，这比放在结果类型中更
 \begin{cpp}
 template<typename Iterator, typename Distance>
 EnableIf<!IsRandomAccessIterator<Iterator>>
-advanceIter(Iterator& x, Distance n)
-{
+advanceIter(Iterator& x, Distance n) {
 	while (n > 0) { // linear time
 		++x;
 		--n;
